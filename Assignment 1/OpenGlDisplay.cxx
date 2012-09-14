@@ -8,8 +8,10 @@
 #include <OpenGlDisplay.h>
 
 OpenGlDisplay::OpenGlDisplay()
+   : originalImage_(std::string("RedLeavesTexture.bmp"))
 {
-
+   originalImage_.quantizeTo(5);
+   imageRenderer_.setImage(originalImage_);
 }
 
 OpenGlDisplay::~OpenGlDisplay()
@@ -23,6 +25,8 @@ void OpenGlDisplay::reshape(int width, int height)
    glLoadIdentity();
 
    gluOrtho2D(0, width, 0, height);
+
+   imageRenderer_.setSize(width, height);
 }
 
 void OpenGlDisplay::display()
@@ -32,13 +36,7 @@ void OpenGlDisplay::display()
 
    glClear(GL_COLOR_BUFFER_BIT);
 
-   glColor3f(1, 0, 0);
-
-   glBegin(GL_TRIANGLES);
-   glVertex3f(10, 0, 0);
-   glVertex3f(0, 10, 0);
-   glVertex3f(10, 10, 0);
-   glEnd();
+   imageRenderer_.render();
 
    glFlush();
    glutSwapBuffers();

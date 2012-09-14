@@ -5,11 +5,12 @@
 
 // Project
 #include <Image.h>
+#include <ImageRenderer.h>
 
 /**
  ******************************************************************************
  *
- * \brief            OpenGlDisplay
+ *                   OpenGlDisplay
  *
  ******************************************************************************
  */
@@ -27,7 +28,8 @@ public:
 private: // helpers
 
 private: // members
-   Image currentImage;
+   Image originalImage_;
+   ImageRenderer imageRenderer_;
 
 };
 

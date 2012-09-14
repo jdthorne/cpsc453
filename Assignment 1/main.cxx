@@ -2,16 +2,16 @@
 #include <GLUT/glut.h>
 #include <OpenGlDisplay.h>
 
-OpenGlDisplay openGlDisplay;
+OpenGlDisplay* openGlDisplay = NULL;
 
 void reshape(int width, int height)
 {
-   openGlDisplay.reshape(width, height);
+   openGlDisplay->reshape(width, height);
 } 
 
 void display()
 {
-   openGlDisplay.display();
+   openGlDisplay->display();
 }
 
 int main(int argc, char** argv)
@@ -23,6 +23,8 @@ int main(int argc, char** argv)
 
    glutReshapeFunc(reshape);
    glutDisplayFunc(display);
+
+   openGlDisplay = new OpenGlDisplay();
 
    reshape(1280, 720);
 

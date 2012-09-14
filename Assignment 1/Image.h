@@ -5,11 +5,12 @@
 #include <string>
 
 // Project
+#include <RgbImage.h>
 
 /**
  ******************************************************************************
  *
- * \brief            Image
+ *                    Image
  *
  ******************************************************************************
  */
@@ -19,15 +20,29 @@ class Image
 public:
    Image();
    Image(std::string filename);
+   Image(const Image& copy);
    ~Image();
 
+   Image cloned();
+
 public:
+   int width();
+   int height();
+
+   int bytesPerRow();
+   int bytesPerPixel();
+   const void* data();
+
+   void getPixel(int row, int column, unsigned char& r, unsigned char& g, unsigned char& b);
+   void setPixel(int row, int column, unsigned char r, unsigned char g, unsigned char b);
+
+   void quantizeTo(int levels);
 
 private: // helpers
-   void loadFromFile(std::string filename);
+   void createOpenGlTexture();
 
 private: // members
-   char* imageData_;
+   RgbImage* image_;
 };
 
 #endif
