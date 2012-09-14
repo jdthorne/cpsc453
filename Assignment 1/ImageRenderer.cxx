@@ -47,6 +47,7 @@ void ImageRenderer::createOpenGlTexture()
 {
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
@@ -60,6 +61,7 @@ void ImageRenderer::render()
    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
    glBegin(GL_QUADS);
+   glColor4f(1, 1, 1, 1);
 
    glTexCoord2f(0, 0);
    glVertex3f(0, 0, 0);
@@ -74,5 +76,6 @@ void ImageRenderer::render()
    glVertex3f(0, height_, 0);
 
    glEnd();
+
    glDisable(GL_TEXTURE_2D);
 }

@@ -79,14 +79,27 @@ void Image::setPixel(int row, int column, unsigned char r, unsigned char g, unsi
  *
  ******************************************************************************
  */
+unsigned char floor(double value)
+{
+   return (unsigned char)value;
+}
+
 void Image::quantizeTo(int levels)
 {
-   double quantize[255];
-   for (int i = 0; i < 256; i++)
+   // Bound levels
+   if (levels < 2)
    {
-      quantize[i] = 255 * ( (i * (levels - 1) / 255) ) / (levels - 1);
+      levels = 2;
    }
 
+   // Create quantization list
+   char quantize[255];
+   for (int i = 0; i < 256; i++)
+   {
+      quantize[i] = floor(255*floor(i*(levels-1)/255.0)/(levels-1));
+   }
+
+   // Quantize individual pixels
    for (int row = 0; row < height(); row++)
    {
       for (int column = 0; column < width(); column++)
