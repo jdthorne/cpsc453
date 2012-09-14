@@ -89,8 +89,10 @@ bool ControlBar::hasChanged()
    return result;
 }
 
-double ControlBar::sliderSetting()
+double ControlBar::sliderSettingInRange(double min, double max)
 {
-   return sliderSetting_;
+   double range = max - min;
+   return min + (range * sliderSetting_);
 }
+
 

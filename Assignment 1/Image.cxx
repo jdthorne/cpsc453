@@ -4,6 +4,7 @@
 // Project
 #include <Image.h>
 #include <RgbImage.h>
+#include <MathHelpers.h>
 
 Image::Image()
 {
@@ -79,12 +80,7 @@ void Image::setPixel(int row, int column, unsigned char r, unsigned char g, unsi
  *
  ******************************************************************************
  */
-unsigned char floor(double value)
-{
-   return (unsigned char)value;
-}
-
-void Image::quantizeTo(int levels)
+void Image::quantizeTo(unsigned char levels)
 {
    // Bound levels
    if (levels < 2)
@@ -114,5 +110,23 @@ void Image::quantizeTo(int levels)
          setPixel(row, column, r, g, b);
       }
    }
+}
+
+void Image::brighten(double scaleFactor)
+{
+   for (int row = 0; row < height(); row++)
+   {
+      for (int column = 0; column < width(); column++)
+      {
+         unsigned char r, g, b;
+         getPixel(row, column, r, g, b);
+
+         r = bound(0, r * scaleFactor, 255);
+         g = bound(0, g * scaleFactor, 255);
+         b = bound(0, b * scaleFactor, 255);
+
+         setPixel(row, column, r, g, b);
+      }
+   }     
 }
 

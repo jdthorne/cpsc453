@@ -36,7 +36,8 @@ public:
    void getPixel(int row, int column, unsigned char& r, unsigned char& g, unsigned char& b);
    void setPixel(int row, int column, unsigned char r, unsigned char g, unsigned char b);
 
-   void quantizeTo(int levels);
+   void quantizeTo(unsigned char levels);
+   void brighten(double scale);
 
 private: // helpers
    void createOpenGlTexture();

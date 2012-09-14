@@ -21,14 +21,13 @@ public:
    ~ControlBar();
 
 public:
-
    void render();
 
    void handleSizeChanged(int width, int height);
    void handleMouseEvent(int button, int state, int x, int y);
 
    bool hasChanged();
-   double sliderSetting();
+   double sliderSettingInRange(double min, double max);
 
 private: // helpers
    void drawText(int x, int y, std::string text);

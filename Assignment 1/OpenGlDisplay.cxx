@@ -75,9 +75,10 @@ void OpenGlDisplay::handleMouseMotion(int x, int y)
    controls_.handleMouseEvent(0, 0, x, y);   
 
    if (controls_.hasChanged())
-   {
+   {  
       Image filteredImage(std::string("landscape3.BMP"));
-      filteredImage.quantizeTo(255 * controls_.sliderSetting());
+      //filteredImage.quantizeTo(controls_.sliderSettingInRange(2, 64));
+      filteredImage.brighten(controls_.sliderSettingInRange(0, 2));
 
       imageRenderer_.setFilteredImage(filteredImage);
    }

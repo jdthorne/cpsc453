@@ -19,3 +19,7 @@ double bound(double min, double value, double max)
    return value;
 }
 
+unsigned char floor(double value)
+{
+   return (unsigned char)value;
+}

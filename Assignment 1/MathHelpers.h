@@ -10,6 +10,6 @@
  ******************************************************************************
  */
 double bound(double min, double value, double max);
-
+unsigned char floor(double value);
 
 #endif
