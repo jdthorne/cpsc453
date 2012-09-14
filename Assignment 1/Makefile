@@ -12,5 +12,5 @@ INCLUDES += "-I/System/Library/Frameworks/OpenGL.framework/Headers"
 INCLUDES += "-I/System/Library/Frameworks/GLUT.framework/Headers"
 INCLUDES += "-I."
 
-assignment1: main.cxx
-	clang -o assignment1 main.cxx $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCUDES)
+assignment1: main.cxx OpenGlDisplay.cxx Image.cxx RgbImage.cpp
+	clang -o assignment1 main.cxx OpenGlDisplay.cxx Image.cxx RgbImage.cpp $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
