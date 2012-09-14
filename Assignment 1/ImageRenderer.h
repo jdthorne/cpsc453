@@ -3,6 +3,9 @@
 
 // System
 
+// OpenGL
+#include <GLUT/glut.h>
+
 // Project
 #include <Image.h>
 
@@ -21,20 +24,25 @@ public:
    ~ImageRenderer();
 
 public:
-   void setImage(Image image);
+   void setOriginalImage(Image original);
+   void setFilteredImage(Image filtered);
    void setSize(int width, int height);
 
    void render();
 
 private: // helpers
-   void createOpenGlTexture();
+   void createOpenGlTextures();
+   void createTexture(int id, Image& image);
+
+   void renderImage(int id, int x, int y, int width, int height);
 
 private: // members
-   Image image_;
+   Image originalImage_;
+   Image filteredImage_;
 
    int width_;
    int height_;
-
+   GLuint textureNames_[2];
 };
 
 #endif

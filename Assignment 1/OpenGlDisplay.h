@@ -28,6 +28,8 @@ public:
    void handleMouseEvent(int button, int state, int x, int y);
    void handleMouseMotion(int x, int y);
 
+   void reloadImageAndFilter();
+
    void display();
 
 private: // helpers
@@ -39,7 +41,6 @@ private: // members
    int width_;
    int height_;
 
-   Image originalImage_;
    ImageRenderer imageRenderer_;
 
    ControlBar controls_;
