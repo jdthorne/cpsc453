@@ -1,0 +1,19 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Users/james/Courses/CPSC453 Computer Graphics"
+		}
+	],
+   "settings":
+   {
+      "sublimeclang_options":
+      [
+         "-ferror-limit=0",
+         "-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers",
+         "-I/System/Library/Frameworks/GLUT.framework/Headers",
+         "-I/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1"
+      ]
+   }
+
+}
