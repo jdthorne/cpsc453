@@ -31,11 +31,6 @@ void display()
    openGlDisplay->display();
 }
 
-void idle()
-{
-   glutPostRedisplay();
-}
-
 /**
  ******************************************************************************
  *
@@ -58,7 +53,6 @@ int main(int argc, char** argv)
    glutMouseFunc(mouseFunc);
    glutMotionFunc(motionFunc);
    glutPassiveMotionFunc(motionFunc);
-   glutIdleFunc(idle);
 
    openGlDisplay = new OpenGlDisplay();
 

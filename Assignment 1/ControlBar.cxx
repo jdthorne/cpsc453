@@ -198,7 +198,10 @@ void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
 
       fileMenu_.setVisible(fileMenuHovered_);
       operationMenu_.setVisible(operationMenuHovered_);
+
    }
+   
+   glutPostRedisplay();
 }
 
 /**
