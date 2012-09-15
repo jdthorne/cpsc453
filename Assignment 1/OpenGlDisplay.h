@@ -29,10 +29,14 @@ public:
    void handleMouseMotion(int x, int y);
 
    void reloadImageAndFilter();
+   void setFilteredImage(Image image);
 
    void display();
 
 public: // I_ControlBarHandler
+   virtual void handleFileOpened(std::string file);
+   virtual void handleFileSaved(std::string file);
+
    virtual void handleQuantilizeSelected(int levels);
    virtual void handleBrightenSelected(double setting);
    virtual void handleSaturateSelected(double scale);
@@ -54,6 +58,8 @@ private: // members
 
    Image originalImage_;
    Image dissolveImage_;
+   Image filteredImage_;
+
    ImageRenderer imageRenderer_;
 
    ControlBar controls_;

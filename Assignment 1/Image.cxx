@@ -35,6 +35,11 @@ Image Image::blankCopy()
    return result;
 }
 
+void Image::save(std::string filename)
+{
+   image_->WriteBmpFile(filename.data());
+}
+
 /**
  ******************************************************************************
  *

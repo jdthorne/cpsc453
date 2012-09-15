@@ -12,10 +12,9 @@ OpenGlDisplay::OpenGlDisplay()
    : mouseDown_(false)
    , controls_(*this)
 {
-   originalImage_ = Image(std::string("images/landscape3.BMP"));
    dissolveImage_ = Image(std::string("images/RedLeavesTexture.bmp"));
-   imageRenderer_.setOriginalImage(originalImage_);
 
+   handleFileOpened("landscape1.bmp");
    handleQuantilizeSelected(128);
 }
 
@@ -96,52 +95,86 @@ int OpenGlDisplay::fixMouseY(int y)
 /**
  ******************************************************************************
  *
- *                   Control Bar
+ *                   File Loading and Saving
+ *
+ ******************************************************************************
+ */
+void OpenGlDisplay::handleFileOpened(std::string file)
+{
+   originalImage_ = Image("images/" + file);
+   imageRenderer_.setOriginalImage(originalImage_);
+}
+
+void OpenGlDisplay::handleFileSaved(std::string file)
+{
+   std::string path = "images/" + file;
+
+   filteredImage_.save(path);
+}
+
+
+/**
+ ******************************************************************************
+ *
+ *                   Image Operations
  *
  ******************************************************************************
  */
 void OpenGlDisplay::handleQuantilizeSelected(int levels)
 {
-   imageRenderer_.setFilteredImage(originalImage_.quantized(levels));
+   setFilteredImage(originalImage_.quantized(levels));
 }
 
 void OpenGlDisplay::handleBrightenSelected(double setting)
 {
-   imageRenderer_.setFilteredImage(originalImage_.brightened(setting));
+   setFilteredImage(originalImage_.brightened(setting));
 }
 
 void OpenGlDisplay::handleSaturateSelected(double scale)
 {
-   imageRenderer_.setFilteredImage(originalImage_.saturated(scale));
+   setFilteredImage(originalImage_.saturated(scale));
 }
 
 void OpenGlDisplay::handleScaleSelected(double factor)
 {
-   imageRenderer_.setFilteredImage(originalImage_.scaled(factor));
+   setFilteredImage(originalImage_.scaled(factor));
 }
 
 void OpenGlDisplay::handleRotateSelected(double angle)
 {
-   imageRenderer_.setFilteredImage(originalImage_.rotated(angle));
+   setFilteredImage(originalImage_.rotated(angle));
 }
 
 void OpenGlDisplay::handleContrastSelected(double scale)
 {
-   imageRenderer_.setFilteredImage(originalImage_.contrasted(scale));
+   setFilteredImage(originalImage_.contrasted(scale));
 }
 
 void OpenGlDisplay::handleBilinearScaleSelected(double factor)
 {
-   imageRenderer_.setFilteredImage(originalImage_.bilinearScaled(factor));
+   setFilteredImage(originalImage_.bilinearScaled(factor));
 }
 
 void OpenGlDisplay::handleSwirlSelected(double angle)
 {
-   imageRenderer_.setFilteredImage(originalImage_.swirled(angle));
+   setFilteredImage(originalImage_.swirled(angle));
 }
 
 void OpenGlDisplay::handleDissolveSelected(double mix)
 {
-   imageRenderer_.setFilteredImage(originalImage_.dissolved(mix, dissolveImage_));
+   setFilteredImage(originalImage_.dissolved(mix, dissolveImage_));
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Image Handling
+ *
+ ******************************************************************************
+ */
+void OpenGlDisplay::setFilteredImage(Image image)
+{
+   filteredImage_ = image;
+   imageRenderer_.setFilteredImage(image);
 }
 

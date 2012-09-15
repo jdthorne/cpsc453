@@ -58,12 +58,13 @@ private: // members
    bool operationMenuHovered_;
    bool sliderHovered_;
 
-   std::string file_;
-
    PopupMenu fileMenu_;
-   PopupMenu operationMenu_;
+   std::string currentFileName_;
+   std::string currentFileText_;
 
+   PopupMenu operationMenu_;
    int currentOperationIndex_;
+   std::string currentOperationName_;
    std::string currentOperationText_;
 };
 
@@ -80,6 +81,9 @@ public:
    virtual ~I_ControlBarHandler() {};
 
 public:
+   virtual void handleFileOpened(std::string file) = 0;
+   virtual void handleFileSaved(std::string filename) = 0;
+
    virtual void handleQuantilizeSelected(int levels) = 0;
    virtual void handleBrightenSelected(double setting) = 0;
    virtual void handleSaturateSelected(double scale) = 0;

@@ -39,6 +39,8 @@ public:
 
    bool coordsAreOk(int x, int y);
 
+   void save(std::string filename);
+
    Image quantized(unsigned char levels);
    Image brightened(double scale);
    Image saturated(double scale);

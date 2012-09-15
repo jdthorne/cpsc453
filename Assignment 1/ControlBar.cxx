@@ -1,6 +1,7 @@
 
 // System
 #include <cmath>
+#include <sstream>
 
 // OpenGl
 #include <GLUT/glut.h>
@@ -14,13 +15,15 @@ const int BAR_HEIGHT = 25;
 
 const int FILE_MENU_LEFT = 0;
 const int FILE_MENU_TEXT = 20;
+const int FILE_MENU_RIGHT = 160;
 
-const int OPERATION_MENU_LEFT = 60;
-const int OPERATION_MENU_TEXT = 80;
+const int OPERATION_MENU_LEFT = FILE_MENU_RIGHT;
+const int OPERATION_MENU_TEXT = OPERATION_MENU_LEFT + 20;
+const int OPERATION_MENU_RIGHT = OPERATION_MENU_LEFT + 200;
 
-const int SLIDER_LEFT = 240;
-const int SLIDER_TEXT = 260;
-const int SLIDER_BAR_START = 320;
+const int SLIDER_LEFT = OPERATION_MENU_RIGHT;
+const int SLIDER_TEXT = SLIDER_LEFT + 20;
+const int SLIDER_BAR_START = SLIDER_TEXT + 60;
 const int SLIDER_BAR_END_PADDING = 20;
 
 const int TEXT_Y = 8;
@@ -29,12 +32,23 @@ ControlBar::ControlBar(I_ControlBarHandler& handler)
    : handler_(handler)
    , width_(0)
    , sliderSetting_(0.5)
-   , file_("landscape3.BMP")
-   , fileMenu_(*this, FILE_MENU_LEFT, BAR_HEIGHT + 1, OPERATION_MENU_LEFT)
+   , fileMenu_(*this, FILE_MENU_LEFT, BAR_HEIGHT + 1, FILE_MENU_RIGHT)
+   , currentFileName_("landscape3.BMP")
+   , currentFileText_("File: landscape3.BMP")
    , operationMenu_(*this, OPERATION_MENU_LEFT, BAR_HEIGHT + 1, SLIDER_LEFT - OPERATION_MENU_LEFT)
    , currentOperationIndex_(0)
+   , currentOperationName_("Quantilize")
    , currentOperationText_("Operation: Quantilize")
 {
+   fileMenu_.addItem("Save Filtered Image");
+   fileMenu_.addItem("clouds1.BMP");
+   fileMenu_.addItem("clouds2.BMP");
+   fileMenu_.addItem("clouds3.BMP");
+   fileMenu_.addItem("clouds4.BMP");
+   fileMenu_.addItem("landscape1.bmp");
+   fileMenu_.addItem("landscape2.BMP");
+   fileMenu_.addItem("landscape3.BMP");
+
    operationMenu_.addItem("Quantilize");
    operationMenu_.addItem("Brighten");
    operationMenu_.addItem("Saturate");
@@ -91,7 +105,15 @@ void ControlBar::renderTitleText()
 void ControlBar::renderFileMenu()
 {
    glColor4f(1, 1, 1, 1);
-   drawText(FILE_MENU_TEXT, TEXT_Y, "File");
+   drawText(FILE_MENU_TEXT, TEXT_Y, currentFileText_);
+
+   if (fileMenuHovered_)
+   {
+      glColor4f(1, 1, 1, 0.2);
+      drawRectangularQuad(FILE_MENU_LEFT, 0, OPERATION_MENU_LEFT, BAR_HEIGHT);
+   }
+
+   fileMenu_.render();
 }
 
 void ControlBar::renderOperationMenu()
@@ -148,10 +170,12 @@ void ControlBar::handleSizeChanged(int width, int height)
  */
 void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
 {
+   fileMenu_.handleMouseEvent(x, y, mouseDown);
    operationMenu_.handleMouseEvent(x, y, mouseDown);
 
-   sliderHovered_ = (y < BAR_HEIGHT) && (x > SLIDER_BAR_START && x < width_ - SLIDER_BAR_END_PADDING);
+   fileMenuHovered_ = (y < BAR_HEIGHT) && (x > FILE_MENU_LEFT && x < FILE_MENU_RIGHT);
    operationMenuHovered_ = (y < BAR_HEIGHT) && (x > OPERATION_MENU_LEFT && x < SLIDER_LEFT);
+   sliderHovered_ = (y < BAR_HEIGHT) && (x > SLIDER_BAR_START && x < width_ - SLIDER_BAR_END_PADDING);
 
    if (mouseDown)
    {
@@ -186,8 +210,30 @@ void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
  */
 void ControlBar::handleItemSelected(const PopupMenu* menu, int index, std::string item)
 {
-   currentOperationText_ = "Operation: " + item;
-   sliderSetting_ = 0.5;
+   if (menu == &fileMenu_)
+   {
+      if (item == "Save Filtered Image")
+      {
+         std::ostringstream filename;
+         filename << currentOperationName_ << "-";
+         filename << sliderSetting_ << "-";
+         filename << currentFileName_;
+         handler_.handleFileSaved(filename.str());
+      }
+      else
+      {
+         currentFileText_ = "File: " + item;
+         handler_.handleFileOpened(item);
+      }
+   }
+
+   if (menu == &operationMenu_)
+   {
+      currentOperationName_ = item;
+      currentOperationText_ = "Operation: " + item;
+      sliderSetting_ = 0.5;
+
+   }
 
    handleSelectedOperationChanged();
 }
