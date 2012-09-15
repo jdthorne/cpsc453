@@ -78,14 +78,14 @@ public:
    virtual ~I_ControlBarHandler() {};
 
 public:
-   virtual void handleQuantilizeSelected(std::string file, int levels) = 0;
-   virtual void handleBrightenSelected(std::string file, double setting) = 0;
-   virtual void handleSaturateSelected(std::string file, double scale) = 0;
-   virtual void handleScaleSelected(std::string file, double factor) = 0;
-   virtual void handleRotateSelected(std::string file, double angle) = 0;
-   virtual void handleContrastSelected(std::string file, double scale) = 0;
-   virtual void handleBilinearScaleSelected(std::string file, double factor) = 0;
-   virtual void handleSwirlSelected(std::string file, double angle) = 0;
+   virtual void handleQuantilizeSelected(int levels) = 0;
+   virtual void handleBrightenSelected(double setting) = 0;
+   virtual void handleSaturateSelected(double scale) = 0;
+   virtual void handleScaleSelected(double factor) = 0;
+   virtual void handleRotateSelected(double angle) = 0;
+   virtual void handleContrastSelected(double scale) = 0;
+   virtual void handleBilinearScaleSelected(double factor) = 0;
+   virtual void handleSwirlSelected(double angle) = 0;
 
 };
 

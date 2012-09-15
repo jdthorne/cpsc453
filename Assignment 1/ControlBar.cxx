@@ -186,35 +186,35 @@ void ControlBar::handleSelectedOperationChanged()
 {
    if (currentOperationText_ == "Operation: Quantilize")
    {
-      handler_.handleQuantilizeSelected(file_, sliderSettingInRange(2, 255));
+      handler_.handleQuantilizeSelected(sliderSettingInRange(2, 255));
    }
    else if (currentOperationText_ == "Operation: Brighten")
    {
-      handler_.handleBrightenSelected(file_, sliderSettingInRange(0, 2));
+      handler_.handleBrightenSelected(sliderSettingInRange(0, 2));
    }
    else if (currentOperationText_ == "Operation: Saturate")
    {
-      handler_.handleSaturateSelected(file_, sliderSettingInRange(0, 2));
+      handler_.handleSaturateSelected(sliderSettingInRange(0, 2));
    }
    else if (currentOperationText_ == "Operation: Scale")
    {
-      handler_.handleScaleSelected(file_, sliderSettingInRange(0, 1));
+      handler_.handleScaleSelected(sliderSettingInRange(0, 1));
    }
    else if (currentOperationText_ == "Operation: Rotate")
    {
-      handler_.handleRotateSelected(file_, sliderSettingInRange(0, 3.14159 / 2));
+      handler_.handleRotateSelected(sliderSettingInRange(0, 3.14159 / 2));
    }
    else if (currentOperationText_ == "Operation: Contrast")
    {
-      handler_.handleContrastSelected(file_, sliderSettingInRange(0, 2));
+      handler_.handleContrastSelected(sliderSettingInRange(0, 2));
    }
    else if (currentOperationText_ == "Operation: BilinearScale")
    {
-      handler_.handleBilinearScaleSelected(file_, sliderSettingInRange(0, 1));
+      handler_.handleBilinearScaleSelected(sliderSettingInRange(0, 1));
    }
    else if (currentOperationText_ == "Operation: Swirl")
    {
-      handler_.handleSwirlSelected(file_, sliderSettingInRange(0, 3.14159 / 2));
+      handler_.handleSwirlSelected(sliderSettingInRange(0, 3.14159 / 2));
    }
 
    else

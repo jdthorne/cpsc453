@@ -27,9 +27,12 @@ Image::~Image()
 {
 }
 
-Image Image::cloned()
+Image Image::blankCopy()
 {
-   return Image(filename_);
+   Image result;
+   result.image_ = new RgbImage(image_->GetNumRows(), image_->GetNumCols());
+
+   return result;
 }
 
 /**
@@ -101,8 +104,10 @@ bool Image::coordsAreOk(int x, int y)
  *
  ******************************************************************************
  */
-Image& Image::quantize(unsigned char levels)
+Image Image::quantized(unsigned char levels)
 {
+   Image result = this->blankCopy();
+
    // Create quantization list
    char quantize[255];
    for (int i = 0; i < 256; i++)
@@ -122,11 +127,11 @@ Image& Image::quantize(unsigned char levels)
          g = quantize[g];
          b = quantize[b];
 
-         setPixel(x, y, r, g, b);
+         result.setPixel(x, y, r, g, b);
       }
    }
 
-   return *this;
+   return result;
 }
 
 /**
@@ -136,8 +141,10 @@ Image& Image::quantize(unsigned char levels)
  *
  ******************************************************************************
  */
-Image& Image::brighten(double scaleFactor)
+Image Image::brightened(double scaleFactor)
 {
+   Image result = this->blankCopy();
+
    for (int y = 0; y < height(); y++)
    {
       for (int x = 0; x < width(); x++)
@@ -149,11 +156,11 @@ Image& Image::brighten(double scaleFactor)
          g = bound<int>(0, g * scaleFactor, 255);
          b = bound<int>(0, b * scaleFactor, 255);
 
-         setPixel(x, y, r, g, b);
+         result.setPixel(x, y, r, g, b);
       }
    }     
 
-   return *this;
+   return result;
 }
 
 /**
@@ -163,8 +170,10 @@ Image& Image::brighten(double scaleFactor)
  *
  ******************************************************************************
  */
-Image& Image::saturate(double scale)
+Image Image::saturated(double scale)
 {
+   Image result = this->blankCopy();
+
    for (int y = 0; y < height(); y++)
    {
       for (int x = 0; x < width(); x++)
@@ -178,11 +187,11 @@ Image& Image::saturate(double scale)
          g = blendColors(g, lum, scale);
          b = blendColors(b, lum, scale);
 
-         setPixel(x, y, r, g, b);
+         result.setPixel(x, y, r, g, b);
       }
    }
 
-   return *this;
+   return result;
 }
 
 
@@ -193,8 +202,10 @@ Image& Image::saturate(double scale)
  *
  ******************************************************************************
  */
-Image& Image::scale(double factor)
+Image Image::scaled(double factor)
 {
+   Image result = this->blankCopy();
+
    for (int y = 0; y < height(); y++)
    {
       for (int x = 0; x < width(); x++)
@@ -206,16 +217,16 @@ Image& Image::scale(double factor)
          {
             unsigned char r, g, b;
             getPixel(u, v, r, g, b);
-            setPixel(x, y, r, g, b);
+            result.setPixel(x, y, r, g, b);
          }
          else
          {  
-            setPixel(x, y, 0, 0, 0);
+            result.setPixel(x, y, 0, 0, 0);
          }
       }
    }     
 
-   return *this;
+   return result;
 }
 
 
@@ -226,9 +237,11 @@ Image& Image::scale(double factor)
  *
  ******************************************************************************
  */
-Image& Image::rotate(double theta)
+Image Image::rotated(double theta)
 {
-   Image original = this->cloned();
+   theta *= -1;
+
+   Image result = this->blankCopy();
 
    int halfWidth = width() / 2;
    int halfHeight = height() / 2;
@@ -249,17 +262,17 @@ Image& Image::rotate(double theta)
          if (coordsAreOk(u, v))
          {
             unsigned char r, g, b;
-            original.getPixel(u, v, r, g, b);
-            setPixel(x, y, r, g, b);
+            getPixel(u, v, r, g, b);
+            result.setPixel(x, y, r, g, b);
          }
          else
          {
-            setPixel(x, y, 0, 0, 0);
+            result.setPixel(x, y, 0, 0, 0);
          }
       }
    }
 
-   return *this;
+   return result;
 }
 
 
@@ -270,8 +283,10 @@ Image& Image::rotate(double theta)
  *
  ******************************************************************************
  */
-Image& Image::contrast(double scale)
+Image Image::contrasted(double scale)
 {
+   Image result = this->blankCopy();
+
    // Calculate average luminance
    int totalOfRowLuminances = 0;
    for (int y = 0; y < height(); y++)
@@ -303,11 +318,11 @@ Image& Image::contrast(double scale)
          g = blendColors(g, averageLuminance, scale);
          b = blendColors(b, averageLuminance, scale);
 
-         setPixel(x, y, r, g, b);
+         result.setPixel(x, y, r, g, b);
       }
    }     
 
-   return *this;
+   return result;
 }
 
 
@@ -318,7 +333,7 @@ Image& Image::contrast(double scale)
  *
  ******************************************************************************
  */
-Image& Image::bilinearScale(double scale)
+Image Image::bilinearScaled(double scale)
 {
    printf("Warning: [Image] 'bilinearScale()' is not implemented\n");
 
@@ -333,7 +348,7 @@ Image& Image::bilinearScale(double scale)
  *
  ******************************************************************************
  */
-Image& Image::swirl(double angle)
+Image Image::swirled(double angle)
 {
    printf("Warning: [Image] 'swirl()' is not implemented\n");
 

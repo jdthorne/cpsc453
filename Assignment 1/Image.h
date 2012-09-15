@@ -23,7 +23,7 @@ public:
    Image(const Image& copy);
    ~Image();
 
-   Image cloned();
+   Image blankCopy();
 
 public:
    int width();
@@ -38,14 +38,14 @@ public:
 
    bool coordsAreOk(int x, int y);
 
-   Image& quantize(unsigned char levels);
-   Image& brighten(double scale);
-   Image& saturate(double scale);
-   Image& scale(double factor);
-   Image& rotate(double angle);
-   Image& contrast(double scale);
-   Image& bilinearScale(double factor);
-   Image& swirl(double angle);
+   Image quantized(unsigned char levels);
+   Image brightened(double scale);
+   Image saturated(double scale);
+   Image scaled(double factor);
+   Image rotated(double angle);
+   Image contrasted(double scale);
+   Image bilinearScaled(double factor);
+   Image swirled(double angle);
 
 private: // helpers
    void createOpenGlTexture();
