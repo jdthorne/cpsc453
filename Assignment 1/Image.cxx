@@ -1,5 +1,6 @@
 
 // System
+#include <cmath>
 
 // Project
 #include <Image.h>
@@ -12,16 +13,23 @@ Image::Image()
 
 Image::Image(std::string filename)
    : image_(new RgbImage(filename.data()))
+   , filename_(filename)
 {
 }
 
 Image::Image(const Image& copy)
    : image_(copy.image_)
+   , filename_(copy.filename_)
 {
 }
 
 Image::~Image()
 {
+}
+
+Image Image::cloned()
+{
+   return Image(filename_);
 }
 
 /**
@@ -65,20 +73,25 @@ const void* Image::data()
  *
  ******************************************************************************
  */
-void Image::getPixel(int row, int column, unsigned char& r, unsigned char& g, unsigned char& b)
+void Image::getPixel(int x, int y, unsigned char& r, unsigned char& g, unsigned char& b)
 {
-   unsigned char* base = image_->GetRgbPixel(row, column);
+   unsigned char* base = image_->GetRgbPixel(y, x);
    r = base[0];
    g = base[1];
    b = base[2];
 }
 
-void Image::setPixel(int row, int column, unsigned char r, unsigned char g, unsigned char b)
+void Image::setPixel(int x, int y, unsigned char r, unsigned char g, unsigned char b)
 {
-   unsigned char* base = image_->GetRgbPixel(row, column);
+   unsigned char* base = image_->GetRgbPixel(y, x);
    base[0] = r;
    base[1] = g;
    base[2] = b;
+}
+
+bool Image::coordsAreOk(int x, int y)
+{
+   return (x >= 0 && x < width()) && (y >= 0 && y < height());
 }
 
 /**
@@ -88,7 +101,7 @@ void Image::setPixel(int row, int column, unsigned char r, unsigned char g, unsi
  *
  ******************************************************************************
  */
-void Image::quantize(unsigned char levels)
+Image& Image::quantize(unsigned char levels)
 {
    // Create quantization list
    char quantize[255];
@@ -98,20 +111,22 @@ void Image::quantize(unsigned char levels)
    }
 
    // Quantize individual pixels
-   for (int row = 0; row < height(); row++)
+   for (int y = 0; y < height(); y++)
    {
-      for (int column = 0; column < width(); column++)
+      for (int x = 0; x < width(); x++)
       {
          unsigned char r, g, b;
-         getPixel(row, column, r, g, b);
+         getPixel(x, y, r, g, b);
 
          r = quantize[r];
          g = quantize[g];
          b = quantize[b];
 
-         setPixel(row, column, r, g, b);
+         setPixel(x, y, r, g, b);
       }
    }
+
+   return *this;
 }
 
 /**
@@ -121,22 +136,24 @@ void Image::quantize(unsigned char levels)
  *
  ******************************************************************************
  */
-void Image::brighten(double scaleFactor)
+Image& Image::brighten(double scaleFactor)
 {
-   for (int row = 0; row < height(); row++)
+   for (int y = 0; y < height(); y++)
    {
-      for (int column = 0; column < width(); column++)
+      for (int x = 0; x < width(); x++)
       {
          unsigned char r, g, b;
-         getPixel(row, column, r, g, b);
+         getPixel(x, y, r, g, b);
 
-         r = bound(0, r * scaleFactor, 255);
-         g = bound(0, g * scaleFactor, 255);
-         b = bound(0, b * scaleFactor, 255);
+         r = bound<int>(0, r * scaleFactor, 255);
+         g = bound<int>(0, g * scaleFactor, 255);
+         b = bound<int>(0, b * scaleFactor, 255);
 
-         setPixel(row, column, r, g, b);
+         setPixel(x, y, r, g, b);
       }
    }     
+
+   return *this;
 }
 
 /**
@@ -146,9 +163,26 @@ void Image::brighten(double scaleFactor)
  *
  ******************************************************************************
  */
-void Image::saturate(double scale)
+Image& Image::saturate(double scale)
 {
-   printf("Warning: [Image] 'saturate(double scale)' is not implemented\n");
+   for (int y = 0; y < height(); y++)
+   {
+      for (int x = 0; x < width(); x++)
+      {
+         unsigned char r, g, b;
+         getPixel(x, y, r, g, b);
+
+         unsigned char lum = luminance(r, g, b);
+
+         r = blendColors(r, lum, scale);
+         g = blendColors(g, lum, scale);
+         b = blendColors(b, lum, scale);
+
+         setPixel(x, y, r, g, b);
+      }
+   }
+
+   return *this;
 }
 
 
@@ -159,9 +193,29 @@ void Image::saturate(double scale)
  *
  ******************************************************************************
  */
-void Image::scale()
+Image& Image::scale(double factor)
 {
-   printf("Warning: [Image] 'scale()' is not implemented\n");
+   for (int y = 0; y < height(); y++)
+   {
+      for (int x = 0; x < width(); x++)
+      {
+         int u = x / factor;
+         int v = y;
+
+         if (coordsAreOk(u, v))
+         {
+            unsigned char r, g, b;
+            getPixel(u, v, r, g, b);
+            setPixel(x, y, r, g, b);
+         }
+         else
+         {  
+            setPixel(x, y, 0, 0, 0);
+         }
+      }
+   }     
+
+   return *this;
 }
 
 
@@ -172,9 +226,40 @@ void Image::scale()
  *
  ******************************************************************************
  */
-void Image::rotate()
+Image& Image::rotate(double theta)
 {
-   printf("Warning: [Image] 'rotate()' is not implemented\n");
+   Image original = this->cloned();
+
+   int halfWidth = width() / 2;
+   int halfHeight = height() / 2;
+
+   for (int y = 0; y < height(); y++)
+   {
+      for (int x = 0; x < width(); x++)
+      {
+         int xRel = x - halfWidth;
+         int yRel = y - halfHeight;
+
+         int uRel = xRel * cos(theta) - yRel * sin(theta);
+         int vRel = xRel * sin(theta) + yRel * cos(theta);
+
+         int u = uRel + halfWidth;
+         int v = vRel + halfHeight;
+
+         if (coordsAreOk(u, v))
+         {
+            unsigned char r, g, b;
+            original.getPixel(u, v, r, g, b);
+            setPixel(x, y, r, g, b);
+         }
+         else
+         {
+            setPixel(x, y, 0, 0, 0);
+         }
+      }
+   }
+
+   return *this;
 }
 
 
@@ -185,9 +270,44 @@ void Image::rotate()
  *
  ******************************************************************************
  */
-void Image::contrast(double scale)
+Image& Image::contrast(double scale)
 {
-   printf("Warning: [Image] 'contrast(double scale)' is not implemented\n");
+   // Calculate average luminance
+   int totalOfRowLuminances = 0;
+   for (int y = 0; y < height(); y++)
+   {
+      int totalLuminanceOfRow = 0;
+      for (int x = 0; x < width(); x++)
+      {
+         unsigned char r, g, b;
+         getPixel(x, y, r, g, b);
+
+         totalLuminanceOfRow += luminance(r, g, b);
+      }
+
+      int actualLuminanceOfRow = (totalLuminanceOfRow / width());
+      totalOfRowLuminances += actualLuminanceOfRow;
+   }
+
+   int averageLuminance = (totalOfRowLuminances / height());
+
+   // Apply contrast
+   for (int y = 0; y < height(); y++)
+   {
+      for (int x = 0; x < width(); x++)
+      {
+         unsigned char r, g, b;
+         getPixel(x, y, r, g, b);
+
+         r = blendColors(r, averageLuminance, scale);
+         g = blendColors(g, averageLuminance, scale);
+         b = blendColors(b, averageLuminance, scale);
+
+         setPixel(x, y, r, g, b);
+      }
+   }     
+
+   return *this;
 }
 
 
@@ -198,9 +318,11 @@ void Image::contrast(double scale)
  *
  ******************************************************************************
  */
-void Image::bilinearScale()
+Image& Image::bilinearScale(double scale)
 {
    printf("Warning: [Image] 'bilinearScale()' is not implemented\n");
+
+   return *this;
 }
 
 
@@ -211,9 +333,11 @@ void Image::bilinearScale()
  *
  ******************************************************************************
  */
-void Image::swirl()
+Image& Image::swirl(double angle)
 {
    printf("Warning: [Image] 'swirl()' is not implemented\n");
+
+   return *this;
 }
 
 

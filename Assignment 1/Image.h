@@ -33,23 +33,26 @@ public:
    int bytesPerPixel();
    const void* data();
 
-   void getPixel(int row, int column, unsigned char& r, unsigned char& g, unsigned char& b);
-   void setPixel(int row, int column, unsigned char r, unsigned char g, unsigned char b);
+   void getPixel(int x, int y, unsigned char& r, unsigned char& g, unsigned char& b);
+   void setPixel(int x, int y, unsigned char r, unsigned char g, unsigned char b);
 
-   void quantize(unsigned char levels);
-   void brighten(double scale);
-   void saturate(double scale);
-   void scale();
-   void rotate();
-   void contrast(double scale);
-   void bilinearScale();
-   void swirl();
+   bool coordsAreOk(int x, int y);
+
+   Image& quantize(unsigned char levels);
+   Image& brighten(double scale);
+   Image& saturate(double scale);
+   Image& scale(double factor);
+   Image& rotate(double angle);
+   Image& contrast(double scale);
+   Image& bilinearScale(double factor);
+   Image& swirl(double angle);
 
 private: // helpers
    void createOpenGlTexture();
 
 private: // members
    RgbImage* image_;
+   std::string filename_;
 };
 
 #endif

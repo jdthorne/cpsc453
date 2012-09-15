@@ -10,10 +10,12 @@
 
 OpenGlDisplay::OpenGlDisplay()
    : mouseDown_(false)
+   , controls_(*this)
 {
    Image baseImage(std::string("landscape3.BMP"));
    imageRenderer_.setOriginalImage(baseImage);
-   imageRenderer_.setFilteredImage(baseImage);
+
+   handleQuantilizeSelected("landscape3.BMP", 0);
 }
 
 OpenGlDisplay::~OpenGlDisplay()
@@ -83,17 +85,57 @@ void OpenGlDisplay::handleMouseMotion(int x, int y)
 {
    y = fixMouseY(y);
    controls_.handleMouseEvent(x, y, mouseDown_);
-
-   if (controls_.hasChanged())
-   {  
-      Image filteredImage(std::string("landscape3.BMP"));
-      filteredImage.brighten(controls_.sliderSettingInRange(0, 2));
-
-      imageRenderer_.setFilteredImage(filteredImage);
-   }
 }
 
 int OpenGlDisplay::fixMouseY(int y)
 {
    return height_ - y;
 }
+
+/**
+ ******************************************************************************
+ *
+ *                   Control Bar
+ *
+ ******************************************************************************
+ */
+void OpenGlDisplay::handleQuantilizeSelected(std::string file, int levels)
+{
+   imageRenderer_.setFilteredImage(Image(file).quantize(levels));
+}
+
+void OpenGlDisplay::handleBrightenSelected(std::string file, double setting)
+{
+   imageRenderer_.setFilteredImage(Image(file).brighten(setting));
+}
+
+void OpenGlDisplay::handleSaturateSelected(std::string file, double scale)
+{
+   imageRenderer_.setFilteredImage(Image(file).saturate(scale));
+}
+
+void OpenGlDisplay::handleScaleSelected(std::string file, double factor)
+{
+   imageRenderer_.setFilteredImage(Image(file).scale(factor));
+}
+
+void OpenGlDisplay::handleRotateSelected(std::string file, double angle)
+{
+   imageRenderer_.setFilteredImage(Image(file).rotate(angle));
+}
+
+void OpenGlDisplay::handleContrastSelected(std::string file, double scale)
+{
+   imageRenderer_.setFilteredImage(Image(file).contrast(scale));
+}
+
+void OpenGlDisplay::handleBilinearScaleSelected(std::string file, double factor)
+{
+   imageRenderer_.setFilteredImage(Image(file).bilinearScale(factor));
+}
+
+void OpenGlDisplay::handleSwirlSelected(std::string file, double angle)
+{
+   imageRenderer_.setFilteredImage(Image(file).swirl(angle));
+}
+

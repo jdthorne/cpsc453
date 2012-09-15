@@ -7,6 +7,9 @@
 // Project
 #include <PopupMenu.h>
 
+
+class I_ControlBarHandler;
+
 /**
  ******************************************************************************
  *
@@ -18,7 +21,7 @@ class ControlBar : public I_PopupMenuHandler
 {
 
 public:
-   ControlBar();
+   ControlBar(I_ControlBarHandler& handler);
    virtual ~ControlBar();
 
 public:
@@ -28,7 +31,6 @@ public:
    void handleMouseEvent(int x, int y, bool mouseDown);
 
    bool hasChanged();
-   double sliderSettingInRange(double min, double max);
 
 public: // popup menu handler
    virtual void handleItemSelected(const PopupMenu* menu, int index, std::string item);
@@ -39,8 +41,12 @@ private: // helpers
    void renderOperationMenu();
    void renderSlider();
 
+   double sliderSettingInRange(double min, double max);
+
+   void handleSelectedOperationChanged();
+
 private: // members
-   bool hasChanged_;
+   I_ControlBarHandler& handler_;
 
    int width_;
    int height_;
@@ -51,8 +57,11 @@ private: // members
    bool operationMenuHovered_;
    bool sliderHovered_;
 
+   std::string file_;
+
    PopupMenu operationMenu_;
 
+   int currentOperationIndex_;
    std::string currentOperationText_;
 };
 
@@ -69,7 +78,14 @@ public:
    virtual ~I_ControlBarHandler() {};
 
 public:
-   virtual void handleOperationChanged() = 0;
+   virtual void handleQuantilizeSelected(std::string file, int levels) = 0;
+   virtual void handleBrightenSelected(std::string file, double setting) = 0;
+   virtual void handleSaturateSelected(std::string file, double scale) = 0;
+   virtual void handleScaleSelected(std::string file, double factor) = 0;
+   virtual void handleRotateSelected(std::string file, double angle) = 0;
+   virtual void handleContrastSelected(std::string file, double scale) = 0;
+   virtual void handleBilinearScaleSelected(std::string file, double factor) = 0;
+   virtual void handleSwirlSelected(std::string file, double angle) = 0;
 
 };
 

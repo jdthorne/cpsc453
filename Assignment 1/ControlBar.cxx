@@ -21,16 +21,24 @@ const int SLIDER_BAR_END_PADDING = 20;
 
 const int TEXT_Y = 8;
 
-ControlBar::ControlBar()
-   : hasChanged_(false)
+ControlBar::ControlBar(I_ControlBarHandler& handler)
+   : handler_(handler)
    , width_(0)
    , height_(25)
-   , sliderSetting_(0)
+   , sliderSetting_(0.5)
+   , file_("landscape3.BMP")
    , operationMenu_(*this, OPERATION_MENU_LEFT, height_ + 1, SLIDER_LEFT - OPERATION_MENU_LEFT)
+   , currentOperationIndex_(0)
    , currentOperationText_("Operation: Quantilize")
 {
    operationMenu_.addItem("Quantilize");
    operationMenu_.addItem("Brighten");
+   operationMenu_.addItem("Saturate");
+   operationMenu_.addItem("Scale");
+   operationMenu_.addItem("Rotate");
+   operationMenu_.addItem("Contrast");
+   operationMenu_.addItem("BilinearScale");
+   operationMenu_.addItem("Swirl");
 }
 
 ControlBar::~ControlBar()
@@ -136,9 +144,9 @@ void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
       {
          double sliderWidth = width_ - SLIDER_BAR_START - SLIDER_BAR_END_PADDING;
          sliderSetting_ = (x - SLIDER_BAR_START) / sliderWidth;
-         sliderSetting_ = bound(0, sliderSetting_, 1);
+         sliderSetting_ = bound(0.0, sliderSetting_, 1.0);
 
-         hasChanged_ = true;
+         handleSelectedOperationChanged();
       }
 
       if (operationMenuHovered_)
@@ -162,8 +170,59 @@ void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
 void ControlBar::handleItemSelected(const PopupMenu* menu, int index, std::string item)
 {
    currentOperationText_ = "Operation: " + item;
-   printf("Warning: [ControlBar] 'handleItemSelected(const PopupMenu* menu, int index, std::string item)' is not implemented\n");
+   sliderSetting_ = 0.5;
+
+   handleSelectedOperationChanged();
 }
+
+/**
+ ******************************************************************************
+ *
+ *                   Current Operation
+ *
+ ******************************************************************************
+ */
+void ControlBar::handleSelectedOperationChanged()
+{
+   if (currentOperationText_ == "Operation: Quantilize")
+   {
+      handler_.handleQuantilizeSelected(file_, sliderSettingInRange(2, 255));
+   }
+   else if (currentOperationText_ == "Operation: Brighten")
+   {
+      handler_.handleBrightenSelected(file_, sliderSettingInRange(0, 2));
+   }
+   else if (currentOperationText_ == "Operation: Saturate")
+   {
+      handler_.handleSaturateSelected(file_, sliderSettingInRange(0, 2));
+   }
+   else if (currentOperationText_ == "Operation: Scale")
+   {
+      handler_.handleScaleSelected(file_, sliderSettingInRange(0, 1));
+   }
+   else if (currentOperationText_ == "Operation: Rotate")
+   {
+      handler_.handleRotateSelected(file_, sliderSettingInRange(0, 3.14159 / 2));
+   }
+   else if (currentOperationText_ == "Operation: Contrast")
+   {
+      handler_.handleContrastSelected(file_, sliderSettingInRange(0, 2));
+   }
+   else if (currentOperationText_ == "Operation: BilinearScale")
+   {
+      handler_.handleBilinearScaleSelected(file_, sliderSettingInRange(0, 1));
+   }
+   else if (currentOperationText_ == "Operation: Swirl")
+   {
+      handler_.handleSwirlSelected(file_, sliderSettingInRange(0, 3.14159 / 2));
+   }
+
+   else
+   {
+      printf("[ControlBar] Error: Unknown operation selected: '%s'\n", currentOperationText_.data());
+   }
+}
+
 
 /**
  ******************************************************************************
@@ -172,14 +231,6 @@ void ControlBar::handleItemSelected(const PopupMenu* menu, int index, std::strin
  *
  ******************************************************************************
  */
-bool ControlBar::hasChanged()
-{
-   bool result = hasChanged_;
-   hasChanged_ = false;
-
-   return result;
-}
-
 double ControlBar::sliderSettingInRange(double min, double max)
 {
    double range = max - min;
