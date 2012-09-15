@@ -20,6 +20,7 @@ public:
    ~Color();
 
 public:
+   unsigned char luminance();
    Color toLuminance();
    Color blendedWith(Color rhs, double mix);
 
@@ -27,6 +28,7 @@ public:
 
 public: // members
    unsigned char r, g, b;
+
 };
 
 #endif

@@ -99,6 +99,26 @@ bool Image::coordsAreOk(int x, int y)
 /**
  ******************************************************************************
  *
+ *                   Misc Helper Functions
+ *
+ ******************************************************************************
+ */
+inline void rotateAroundCenter(int x, int y, int halfWidth, int halfHeight, double theta,
+                               int& xOut, int& yOut)
+{
+   int xRel = x - halfWidth;
+   int yRel = y - halfHeight;
+
+   int uRel = xRel * cos(theta) - yRel * sin(theta);
+   int vRel = xRel * sin(theta) + yRel * cos(theta);
+
+   xOut = uRel + halfWidth;
+   yOut = vRel + halfHeight;
+}
+
+/**
+ ******************************************************************************
+ *
  *                   Quantization
  *
  ******************************************************************************
@@ -147,13 +167,10 @@ Image Image::brightened(double scaleFactor)
    {
       for (int x = 0; x < width(); x++)
       {
-         Color c = getPixel(x, y);
+         Color color = getPixel(x, y);
 
-         c.r = bound<int>(0, c.r * scaleFactor, 255);
-         c.g = bound<int>(0, c.g * scaleFactor, 255);
-         c.b = bound<int>(0, c.b * scaleFactor, 255);
-
-         result.setPixel(x, y, c);
+         Color newColor = color.blendedWith(Color::BLACK, scaleFactor);
+         result.setPixel(x, y, newColor);
       }
    }     
 
@@ -210,10 +227,6 @@ Image Image::scaled(double factor)
          {
             result.setPixel(x, y, getPixel(u, v));
          }
-         else
-         {  
-            result.setPixel(x, y, Color::BLACK);
-         }
       }
    }     
 
@@ -241,22 +254,12 @@ Image Image::rotated(double theta)
    {
       for (int x = 0; x < width(); x++)
       {
-         int xRel = x - halfWidth;
-         int yRel = y - halfHeight;
-
-         int uRel = xRel * cos(theta) - yRel * sin(theta);
-         int vRel = xRel * sin(theta) + yRel * cos(theta);
-
-         int u = uRel + halfWidth;
-         int v = vRel + halfHeight;
+         int u, v;
+         rotateAroundCenter(x, y, halfWidth, halfHeight, theta, u, v);
 
          if (coordsAreOk(u, v))
          {
             result.setPixel(x, y, getPixel(u, v));
-         }
-         else
-         {
-            result.setPixel(x, y, Color::BLACK);
          }
       }
    }
@@ -285,7 +288,7 @@ Image Image::contrasted(double scale)
       {
          Color color = getPixel(x, y);
 
-         totalLuminanceOfRow += luminance(color.r, color.g, color.b);
+         totalLuminanceOfRow += color.luminance();
       }
 
       int actualLuminanceOfRow = (totalLuminanceOfRow / width());
@@ -327,7 +330,20 @@ Image Image::bilinearScaled(double scale)
    {
       for (int x = 0; x < width(); x++)
       {
+         double u = x / scale;
 
+         int u1 = floor(u);
+         int u2 = ceil(u);
+         int v = y;
+
+         if (coordsAreOk(u1, v) && coordsAreOk(u2, v))
+         {
+            Color c1 = getPixel(u1, v);
+            Color c2 = getPixel(u2, v);
+
+            Color newColor = c1.blendedWith(c2, 0.5);
+            result.setPixel(x, y, newColor);
+         }
       }
    }   
 
@@ -342,11 +358,64 @@ Image Image::bilinearScaled(double scale)
  *
  ******************************************************************************
  */
-Image Image::swirled(double angle)
+Image Image::swirled(double theta)
 {
-   printf("Warning: [Image] 'swirl()' is not implemented\n");
+   Image result = this->blankCopy();
 
-   return *this;
+   int halfWidth = width() / 2;
+   int halfHeight = height() / 2;
+
+   for (int v = 0; v < height(); v++)
+   {
+      for (int u = 0; u < width(); u++)
+      {
+         double uDistanceFromCenter = (u - halfWidth);
+         double vDistanceFromCenter = (v - halfHeight);
+         double distanceFromCenter = sqrt(   uDistanceFromCenter * uDistanceFromCenter 
+                                           + vDistanceFromCenter * vDistanceFromCenter );
+
+         double distanceFromCenterAsFraction = (distanceFromCenter / halfWidth);
+
+         int x, y;
+         rotateAroundCenter(u, v, halfWidth, halfHeight, theta * distanceFromCenterAsFraction, x, y);
+
+         if (coordsAreOk(x, y) && coordsAreOk(u, v))
+         {
+            result.setPixel(x, y, getPixel(u, v));
+         }
+      }
+   }
+
+   return result;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Dissolve
+ *
+ ******************************************************************************
+ */
+Image Image::dissolved(double mix, Image& dissolveWith)
+{
+   mix = 1.0 - mix;
+   Image result = this->blankCopy();
+
+   for (int y = 0; y < height(); y++)
+   {
+      for (int x = 0; x < width(); x++)
+      {
+         if (coordsAreOk(x, y) && dissolveWith.coordsAreOk(x, y))
+         {
+            Color c1 = getPixel(x, y);
+            Color c2 = dissolveWith.getPixel(x, y);
+
+            Color newColor = c1.blendedWith(c2, mix);
+            result.setPixel(x, y, newColor);
+         }
+      }
+   }   
+
+   return result;
+}
 

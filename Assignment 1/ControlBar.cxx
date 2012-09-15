@@ -1,5 +1,6 @@
 
 // System
+#include <cmath>
 
 // OpenGl
 #include <GLUT/glut.h>
@@ -37,8 +38,9 @@ ControlBar::ControlBar(I_ControlBarHandler& handler)
    operationMenu_.addItem("Scale");
    operationMenu_.addItem("Rotate");
    operationMenu_.addItem("Contrast");
-   operationMenu_.addItem("BilinearScale");
+   operationMenu_.addItem("Bilinear Scale");
    operationMenu_.addItem("Swirl");
+   operationMenu_.addItem("Dissolve");
 }
 
 ControlBar::~ControlBar()
@@ -144,7 +146,15 @@ void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
       {
          double sliderWidth = width_ - SLIDER_BAR_START - SLIDER_BAR_END_PADDING;
          sliderSetting_ = (x - SLIDER_BAR_START) / sliderWidth;
-         sliderSetting_ = bound(0.0, sliderSetting_, 1.0);
+
+         if (sliderSetting_ < 0.0)
+         {
+            sliderSetting_ = 0;
+         }
+         if (sliderSetting_ > 1.0)
+         {
+            sliderSetting_ = 1.0;
+         }
 
          handleSelectedOperationChanged();
       }
@@ -198,7 +208,7 @@ void ControlBar::handleSelectedOperationChanged()
    }
    else if (currentOperationText_ == "Operation: Scale")
    {
-      handler_.handleScaleSelected(sliderSettingInRange(0, 1));
+      handler_.handleScaleSelected(sliderSettingInRange(0, 2));
    }
    else if (currentOperationText_ == "Operation: Rotate")
    {
@@ -208,13 +218,17 @@ void ControlBar::handleSelectedOperationChanged()
    {
       handler_.handleContrastSelected(sliderSettingInRange(0, 2));
    }
-   else if (currentOperationText_ == "Operation: BilinearScale")
+   else if (currentOperationText_ == "Operation: Bilinear Scale")
    {
-      handler_.handleBilinearScaleSelected(sliderSettingInRange(0, 1));
+      handler_.handleBilinearScaleSelected(sliderSettingInRange(0, 2));
    }
    else if (currentOperationText_ == "Operation: Swirl")
    {
       handler_.handleSwirlSelected(sliderSettingInRange(0, 3.14159 / 2));
+   }
+   else if (currentOperationText_ == "Operation: Dissolve")
+   {
+      handler_.handleDissolveSelected(sliderSettingInRange(0, 1));
    }
 
    else

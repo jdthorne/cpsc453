@@ -86,6 +86,7 @@ public:
    virtual void handleContrastSelected(double scale) = 0;
    virtual void handleBilinearScaleSelected(double factor) = 0;
    virtual void handleSwirlSelected(double angle) = 0;
+   virtual void handleDissolveSelected(double mix) = 0;
 
 };
 

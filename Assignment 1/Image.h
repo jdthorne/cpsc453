@@ -47,6 +47,7 @@ public:
    Image contrasted(double scale);
    Image bilinearScaled(double factor);
    Image swirled(double angle);
+   Image dissolved(double mix, Image& image);
 
 private: // helpers
    void createOpenGlTexture();

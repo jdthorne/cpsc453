@@ -19,17 +19,51 @@ Color::~Color()
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Helper Functions
+ *
+ ******************************************************************************
+ */
+inline unsigned char blendColorValues(unsigned char a, unsigned char b, double mix)
+{
+   int newValue = (mix * a) + ( (1.0 - mix) * b );
+   
+   if (newValue < 0)
+   {
+      return 0;
+   }
+   if (newValue > 255)
+   {
+      return 255;
+   }
+
+   return newValue;
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Color Operations
+ *
+ ******************************************************************************
+ */
+unsigned char Color::luminance()
+{
+   return (0.3 * r) + (0.59 * g) + (0.11 * b);
+}
+
 Color Color::toLuminance()
 {
-   unsigned char lum = luminance(r, g, b);
-   return Color(lum, lum, lum);
+   return Color(luminance(), luminance(), luminance());
 }
 
 Color Color::blendedWith(Color rhs, double mix)
 {
-   unsigned char newR = blendColors(r, rhs.r, mix);
-   unsigned char newG = blendColors(g, rhs.g, mix);
-   unsigned char newB = blendColors(b, rhs.b, mix);
+   unsigned char newR = blendColorValues(r, rhs.r, mix);
+   unsigned char newG = blendColorValues(g, rhs.g, mix);
+   unsigned char newB = blendColorValues(b, rhs.b, mix);
 
    return Color(newR, newG, newB);
 }

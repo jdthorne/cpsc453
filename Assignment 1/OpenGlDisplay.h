@@ -41,6 +41,7 @@ public: // I_ControlBarHandler
    virtual void handleContrastSelected(double scale);
    virtual void handleBilinearScaleSelected(double factor);
    virtual void handleSwirlSelected(double angle);
+   virtual void handleDissolveSelected(double mix);
 
 private: // helpers
    int fixMouseY(int y);
@@ -52,6 +53,7 @@ private: // members
    int height_;
 
    Image originalImage_;
+   Image dissolveImage_;
    ImageRenderer imageRenderer_;
 
    ControlBar controls_;

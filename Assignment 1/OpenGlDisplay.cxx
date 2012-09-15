@@ -12,7 +12,8 @@ OpenGlDisplay::OpenGlDisplay()
    : mouseDown_(false)
    , controls_(*this)
 {
-   originalImage_ = Image(std::string("landscape3.BMP"));
+   originalImage_ = Image(std::string("images/landscape3.BMP"));
+   dissolveImage_ = Image(std::string("images/RedLeavesTexture.bmp"));
    imageRenderer_.setOriginalImage(originalImage_);
 
    handleQuantilizeSelected(128);
@@ -137,5 +138,10 @@ void OpenGlDisplay::handleBilinearScaleSelected(double factor)
 void OpenGlDisplay::handleSwirlSelected(double angle)
 {
    imageRenderer_.setFilteredImage(originalImage_.swirled(angle));
+}
+
+void OpenGlDisplay::handleDissolveSelected(double mix)
+{
+   imageRenderer_.setFilteredImage(originalImage_.dissolved(mix, dissolveImage_));
 }
 
