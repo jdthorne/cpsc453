@@ -54,6 +54,7 @@ int main(int argc, char** argv)
    glutDisplayFunc(display);
    glutMouseFunc(mouseFunc);
    glutMotionFunc(motionFunc);
+   glutPassiveMotionFunc(motionFunc);
    glutIdleFunc(idle);
 
    openGlDisplay = new OpenGlDisplay();

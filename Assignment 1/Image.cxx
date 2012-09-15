@@ -48,7 +48,8 @@ int Image::bytesPerRow()
 
 int Image::bytesPerPixel()
 {
-   // This class currently only supports RGB images
+   // This class currently only supports RGB images; so this is always 3
+   // If we supported RGBA in future, we'd need to make this more complicated.
    return 3;
 }
 
@@ -57,6 +58,13 @@ const void* Image::data()
    return image_->ImageData();
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Pixel Operations
+ *
+ ******************************************************************************
+ */
 void Image::getPixel(int row, int column, unsigned char& r, unsigned char& g, unsigned char& b)
 {
    unsigned char* base = image_->GetRgbPixel(row, column);
@@ -76,18 +84,12 @@ void Image::setPixel(int row, int column, unsigned char r, unsigned char g, unsi
 /**
  ******************************************************************************
  *
- *                   Image Transformations
+ *                   Quantization
  *
  ******************************************************************************
  */
-void Image::quantizeTo(unsigned char levels)
+void Image::quantize(unsigned char levels)
 {
-   // Bound levels
-   if (levels < 2)
-   {
-      levels = 2;
-   }
-
    // Create quantization list
    char quantize[255];
    for (int i = 0; i < 256; i++)
@@ -112,6 +114,13 @@ void Image::quantizeTo(unsigned char levels)
    }
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Brightness
+ *
+ ******************************************************************************
+ */
 void Image::brighten(double scaleFactor)
 {
    for (int row = 0; row < height(); row++)
@@ -129,4 +138,82 @@ void Image::brighten(double scaleFactor)
       }
    }     
 }
+
+/**
+ ******************************************************************************
+ *
+ *                   Saturation
+ *
+ ******************************************************************************
+ */
+void Image::saturate(double scale)
+{
+   printf("Warning: [Image] 'saturate(double scale)' is not implemented\n");
+}
+
+
+/**
+ ******************************************************************************
+ *
+ *                   Scale
+ *
+ ******************************************************************************
+ */
+void Image::scale()
+{
+   printf("Warning: [Image] 'scale()' is not implemented\n");
+}
+
+
+/**
+ ******************************************************************************
+ *
+ *                   Rotate
+ *
+ ******************************************************************************
+ */
+void Image::rotate()
+{
+   printf("Warning: [Image] 'rotate()' is not implemented\n");
+}
+
+
+/**
+ ******************************************************************************
+ *
+ *                   Contrast
+ *
+ ******************************************************************************
+ */
+void Image::contrast(double scale)
+{
+   printf("Warning: [Image] 'contrast(double scale)' is not implemented\n");
+}
+
+
+/**
+ ******************************************************************************
+ *
+ *                   Bilinear Scaling
+ *
+ ******************************************************************************
+ */
+void Image::bilinearScale()
+{
+   printf("Warning: [Image] 'bilinearScale()' is not implemented\n");
+}
+
+
+/**
+ ******************************************************************************
+ *
+ *                   Swirl
+ *
+ ******************************************************************************
+ */
+void Image::swirl()
+{
+   printf("Warning: [Image] 'swirl()' is not implemented\n");
+}
+
 

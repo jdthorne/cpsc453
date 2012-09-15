@@ -20,6 +20,13 @@ OpenGlDisplay::~OpenGlDisplay()
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Resizing
+ *
+ ******************************************************************************
+ */
 void OpenGlDisplay::handleSizeChanged(int width, int height)
 {
    glViewport(0, 0, width, height);
@@ -35,6 +42,13 @@ void OpenGlDisplay::handleSizeChanged(int width, int height)
    controls_.handleSizeChanged(width, height);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Rendering
+ *
+ ******************************************************************************
+ */
 void OpenGlDisplay::display()
 {
    glMatrixMode(GL_MODELVIEW);
@@ -49,37 +63,37 @@ void OpenGlDisplay::display()
    glutSwapBuffers();
 }
 
-int OpenGlDisplay::fixMouseY(int y)
-{
-   return height_ - y;
-}
-
+/**
+ ******************************************************************************
+ *
+ *                   Mouse Events
+ *
+ ******************************************************************************
+ */
 void OpenGlDisplay::handleMouseEvent(int button, int state, int x, int y)
 {
    y = fixMouseY(y);
 
-   controls_.handleMouseEvent(button, state, x, y);
+   mouseDown_ = (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN);
 
-   mouseDown_ = (button == GLUT_LEFT_BUTTON);
+   controls_.handleMouseEvent(x, y, mouseDown_);
 }
 
 void OpenGlDisplay::handleMouseMotion(int x, int y)
 {
-   if (!mouseDown_)
-   {
-      return;
-   }
-
    y = fixMouseY(y);
-
-   controls_.handleMouseEvent(0, 0, x, y);   
+   controls_.handleMouseEvent(x, y, mouseDown_);
 
    if (controls_.hasChanged())
    {  
       Image filteredImage(std::string("landscape3.BMP"));
-      //filteredImage.quantizeTo(controls_.sliderSettingInRange(2, 64));
       filteredImage.brighten(controls_.sliderSettingInRange(0, 2));
 
       imageRenderer_.setFilteredImage(filteredImage);
    }
+}
+
+int OpenGlDisplay::fixMouseY(int y)
+{
+   return height_ - y;
 }

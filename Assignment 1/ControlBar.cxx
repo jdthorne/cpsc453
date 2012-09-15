@@ -5,82 +5,173 @@
 #include <GLUT/glut.h>
 
 // Project
+#include <OpenGlHelpers.h>
 #include <MathHelpers.h>
 #include <ControlBar.h>
 
-const int SLIDER_LEFT = 320;
-const int SLIDER_RIGHT = 50;
+const int FILE_MENU_TEXT = 20;
+
+const int OPERATION_MENU_LEFT = 60;
+const int OPERATION_MENU_TEXT = 80;
+
+const int SLIDER_LEFT = 240;
+const int SLIDER_TEXT = 260;
+const int SLIDER_BAR_START = 320;
+const int SLIDER_BAR_END_PADDING = 20;
+
+const int TEXT_Y = 8;
 
 ControlBar::ControlBar()
    : hasChanged_(false)
    , width_(0)
-   , height_(50)
+   , height_(25)
    , sliderSetting_(0)
+   , operationMenu_(*this, OPERATION_MENU_LEFT, height_ + 1, SLIDER_LEFT - OPERATION_MENU_LEFT)
+   , currentOperationText_("Operation: Quantilize")
 {
-
+   operationMenu_.addItem("Quantilize");
+   operationMenu_.addItem("Brighten");
 }
 
 ControlBar::~ControlBar()
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   User Interface Drawing
+ *
+ ******************************************************************************
+ */
 void ControlBar::render()
 {
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-   glColor4f(0, 0, 0, 0.75);
-
-   glBegin(GL_QUADS);
-   glVertex3f(0, 0, 0);
-   glVertex3f(width_, 0, 0);
-   glVertex3f(width_, height_, 0);
-   glVertex3f(0, height_, 0);
-   glEnd();
-
-   glColor4f(1, 1, 1, 1);
-   drawText(20, 20, "File");
-   drawText(80, 20, "Operation: Quantize");
-
-   glColor4f(1, 0, 0, 1);
-   int sliderWidth = width_ - SLIDER_LEFT - SLIDER_RIGHT;
-   drawText(SLIDER_LEFT - 10, 20, "[");
-   drawText(SLIDER_LEFT + (sliderSetting_ * sliderWidth), 20, "+");
-   drawText(width_ - SLIDER_RIGHT + 20, 20, "]");
+   renderBackground();
+   renderFileMenu();
+   renderOperationMenu();
+   renderSlider();
 
    glDisable(GL_BLEND);
 }
 
-void ControlBar::drawText(int x, int y, std::string text)
+void ControlBar::renderBackground()
 {
-   glRasterPos2f(x, y);
-   for (int i = 0; i < text.length(); i++)
+   glColor4f(0, 0, 0, 0.85);
+   drawRectangularQuad(0, 0, width_, height_);
+
+   glColor4f(1, 1, 1, 1);
+   drawLine(0, height_, width_, height_);
+}
+
+void ControlBar::renderFileMenu()
+{
+   glColor4f(1, 1, 1, 1);
+   drawText(FILE_MENU_TEXT, TEXT_Y, "File");
+}
+
+void ControlBar::renderOperationMenu()
+{
+   glColor4f(1, 1, 1, 1);
+   drawLine(OPERATION_MENU_LEFT, 0, OPERATION_MENU_LEFT, height_);
+   drawText(OPERATION_MENU_TEXT, TEXT_Y, currentOperationText_);
+
+   if (operationMenuHovered_)
    {
-      glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, text.data()[i]);
+      glColor4f(1, 1, 1, 0.2);
+      drawRectangularQuad(OPERATION_MENU_LEFT, 0, SLIDER_LEFT - OPERATION_MENU_LEFT, height_);
+   }
+
+   operationMenu_.render();
+}
+
+void ControlBar::renderSlider()
+{
+   glColor4f(1, 1, 1, 1);
+   drawLine(SLIDER_LEFT, 0, SLIDER_LEFT, height_);
+   drawText(SLIDER_TEXT, 8, "Amount:");
+
+   int sliderWidth = width_ - SLIDER_BAR_START - SLIDER_BAR_END_PADDING - 20;
+   int sliderPosition = SLIDER_BAR_START + (sliderSetting_ * sliderWidth);
+   drawRectangularQuad(sliderPosition, 0, 20, height_);
+
+   if (sliderHovered_)
+   {
+      glColor4f(1, 1, 1, 0.2);
+      drawRectangularQuad(SLIDER_BAR_START, 0, sliderWidth + 20, height_);
    }
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Resizing
+ *
+ ******************************************************************************
+ */
 void ControlBar::handleSizeChanged(int width, int height)
 {
    width_ = width;
 }
 
-void ControlBar::handleMouseEvent(int button, int state, int x, int y)
+/**
+ ******************************************************************************
+ *
+ *                   Mouse Events
+ *
+ ******************************************************************************
+ */
+void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
 {
-   if (y > height_)
-   {
-      return;
-   }
+   operationMenu_.handleMouseEvent(x, y, mouseDown);
 
-   if (x > SLIDER_LEFT && x < width_ - SLIDER_RIGHT)
+   sliderHovered_ = (y < height_) && (x > SLIDER_BAR_START && x < width_ - SLIDER_BAR_END_PADDING);
+   operationMenuHovered_ = (y < height_) && (x > OPERATION_MENU_LEFT && x < SLIDER_LEFT);
+
+   if (mouseDown)
    {
-      double sliderWidth = width_ - SLIDER_LEFT - SLIDER_RIGHT;
-      sliderSetting_ = (x - SLIDER_LEFT) / sliderWidth;
-      sliderSetting_ = bound(0, sliderSetting_, 1);
+      if (sliderHovered_)
+      {
+         double sliderWidth = width_ - SLIDER_BAR_START - SLIDER_BAR_END_PADDING;
+         sliderSetting_ = (x - SLIDER_BAR_START) / sliderWidth;
+         sliderSetting_ = bound(0, sliderSetting_, 1);
+
+         hasChanged_ = true;
+      }
+
+      if (operationMenuHovered_)
+      {
+         operationMenu_.show();
+      }
+      else
+      {
+         operationMenu_.hide();
+      }
    }
-   hasChanged_ = true;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Popup Menu Events
+ *
+ ******************************************************************************
+ */
+void ControlBar::handleItemSelected(const PopupMenu* menu, int index, std::string item)
+{
+   currentOperationText_ = "Operation: " + item;
+   printf("Warning: [ControlBar] 'handleItemSelected(const PopupMenu* menu, int index, std::string item)' is not implemented\n");
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Current Status
+ *
+ ******************************************************************************
+ */
 bool ControlBar::hasChanged()
 {
    bool result = hasChanged_;
