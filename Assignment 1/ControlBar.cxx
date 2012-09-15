@@ -231,7 +231,7 @@ void ControlBar::handleItemSelected(const PopupMenu* menu, int index, std::strin
    {
       currentOperationName_ = item;
       currentOperationText_ = "Operation: " + item;
-      sliderSetting_ = 0.5;
+      sliderSetting_ = 0.25;
 
    }
 
@@ -265,7 +265,7 @@ void ControlBar::handleSelectedOperationChanged()
    }
    else if (currentOperationText_ == "Operation: Rotate")
    {
-      handler_.handleRotateSelected(sliderSettingInRange(0, 3.14159 / 2));
+      handler_.handleRotateSelected(sliderSettingInRange(0, 3.14159));
    }
    else if (currentOperationText_ == "Operation: Contrast")
    {
@@ -277,7 +277,7 @@ void ControlBar::handleSelectedOperationChanged()
    }
    else if (currentOperationText_ == "Operation: Swirl")
    {
-      handler_.handleSwirlSelected(sliderSettingInRange(0, 3.14159 / 2));
+      handler_.handleSwirlSelected(sliderSettingInRange(0, 3.14159));
    }
    else if (currentOperationText_ == "Operation: Dissolve")
    {

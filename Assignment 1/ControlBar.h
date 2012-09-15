@@ -66,6 +66,7 @@ private: // members
    int currentOperationIndex_;
    std::string currentOperationName_;
    std::string currentOperationText_;
+
 };
 
 /**
