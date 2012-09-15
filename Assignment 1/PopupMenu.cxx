@@ -28,14 +28,9 @@ PopupMenu::~PopupMenu()
 {
 }
 
-void PopupMenu::show()
+void PopupMenu::setVisible(bool visible)
 {
-   visible_ = true;
-}
-
-void PopupMenu::hide()
-{
-   visible_ = false;
+   visible_ = visible;
 }
 
 void PopupMenu::addItem(std::string item)

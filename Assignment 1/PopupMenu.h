@@ -25,9 +25,7 @@ public:
    ~PopupMenu();
 
 public:
-   void show();
-   void hide();
-
+   void setVisible(bool visible);
    void addItem(std::string item);
 
    void render();

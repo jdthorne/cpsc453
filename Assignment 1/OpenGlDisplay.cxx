@@ -41,8 +41,8 @@ void OpenGlDisplay::handleSizeChanged(int width, int height)
    width_ = width;
    height_ = height;
 
-   imageRenderer_.setSize(width, height);
    controls_.handleSizeChanged(width, height);
+   imageRenderer_.handleSizeChanged(width, height);
 }
 
 /**

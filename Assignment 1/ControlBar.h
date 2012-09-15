@@ -37,6 +37,7 @@ public: // popup menu handler
 
 private: // helpers
    void renderBackground();
+   void renderTitleText();
    void renderFileMenu();
    void renderOperationMenu();
    void renderSlider();
@@ -59,6 +60,7 @@ private: // members
 
    std::string file_;
 
+   PopupMenu fileMenu_;
    PopupMenu operationMenu_;
 
    int currentOperationIndex_;

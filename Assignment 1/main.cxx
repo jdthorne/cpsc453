@@ -45,9 +45,12 @@ void idle()
  */
 int main(int argc, char** argv)
 {
+   int width = 1150;
+   int height = 450;
+
    glutInit(&argc, argv);
    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-   glutInitWindowSize(1280, 720);
+   glutInitWindowSize(width, height);
    glutCreateWindow("CPSC453 Computer Graphics - Assignment 1");
 
    glutReshapeFunc(reshape);
@@ -59,7 +62,7 @@ int main(int argc, char** argv)
 
    openGlDisplay = new OpenGlDisplay();
 
-   reshape(1280, 720);
+   reshape(width, height);
 
    glutMainLoop();
 

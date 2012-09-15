@@ -10,6 +10,9 @@
 #include <MathHelpers.h>
 #include <ControlBar.h>
 
+const int BAR_HEIGHT = 25;
+
+const int FILE_MENU_LEFT = 0;
 const int FILE_MENU_TEXT = 20;
 
 const int OPERATION_MENU_LEFT = 60;
@@ -25,10 +28,10 @@ const int TEXT_Y = 8;
 ControlBar::ControlBar(I_ControlBarHandler& handler)
    : handler_(handler)
    , width_(0)
-   , height_(25)
    , sliderSetting_(0.5)
    , file_("landscape3.BMP")
-   , operationMenu_(*this, OPERATION_MENU_LEFT, height_ + 1, SLIDER_LEFT - OPERATION_MENU_LEFT)
+   , fileMenu_(*this, FILE_MENU_LEFT, BAR_HEIGHT + 1, OPERATION_MENU_LEFT)
+   , operationMenu_(*this, OPERATION_MENU_LEFT, BAR_HEIGHT + 1, SLIDER_LEFT - OPERATION_MENU_LEFT)
    , currentOperationIndex_(0)
    , currentOperationText_("Operation: Quantilize")
 {
@@ -60,6 +63,7 @@ void ControlBar::render()
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
    renderBackground();
+   renderTitleText();
    renderFileMenu();
    renderOperationMenu();
    renderSlider();
@@ -70,10 +74,18 @@ void ControlBar::render()
 void ControlBar::renderBackground()
 {
    glColor4f(0, 0, 0, 0.85);
-   drawRectangularQuad(0, 0, width_, height_);
+   drawRectangularQuad(0, 0, width_, BAR_HEIGHT);
+   drawRectangularQuad(0, height_ - BAR_HEIGHT, width_, BAR_HEIGHT);
 
    glColor4f(1, 1, 1, 1);
-   drawLine(0, height_, width_, height_);
+   drawLine(0, BAR_HEIGHT, width_, BAR_HEIGHT);
+   drawLine(0, height_ - BAR_HEIGHT, width_, height_ - BAR_HEIGHT);
+}
+
+void ControlBar::renderTitleText()
+{
+   glColor4f(1, 1, 1, 1);
+   drawText(FILE_MENU_TEXT, height_ - BAR_HEIGHT + TEXT_Y, "CPSC453 Computer Graphics - Assignment 1 - James Thorne");
 }
 
 void ControlBar::renderFileMenu()
@@ -85,13 +97,13 @@ void ControlBar::renderFileMenu()
 void ControlBar::renderOperationMenu()
 {
    glColor4f(1, 1, 1, 1);
-   drawLine(OPERATION_MENU_LEFT, 0, OPERATION_MENU_LEFT, height_);
+   drawLine(OPERATION_MENU_LEFT, 0, OPERATION_MENU_LEFT, BAR_HEIGHT);
    drawText(OPERATION_MENU_TEXT, TEXT_Y, currentOperationText_);
 
    if (operationMenuHovered_)
    {
       glColor4f(1, 1, 1, 0.2);
-      drawRectangularQuad(OPERATION_MENU_LEFT, 0, SLIDER_LEFT - OPERATION_MENU_LEFT, height_);
+      drawRectangularQuad(OPERATION_MENU_LEFT, 0, SLIDER_LEFT - OPERATION_MENU_LEFT, BAR_HEIGHT);
    }
 
    operationMenu_.render();
@@ -100,17 +112,17 @@ void ControlBar::renderOperationMenu()
 void ControlBar::renderSlider()
 {
    glColor4f(1, 1, 1, 1);
-   drawLine(SLIDER_LEFT, 0, SLIDER_LEFT, height_);
+   drawLine(SLIDER_LEFT, 0, SLIDER_LEFT, BAR_HEIGHT);
    drawText(SLIDER_TEXT, 8, "Amount:");
 
    int sliderWidth = width_ - SLIDER_BAR_START - SLIDER_BAR_END_PADDING - 20;
    int sliderPosition = SLIDER_BAR_START + (sliderSetting_ * sliderWidth);
-   drawRectangularQuad(sliderPosition, 0, 20, height_);
+   drawRectangularQuad(sliderPosition, 0, 20, BAR_HEIGHT);
 
    if (sliderHovered_)
    {
       glColor4f(1, 1, 1, 0.2);
-      drawRectangularQuad(SLIDER_BAR_START, 0, sliderWidth + 20, height_);
+      drawRectangularQuad(SLIDER_BAR_START, 0, sliderWidth + 20, BAR_HEIGHT);
    }
 }
 
@@ -124,6 +136,7 @@ void ControlBar::renderSlider()
 void ControlBar::handleSizeChanged(int width, int height)
 {
    width_ = width;
+   height_ = height;
 }
 
 /**
@@ -137,8 +150,8 @@ void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
 {
    operationMenu_.handleMouseEvent(x, y, mouseDown);
 
-   sliderHovered_ = (y < height_) && (x > SLIDER_BAR_START && x < width_ - SLIDER_BAR_END_PADDING);
-   operationMenuHovered_ = (y < height_) && (x > OPERATION_MENU_LEFT && x < SLIDER_LEFT);
+   sliderHovered_ = (y < BAR_HEIGHT) && (x > SLIDER_BAR_START && x < width_ - SLIDER_BAR_END_PADDING);
+   operationMenuHovered_ = (y < BAR_HEIGHT) && (x > OPERATION_MENU_LEFT && x < SLIDER_LEFT);
 
    if (mouseDown)
    {
@@ -159,14 +172,8 @@ void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
          handleSelectedOperationChanged();
       }
 
-      if (operationMenuHovered_)
-      {
-         operationMenu_.show();
-      }
-      else
-      {
-         operationMenu_.hide();
-      }
+      fileMenu_.setVisible(fileMenuHovered_);
+      operationMenu_.setVisible(operationMenuHovered_);
    }
 }
 
