@@ -76,20 +76,19 @@ const void* Image::data()
  *
  ******************************************************************************
  */
-void Image::getPixel(int x, int y, unsigned char& r, unsigned char& g, unsigned char& b)
+Color Image::getPixel(int x, int y)
 {
    unsigned char* base = image_->GetRgbPixel(y, x);
-   r = base[0];
-   g = base[1];
-   b = base[2];
+
+   return Color(base[0], base[1], base[2]);
 }
 
-void Image::setPixel(int x, int y, unsigned char r, unsigned char g, unsigned char b)
+void Image::setPixel(int x, int y, Color c)
 {
    unsigned char* base = image_->GetRgbPixel(y, x);
-   base[0] = r;
-   base[1] = g;
-   base[2] = b;
+   base[0] = c.r;
+   base[1] = c.g;
+   base[2] = c.b;
 }
 
 bool Image::coordsAreOk(int x, int y)
@@ -120,14 +119,13 @@ Image Image::quantized(unsigned char levels)
    {
       for (int x = 0; x < width(); x++)
       {
-         unsigned char r, g, b;
-         getPixel(x, y, r, g, b);
+         Color c = getPixel(x, y);
 
-         r = quantize[r];
-         g = quantize[g];
-         b = quantize[b];
+         c.r = quantize[c.r];
+         c.g = quantize[c.g];
+         c.b = quantize[c.b];
 
-         result.setPixel(x, y, r, g, b);
+         result.setPixel(x, y, c);
       }
    }
 
@@ -149,14 +147,13 @@ Image Image::brightened(double scaleFactor)
    {
       for (int x = 0; x < width(); x++)
       {
-         unsigned char r, g, b;
-         getPixel(x, y, r, g, b);
+         Color c = getPixel(x, y);
 
-         r = bound<int>(0, r * scaleFactor, 255);
-         g = bound<int>(0, g * scaleFactor, 255);
-         b = bound<int>(0, b * scaleFactor, 255);
+         c.r = bound<int>(0, c.r * scaleFactor, 255);
+         c.g = bound<int>(0, c.g * scaleFactor, 255);
+         c.b = bound<int>(0, c.b * scaleFactor, 255);
 
-         result.setPixel(x, y, r, g, b);
+         result.setPixel(x, y, c);
       }
    }     
 
@@ -178,16 +175,12 @@ Image Image::saturated(double scale)
    {
       for (int x = 0; x < width(); x++)
       {
-         unsigned char r, g, b;
-         getPixel(x, y, r, g, b);
+         Color color = getPixel(x, y);
+         Color luminance = color.toLuminance();
 
-         unsigned char lum = luminance(r, g, b);
+         Color newColor = color.blendedWith(luminance, scale);
 
-         r = blendColors(r, lum, scale);
-         g = blendColors(g, lum, scale);
-         b = blendColors(b, lum, scale);
-
-         result.setPixel(x, y, r, g, b);
+         result.setPixel(x, y, newColor);
       }
    }
 
@@ -215,13 +208,11 @@ Image Image::scaled(double factor)
 
          if (coordsAreOk(u, v))
          {
-            unsigned char r, g, b;
-            getPixel(u, v, r, g, b);
-            result.setPixel(x, y, r, g, b);
+            result.setPixel(x, y, getPixel(u, v));
          }
          else
          {  
-            result.setPixel(x, y, 0, 0, 0);
+            result.setPixel(x, y, Color::BLACK);
          }
       }
    }     
@@ -261,13 +252,11 @@ Image Image::rotated(double theta)
 
          if (coordsAreOk(u, v))
          {
-            unsigned char r, g, b;
-            getPixel(u, v, r, g, b);
-            result.setPixel(x, y, r, g, b);
+            result.setPixel(x, y, getPixel(u, v));
          }
          else
          {
-            result.setPixel(x, y, 0, 0, 0);
+            result.setPixel(x, y, Color::BLACK);
          }
       }
    }
@@ -294,10 +283,9 @@ Image Image::contrasted(double scale)
       int totalLuminanceOfRow = 0;
       for (int x = 0; x < width(); x++)
       {
-         unsigned char r, g, b;
-         getPixel(x, y, r, g, b);
+         Color color = getPixel(x, y);
 
-         totalLuminanceOfRow += luminance(r, g, b);
+         totalLuminanceOfRow += luminance(color.r, color.g, color.b);
       }
 
       int actualLuminanceOfRow = (totalLuminanceOfRow / width());
@@ -306,19 +294,17 @@ Image Image::contrasted(double scale)
 
    int averageLuminance = (totalOfRowLuminances / height());
 
+   Color luminanceColor = Color(averageLuminance, averageLuminance, averageLuminance);
+
    // Apply contrast
    for (int y = 0; y < height(); y++)
    {
       for (int x = 0; x < width(); x++)
       {
-         unsigned char r, g, b;
-         getPixel(x, y, r, g, b);
+         Color color = getPixel(x, y);
 
-         r = blendColors(r, averageLuminance, scale);
-         g = blendColors(g, averageLuminance, scale);
-         b = blendColors(b, averageLuminance, scale);
-
-         result.setPixel(x, y, r, g, b);
+         Color newColor = color.blendedWith(luminanceColor, scale);
+         result.setPixel(x, y, newColor);
       }
    }     
 
@@ -335,9 +321,17 @@ Image Image::contrasted(double scale)
  */
 Image Image::bilinearScaled(double scale)
 {
-   printf("Warning: [Image] 'bilinearScale()' is not implemented\n");
+   Image result = this->blankCopy();
 
-   return *this;
+   for (int y = 0; y < height(); y++)
+   {
+      for (int x = 0; x < width(); x++)
+      {
+
+      }
+   }   
+
+   return result;
 }
 
 

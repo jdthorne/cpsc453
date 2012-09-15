@@ -6,6 +6,7 @@
 
 // Project
 #include <RgbImage.h>
+#include <Color.h>
 
 /**
  ******************************************************************************
@@ -33,8 +34,8 @@ public:
    int bytesPerPixel();
    const void* data();
 
-   void getPixel(int x, int y, unsigned char& r, unsigned char& g, unsigned char& b);
-   void setPixel(int x, int y, unsigned char r, unsigned char g, unsigned char b);
+   Color getPixel(int x, int y);
+   void setPixel(int x, int y, Color c);
 
    bool coordsAreOk(int x, int y);
 
