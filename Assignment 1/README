@@ -7,8 +7,8 @@
 Welcome to CPSC453 Assignment 1!
 
 
-Name:       James Donald Thorne
-Student ID: 10018506
+Student Name: James Donald Thorne
+Student ID:   10018506
 
 
 Target Platform:
@@ -68,10 +68,10 @@ Reused Code:
    - RgbImage.h / RgbImage.cpp, created by Samuel R. Buss, used as a requirement of this assignment.
      
      Original copyright notice is intact, an can be found at the top of RgbImage.h.
+     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/
 
    - All of the pictures in the images/ folder, obtained from the course website, used as a requirement
      of this assignment.
      
      Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/
 
-   - 

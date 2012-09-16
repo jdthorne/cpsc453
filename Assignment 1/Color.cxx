@@ -3,7 +3,6 @@
 
 // Project
 #include <Color.h>
-#include <MathHelpers.h>
 
 const Color Color::BLACK = Color(0, 0, 0);
 
@@ -45,22 +44,25 @@ inline unsigned char blendColorValues(unsigned char a, unsigned char b, double m
 /**
  ******************************************************************************
  *
- *                   Color Operations
+ *                   Luminance
  *
  ******************************************************************************
  */
 unsigned char Color::luminance()
 {
+   // Calculate the scalar luminance of this color
    return (0.3 * r) + (0.59 * g) + (0.11 * b);
 }
 
-Color Color::toLuminance()
+Color Color::toGreyscaleLuminanceColor()
 {
+   // Create a color consisting entirely of luminance
    return Color(luminance(), luminance(), luminance());
 }
 
 Color Color::blendedWith(Color rhs, double mix)
 {
+   // Blend the two colors together
    unsigned char newR = blendColorValues(r, rhs.r, mix);
    unsigned char newG = blendColorValues(g, rhs.g, mix);
    unsigned char newB = blendColorValues(b, rhs.b, mix);

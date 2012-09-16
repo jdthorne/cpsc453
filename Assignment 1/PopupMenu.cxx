@@ -21,13 +21,19 @@ PopupMenu::PopupMenu(I_PopupMenuHandler& handler, int x, int y, int width)
    , visible_(false)
    , highlightedIndex_(NO_ITEM)
 {
-
 }
 
 PopupMenu::~PopupMenu()
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Setup & Visiblity
+ *
+ ******************************************************************************
+ */
 void PopupMenu::setVisible(bool visible)
 {
    visible_ = visible;
@@ -38,11 +44,25 @@ void PopupMenu::addItem(std::string item)
    items_.push_back(item);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Accessors
+ *
+ ******************************************************************************
+ */
 int PopupMenu::height()
 {
    return (items_.size() * MENU_ITEM_HEIGHT);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Menu Rendering
+ *
+ ******************************************************************************
+ */
 void PopupMenu::render()
 {
    if (!visible_)
@@ -50,17 +70,22 @@ void PopupMenu::render()
       return;
    }
 
+   // Draw the background
    glColor4f(0, 0, 0, 0.85);
    drawRectangularQuad(x_, y_, width_, height());
 
+   // Draw the top line
    glColor4f(1, 1, 1, 1);
    drawLine(x_, y_ + height(), x_ + width_, y_ + height());
 
+   // Draw each individual item
    for (int i = 0; i < items_.size(); i++)
    {
+      // Draw the text
       glColor4f(1, 1, 1, 1);
       drawText(x_ + 20, positionOfItem(i) + MENU_ITEM_TEXT_Y, items_[i]);
 
+      // Draw the highlight color if necessary
       if (i == highlightedIndex_)
       {
          glColor4f(1, 1, 1, 0.2);
@@ -68,30 +93,44 @@ void PopupMenu::render()
       }
    }
 }
-
 int PopupMenu::positionOfItem(int index)
 {
+   // Return the position of an item
    return y_ + height() - (index * MENU_ITEM_HEIGHT);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Mouse Events
+ *
+ ******************************************************************************
+ */
 void PopupMenu::handleMouseEvent(int x, int y, bool mouseDown)
 {
    highlightedIndex_ = -1;
 
-   if (x >= x_ && x < x_ + width_)
+   // Don't do anything if we're outside of the menu area
+   if (x < x_ || x > x_ + width_)
    {
-      for (int i = 0; i < items_.size(); i++)
-      {
-         if (y > positionOfItem(i) - MENU_ITEM_HEIGHT && y < positionOfItem(i))
-         {
-            if (visible_ && mouseDown)
-            {
-               handler_.handleItemSelected(this, i, items_[i]);
-            }
+      return;
+   }
 
-            highlightedIndex_ = i;
-            break;
+   // Otherwise, check individual items
+   for (int i = 0; i < items_.size(); i++)
+   {
+      bool mouseIsHoveringOverItem = y > positionOfItem(i) - MENU_ITEM_HEIGHT && y < positionOfItem(i);
+      if (mouseIsHoveringOverItem)
+      {
+         // Was it a click?
+         if (visible_ && mouseDown)
+         {
+            handler_.handleItemSelected(this, i, items_[i]);
          }
+
+         // It was always just a highlight
+         highlightedIndex_ = i;
+         break;
       }
-   }   
+   }
 }

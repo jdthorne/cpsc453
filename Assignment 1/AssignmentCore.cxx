@@ -6,9 +6,9 @@
 #include <GLUT/glut.h>
 
 // Project
-#include <OpenGlDisplay.h>
+#include <AssignmentCore.h>
 
-OpenGlDisplay::OpenGlDisplay()
+AssignmentCore::AssignmentCore()
    : mouseDown_(false)
    , controls_(*this)
 {
@@ -18,7 +18,7 @@ OpenGlDisplay::OpenGlDisplay()
    handleQuantilizeSelected(128);
 }
 
-OpenGlDisplay::~OpenGlDisplay()
+AssignmentCore::~AssignmentCore()
 {
 }
 
@@ -29,17 +29,20 @@ OpenGlDisplay::~OpenGlDisplay()
  *
  ******************************************************************************
  */
-void OpenGlDisplay::handleSizeChanged(int width, int height)
+void AssignmentCore::handleSizeChanged(int width, int height)
 {
+   // Setup the OpenGL Viewport
    glViewport(0, 0, width, height);
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
 
    gluOrtho2D(0, width, 0, height);
 
+   // Store the height
    width_ = width;
    height_ = height;
 
+   // Delegate to children
    controls_.handleSizeChanged(width, height);
    imageRenderer_.handleSizeChanged(width, height);
 }
@@ -51,16 +54,20 @@ void OpenGlDisplay::handleSizeChanged(int width, int height)
  *
  ******************************************************************************
  */
-void OpenGlDisplay::display()
+void AssignmentCore::display()
 {
+   // Ensure we haven't screwed up the MODELVIEW matrix
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
 
+   // Clear the screen
    glClear(GL_COLOR_BUFFER_BIT);
 
+   // Delegate rendering
    imageRenderer_.render();
    controls_.render();
 
+   // Flush & Swap to the screen
    glFlush();
    glutSwapBuffers();
 }
@@ -72,23 +79,30 @@ void OpenGlDisplay::display()
  *
  ******************************************************************************
  */
-void OpenGlDisplay::handleMouseEvent(int button, int state, int x, int y)
+void AssignmentCore::handleMouseEvent(int button, int state, int x, int y)
 {
+   // GLUT and OpenGL disagree about mouse coordinates :(
    y = fixMouseY(y);
 
+   // Determine if mouse is down
    mouseDown_ = (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN);
 
+   // Delegate to the control bar
    controls_.handleMouseEvent(x, y, mouseDown_);
 }
 
-void OpenGlDisplay::handleMouseMotion(int x, int y)
+void AssignmentCore::handleMouseMotion(int x, int y)
 {
+   // GLUT and OpenGL disagree about mouse coordinates :(
    y = fixMouseY(y);
+
+   // Delegate to the control bar
    controls_.handleMouseEvent(x, y, mouseDown_);
 }
 
-int OpenGlDisplay::fixMouseY(int y)
+int AssignmentCore::fixMouseY(int y)
 {
+   // GLUT and OpenGL disagree about mouse coordinates :(
    return height_ - y;
 }
 
@@ -99,16 +113,17 @@ int OpenGlDisplay::fixMouseY(int y)
  *
  ******************************************************************************
  */
-void OpenGlDisplay::handleFileOpened(std::string file)
+void AssignmentCore::handleFileOpened(std::string file)
 {
+   // Load the original image
    originalImage_ = Image("images/" + file);
    imageRenderer_.setOriginalImage(originalImage_);
 }
 
-void OpenGlDisplay::handleFileSaved(std::string file)
+void AssignmentCore::handleFileSaved(std::string file)
 {
+   // Save the filtered image
    std::string path = "images/" + file;
-
    filteredImage_.save(path);
 }
 
@@ -120,47 +135,47 @@ void OpenGlDisplay::handleFileSaved(std::string file)
  *
  ******************************************************************************
  */
-void OpenGlDisplay::handleQuantilizeSelected(int levels)
+void AssignmentCore::handleQuantilizeSelected(int levels)
 {
    setFilteredImage(originalImage_.quantized(levels));
 }
 
-void OpenGlDisplay::handleBrightenSelected(double setting)
+void AssignmentCore::handleBrightenSelected(double setting)
 {
    setFilteredImage(originalImage_.brightened(setting));
 }
 
-void OpenGlDisplay::handleSaturateSelected(double scale)
+void AssignmentCore::handleSaturateSelected(double scale)
 {
    setFilteredImage(originalImage_.saturated(scale));
 }
 
-void OpenGlDisplay::handleScaleSelected(double factor)
+void AssignmentCore::handleScaleSelected(double factor)
 {
    setFilteredImage(originalImage_.scaled(factor));
 }
 
-void OpenGlDisplay::handleRotateSelected(double angle)
+void AssignmentCore::handleRotateSelected(double angle)
 {
    setFilteredImage(originalImage_.rotated(angle));
 }
 
-void OpenGlDisplay::handleContrastSelected(double scale)
+void AssignmentCore::handleContrastSelected(double scale)
 {
    setFilteredImage(originalImage_.contrasted(scale));
 }
 
-void OpenGlDisplay::handleBilinearScaleSelected(double factor)
+void AssignmentCore::handleBilinearScaleSelected(double factor)
 {
    setFilteredImage(originalImage_.bilinearScaled(factor));
 }
 
-void OpenGlDisplay::handleSwirlSelected(double angle)
+void AssignmentCore::handleSwirlSelected(double angle)
 {
    setFilteredImage(originalImage_.swirled(angle));
 }
 
-void OpenGlDisplay::handleDissolveSelected(double mix)
+void AssignmentCore::handleDissolveSelected(double mix)
 {
    setFilteredImage(originalImage_.dissolved(mix, dissolveImage_));
 }
@@ -172,9 +187,12 @@ void OpenGlDisplay::handleDissolveSelected(double mix)
  *
  ******************************************************************************
  */
-void OpenGlDisplay::setFilteredImage(Image image)
+void AssignmentCore::setFilteredImage(Image image)
 {
+   // Store the filtered image (so we can save it later if we want)
    filteredImage_ = image;
+
+   // Give it to the renderer so it actually shows up
    imageRenderer_.setFilteredImage(image);
 }
 

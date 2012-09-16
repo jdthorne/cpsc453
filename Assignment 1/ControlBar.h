@@ -32,7 +32,7 @@ public:
 
    bool hasChanged();
 
-public: // popup menu handler
+public: // I_PopupMenuHandler
    virtual void handleItemSelected(const PopupMenu* menu, int index, std::string item);
 
 private: // helpers
@@ -45,6 +45,10 @@ private: // helpers
    double sliderSettingInRange(double min, double max);
 
    void handleSelectedOperationChanged();
+
+   void handleSliderClicked(int x);
+   void handleFileMenuClicked(std::string item);
+   void handleOperationMenuClicked(std::string item);
 
 private: // members
    I_ControlBarHandler& handler_;

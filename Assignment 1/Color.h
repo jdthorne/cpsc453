@@ -21,7 +21,7 @@ public:
 
 public:
    unsigned char luminance();
-   Color toLuminance();
+   Color toGreyscaleLuminanceColor();
    Color blendedWith(Color rhs, double mix);
 
    static const Color BLACK;

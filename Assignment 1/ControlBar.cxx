@@ -8,7 +8,6 @@
 
 // Project
 #include <OpenGlHelpers.h>
-#include <MathHelpers.h>
 #include <ControlBar.h>
 
 const int BAR_HEIGHT = 25;
@@ -40,6 +39,8 @@ ControlBar::ControlBar(I_ControlBarHandler& handler)
    , currentOperationName_("Quantilize")
    , currentOperationText_("Operation: Quantilize")
 {
+
+   // Setup the file menu
    fileMenu_.addItem("Save Filtered Image");
    fileMenu_.addItem("clouds1.BMP");
    fileMenu_.addItem("clouds2.BMP");
@@ -49,6 +50,7 @@ ControlBar::ControlBar(I_ControlBarHandler& handler)
    fileMenu_.addItem("landscape2.BMP");
    fileMenu_.addItem("landscape3.BMP");
 
+   // Setup the Operations menu
    operationMenu_.addItem("Quantilize");
    operationMenu_.addItem("Brighten");
    operationMenu_.addItem("Saturate");
@@ -73,24 +75,29 @@ ControlBar::~ControlBar()
  */
 void ControlBar::render()
 {
+   // Setup Alpha Blending, to make menus look better
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+   // Render individual control bar components
    renderBackground();
    renderTitleText();
    renderFileMenu();
    renderOperationMenu();
    renderSlider();
 
+   // Disable blending, so we don't screw up anything that happens next
    glDisable(GL_BLEND);
 }
 
 void ControlBar::renderBackground()
 {
+   // Render the backgrounds of the bars
    glColor4f(0, 0, 0, 0.85);
    drawRectangularQuad(0, 0, width_, BAR_HEIGHT);
    drawRectangularQuad(0, height_ - BAR_HEIGHT, width_, BAR_HEIGHT);
 
+   // Render separator liens
    glColor4f(1, 1, 1, 1);
    drawLine(0, BAR_HEIGHT, width_, BAR_HEIGHT);
    drawLine(0, height_ - BAR_HEIGHT, width_, height_ - BAR_HEIGHT);
@@ -98,49 +105,59 @@ void ControlBar::renderBackground()
 
 void ControlBar::renderTitleText()
 {
+   // Render the titlebar text in white
    glColor4f(1, 1, 1, 1);
    drawText(FILE_MENU_TEXT, height_ - BAR_HEIGHT + TEXT_Y, "CPSC453 Computer Graphics - Assignment 1 - James Thorne");
 }
 
 void ControlBar::renderFileMenu()
 {
+   // Render the file menu text
    glColor4f(1, 1, 1, 1);
    drawText(FILE_MENU_TEXT, TEXT_Y, currentFileText_);
 
+   // Render the "highlight" background if necessary
    if (fileMenuHovered_)
    {
       glColor4f(1, 1, 1, 0.2);
       drawRectangularQuad(FILE_MENU_LEFT, 0, OPERATION_MENU_LEFT, BAR_HEIGHT);
    }
 
+   // Render the actual menu
    fileMenu_.render();
 }
 
 void ControlBar::renderOperationMenu()
 {
+   // Render the operaton menu separator & text
    glColor4f(1, 1, 1, 1);
    drawLine(OPERATION_MENU_LEFT, 0, OPERATION_MENU_LEFT, BAR_HEIGHT);
    drawText(OPERATION_MENU_TEXT, TEXT_Y, currentOperationText_);
 
+   // Render the "highlight" background if necessary
    if (operationMenuHovered_)
    {
       glColor4f(1, 1, 1, 0.2);
       drawRectangularQuad(OPERATION_MENU_LEFT, 0, SLIDER_LEFT - OPERATION_MENU_LEFT, BAR_HEIGHT);
    }
 
+   // Render the actual menu
    operationMenu_.render();
 }
 
 void ControlBar::renderSlider()
 {
+   // Render the slider separator & text
    glColor4f(1, 1, 1, 1);
    drawLine(SLIDER_LEFT, 0, SLIDER_LEFT, BAR_HEIGHT);
    drawText(SLIDER_TEXT, 8, "Amount:");
 
+   // Render the slider "thumb"
    int sliderWidth = width_ - SLIDER_BAR_START - SLIDER_BAR_END_PADDING - 20;
    int sliderPosition = SLIDER_BAR_START + (sliderSetting_ * sliderWidth);
    drawRectangularQuad(sliderPosition, 0, 20, BAR_HEIGHT);
 
+   // Render the "highlight" background if necessary
    if (sliderHovered_)
    {
       glColor4f(1, 1, 1, 0.2);
@@ -170,38 +187,50 @@ void ControlBar::handleSizeChanged(int width, int height)
  */
 void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
 {
+   // Delegate to the popup menus
    fileMenu_.handleMouseEvent(x, y, mouseDown);
    operationMenu_.handleMouseEvent(x, y, mouseDown);
 
+   // Determine if anything should be highlighted
    fileMenuHovered_ = (y < BAR_HEIGHT) && (x > FILE_MENU_LEFT && x < FILE_MENU_RIGHT);
    operationMenuHovered_ = (y < BAR_HEIGHT) && (x > OPERATION_MENU_LEFT && x < SLIDER_LEFT);
    sliderHovered_ = (y < BAR_HEIGHT) && (x > SLIDER_BAR_START && x < width_ - SLIDER_BAR_END_PADDING);
 
    if (mouseDown)
    {
+      // Move the slider if necessary
       if (sliderHovered_)
       {
-         double sliderWidth = width_ - SLIDER_BAR_START - SLIDER_BAR_END_PADDING;
-         sliderSetting_ = (x - SLIDER_BAR_START) / sliderWidth;
-
-         if (sliderSetting_ < 0.0)
-         {
-            sliderSetting_ = 0;
-         }
-         if (sliderSetting_ > 1.0)
-         {
-            sliderSetting_ = 1.0;
-         }
-
-         handleSelectedOperationChanged();
+         handleSliderClicked(x);
       }
 
+      // Open/Close the menus as necessary
       fileMenu_.setVisible(fileMenuHovered_);
       operationMenu_.setVisible(operationMenuHovered_);
-
    }
-   
+
+   // Redraw the UI, since it's probably changed
    glutPostRedisplay();
+}
+
+void ControlBar::handleSliderClicked(int x)
+{
+   // Figure out the new setting
+   double sliderWidth = width_ - SLIDER_BAR_START - SLIDER_BAR_END_PADDING;
+   sliderSetting_ = (x - SLIDER_BAR_START) / sliderWidth;
+
+   // Make sure it's a valid setting
+   if (sliderSetting_ < 0.0)
+   {
+      sliderSetting_ = 0;
+   }
+   if (sliderSetting_ > 1.0)
+   {
+      sliderSetting_ = 1.0;
+   }
+
+   // Handle the operation changing
+   handleSelectedOperationChanged();
 }
 
 /**
@@ -215,31 +244,45 @@ void ControlBar::handleItemSelected(const PopupMenu* menu, int index, std::strin
 {
    if (menu == &fileMenu_)
    {
-      if (item == "Save Filtered Image")
-      {
-         std::ostringstream filename;
-         filename << currentOperationName_ << "-";
-         filename << sliderSetting_ << "-";
-         filename << currentFileName_;
-         handler_.handleFileSaved(filename.str());
-      }
-      else
-      {
-         currentFileText_ = "File: " + item;
-         handler_.handleFileOpened(item);
-      }
+      handleFileMenuClicked(item);
    }
 
    if (menu == &operationMenu_)
    {
-      currentOperationName_ = item;
-      currentOperationText_ = "Operation: " + item;
-      sliderSetting_ = 0.25;
-
+      handleOperationMenuClicked(item);
    }
 
    handleSelectedOperationChanged();
 }
+
+void ControlBar::handleFileMenuClicked(std::string item)
+{
+   // Trigger the save event
+   if (item == "Save Filtered Image")
+   {
+      std::ostringstream filename;
+      filename << currentOperationName_ << "-";
+      filename << sliderSetting_ << "-";
+      filename << currentFileName_;
+      handler_.handleFileSaved(filename.str());
+      return;
+   }
+
+   // Trigger the load event
+   currentFileText_ = "File: " + item;
+   handler_.handleFileOpened(item);
+}
+
+void ControlBar::handleOperationMenuClicked(std::string item)
+{
+   // Set the operation
+   currentOperationName_ = item;
+   currentOperationText_ = "Operation: " + item;
+
+   // Reset the slider
+   sliderSetting_ = 0.25;
+}
+
 
 /**
  ******************************************************************************
@@ -250,6 +293,7 @@ void ControlBar::handleItemSelected(const PopupMenu* menu, int index, std::strin
  */
 void ControlBar::handleSelectedOperationChanged()
 {
+   // Notify the handler of the current selected operation
    if (currentOperationText_ == "Operation: Quantilize")
    {
       handler_.handleQuantilizeSelected(sliderSettingInRange(2, 255));
@@ -297,12 +341,13 @@ void ControlBar::handleSelectedOperationChanged()
 /**
  ******************************************************************************
  *
- *                   Current Status
+ *                   Helpers
  *
  ******************************************************************************
  */
 double ControlBar::sliderSettingInRange(double min, double max)
 {
+   // Return the slider setting with bounds, to make the above function easier
    double range = max - min;
    return min + (range * sliderSetting_);
 }

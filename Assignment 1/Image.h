@@ -57,7 +57,6 @@ private: // helpers
 
 private: // members
    RgbImage* image_;
-   std::string filename_;
 };
 
 #endif

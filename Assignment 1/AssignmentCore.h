@@ -1,5 +1,5 @@
-#ifndef OPENGLDISPLAY_H
-#define OPENGLDISPLAY_H
+#ifndef ASSIGNMENTCORE_H
+#define ASSIGNMENTCORE_H
 
 // System
 
@@ -15,12 +15,12 @@
  *
  ******************************************************************************
  */
-class OpenGlDisplay : public I_ControlBarHandler
+class AssignmentCore : public I_ControlBarHandler
 {
 
 public:
-   OpenGlDisplay();
-   virtual ~OpenGlDisplay();
+   AssignmentCore();
+   virtual ~AssignmentCore();
 
 public:
    void handleSizeChanged(int width, int height);
