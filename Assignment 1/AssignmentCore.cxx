@@ -12,8 +12,10 @@ AssignmentCore::AssignmentCore()
    : mouseDown_(false)
    , controls_(*this)
 {
+   // Use "Red Leaves" as the dissolve image
    dissolveImage_ = Image(std::string("images/RedLeavesTexture.bmp"));
 
+   // Initialize the display
    handleFileOpened("landscape1.bmp");
    handleQuantilizeSelected(128);
 }

@@ -468,15 +468,15 @@ Image Image::swirled(double theta)
  */
 Image Image::dissolved(double mix, Image& dissolveWith)
 {
-   Image result = this->blankCopy();
+   Image result = dissolveWith.blankCopy();
 
    // Mix from original -> new
    mix = 1.0 - mix;
 
    // Mix each pixel
-   for (int y = 0; y < height(); y++)
+   for (int y = 0; y < result.height(); y++)
    {
-      for (int x = 0; x < width(); x++)
+      for (int x = 0; x < result.width(); x++)
       {
          // Check that the coords are OK on both images (they may be different sizes)
          if (coordsAreOk(x, y) && dissolveWith.coordsAreOk(x, y))
