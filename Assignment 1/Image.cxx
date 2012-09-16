@@ -35,6 +35,14 @@ Image Image::blankCopy()
    return result;
 }
 
+Image Image::blankCopyOfSize(int width, int height)
+{
+   Image result;
+   result.image_ = new RgbImage(height, width);
+
+   return result;
+}
+
 void Image::save(std::string filename)
 {
    image_->WriteBmpFile(filename.data());
@@ -219,11 +227,11 @@ Image Image::saturated(double scale)
  */
 Image Image::scaled(double factor)
 {
-   Image result = this->blankCopy();
+   Image result = this->blankCopyOfSize(width() * factor, height());
 
-   for (int y = 0; y < height(); y++)
+   for (int y = 0; y < result.height(); y++)
    {
-      for (int x = 0; x < width(); x++)
+      for (int x = 0; x < result.width(); x++)
       {
          int u = x / factor;
          int v = y;
@@ -327,15 +335,15 @@ Image Image::contrasted(double scale)
  *
  ******************************************************************************
  */
-Image Image::bilinearScaled(double scale)
+Image Image::bilinearScaled(double factor)
 {
-   Image result = this->blankCopy();
+   Image result = this->blankCopyOfSize(width() * factor, height());
 
-   for (int y = 0; y < height(); y++)
+   for (int y = 0; y < result.height(); y++)
    {
-      for (int x = 0; x < width(); x++)
+      for (int x = 0; x < result.width(); x++)
       {
-         double u = x / scale;
+         double u = x / factor;
 
          int u1 = floor(u);
          int u2 = ceil(u);

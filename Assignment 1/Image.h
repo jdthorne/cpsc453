@@ -25,6 +25,7 @@ public:
    ~Image();
 
    Image blankCopy();
+   Image blankCopyOfSize(int width, int height);
 
 public:
    int width();
