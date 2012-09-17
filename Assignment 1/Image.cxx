@@ -479,7 +479,7 @@ Image Image::dissolved(double mix, Image& dissolveWith)
       for (int x = 0; x < result.width(); x++)
       {
          // Check that the coords are OK on both images (they may be different sizes)
-         if (coordsAreOk(x, y) && dissolveWith.coordsAreOk(x, y))
+         if (result.coordsAreOk(x, y) && coordsAreOk(x, y))
          {
             // Grab the two colors
             Color c1 = getPixel(x, y);

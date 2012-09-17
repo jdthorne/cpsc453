@@ -4,6 +4,186 @@
 		"selected_items":
 		[
 			[
+				"handleOp",
+				"handleSelectedOperationChanged()	void"
+			],
+			[
+				"image",
+				"imageRenderer_	ImageRenderer"
+			],
+			[
+				"curren",
+				"currentFileName_	std::string"
+			],
+			[
+				"cur",
+				"currentOperationName_	std::string"
+			],
+			[
+				"current",
+				"currentOperationName_	std::string"
+			],
+			[
+				"OPER",
+				"OPERATION_MENU_RIGHT	const int"
+			],
+			[
+				"oper",
+				"operationMenu_	PopupMenu"
+			],
+			[
+				"FILE_",
+				"FILE_MENU_RIGHT	const int"
+			],
+			[
+				"FILE",
+				"FILE_MENU_LEFT	const int"
+			],
+			[
+				"fileMenu",
+				"fileMenuHovered_	bool"
+			],
+			[
+				"hei",
+				"height_	int"
+			],
+			[
+				"HEIG",
+				"height_	int"
+			],
+			[
+				"imageH",
+				"imageHalfWidth_	int [2]"
+			],
+			[
+				"dista",
+				"distanceFromCenterAsFraction =	double"
+			],
+			[
+				"half",
+				"halfWidth	int"
+			],
+			[
+				"slider",
+				"sliderSetting_	double"
+			],
+			[
+				"blend",
+				"blendColors(unsigned char a, unsigned char b, double mix)	unsigned char"
+			],
+			[
+				"ge",
+				"GetNumRows() const	long"
+			],
+			[
+				"sliderSet",
+				"sliderSetting_	double"
+			],
+			[
+				"sliderSetting",
+				"sliderSettingInRange(double min, double max)	double"
+			],
+			[
+				"totalL",
+				"totalLuminanceOfRow	int"
+			],
+			[
+				"luman",
+				"luminanceOfColumns	int"
+			],
+			[
+				"sliderSe",
+				"sliderSettingInRange(double min, double max)	double"
+			],
+			[
+				"MENU_",
+				"MENU_ITEM_HEIGHT	const int"
+			],
+			[
+				"MENU",
+				"MENU_ITEM_HEIGHT	const int"
+			],
+			[
+				"OPERAT",
+				"OPERATION_MENU_LEFT	const int"
+			],
+			[
+				"operation",
+				"operationMenu_	PopupMenu"
+			],
+			[
+				"OPERA",
+				"OPERATION_MENU_LEFT	const int"
+			],
+			[
+				"draw",
+				"drawRectangularQuad(int x, int y, int width, int height)	void"
+			],
+			[
+				"slid",
+				"sliderPosition	int"
+			],
+			[
+				"SLID",
+				"SLIDER_LEFT	const int"
+			],
+			[
+				"OP",
+				"OPERATION_MENU_LEFT	const int"
+			],
+			[
+				"SLIDE_",
+				"SLIDER_BAR_START	const int"
+			],
+			[
+				"GLUT_BITMAP_",
+				"GLUT_BITMAP_HELVETICA_12	macro"
+			],
+			[
+				"filtere",
+				"filteredImage_	Image"
+			],
+			[
+				"slide",
+				"sliderWidth	int"
+			],
+			[
+				"sliderS",
+				"sliderSetting_	double"
+			],
+			[
+				"has",
+				"hasChanged_	bool"
+			],
+			[
+				"hand",
+				"handleSizeChanged(int height, int width)	void"
+			],
+			[
+				"GLUT_LEFT",
+				"GLUT_LEFT_BUTTON	macro"
+			],
+			[
+				"handle",
+				"handleMouseEvent(int button, int state, int x, int y)	void"
+			],
+			[
+				"glutBitmapCha",
+				"glutBitmapCharacter(void *font, int character)	void"
+			],
+			[
+				"GetRgbPixel",
+				"GetRgbPixel(long row, long col)	unsigned char *"
+			],
+			[
+				"GetNumR",
+				"GetNumBytesPerRow() const	long"
+			],
+			[
+				"load",
+				"LoadBmpFile(const char *filename)	bool"
+			],
+			[
 				"abos",
 				"absolutePositionOf(const Vector point)	Vector"
 			],
@@ -292,16 +472,8 @@
 				"worldCamera"
 			],
 			[
-				"curren",
-				"currentShipDef"
-			],
-			[
 				"local",
 				"localCombatTeam"
-			],
-			[
-				"handle",
-				"handleMouseDown"
 			],
 			[
 				"comp",
@@ -342,52 +514,32 @@
 			[
 				"used",
 				"usedLabels"
-			],
-			[
-				"max",
-				"maxDeflectorPower"
-			],
-			[
-				"auto",
-				"autopilotModule"
 			]
 		]
 	},
 	"buffers":
 	[
-		{
-			"file": "Lecture Notes.notes",
-			"settings":
-			{
-				"buffer_size": 298,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Assignment 1/main.cxx",
-			"settings":
-			{
-				"buffer_size": 20,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "Packages/User/tup.sublime-build",
 	"command_palette":
 	{
-		"height": 392.0,
+		"height": 47.0,
 		"selected_items":
 		[
+			[
+				"lecture",
+				"Set Syntax: Lecture Notes"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			],
 			[
 				"lec",
 				"Set Syntax: Lecture Notes"
 			],
 			[
 				"Lec",
-				"Set Syntax: Lecture Notes"
-			],
-			[
-				"lecture",
 				"Set Syntax: Lecture Notes"
 			],
 			[
@@ -452,6 +604,41 @@
 	},
 	"file_history":
 	[
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/Color.h",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/Color.cxx",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/OpenGlDisplay.cxx",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/OpenGlDisplay.h",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/ControlBar.h",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/README",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/ControlBar.cxx",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/Image.h",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/main.cxx",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/PopupMenu.h",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/PopupMenu.cxx",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/AssignmentCore.h",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/AssignmentCore.cxx",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/OpenGlHelpers.h",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/OpenGlHelpers.cxx",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/ImageRenderer.h",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/ImageRenderer.cxx",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/Image.cxx",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/MathHelpers.h",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/.gitignore",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/images/.gitignore",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Lecture Notes.notes",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/Makefile",
+		"/Users/james/Library/Application Support/Sublime Text 2/Packages/User/Expand.py",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/MathHelpers.cxx",
+		"/Users/james/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/RgbImage.cpp",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/RgbImage.h",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/OperationDefs.cxx",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/OperationDefs.h",
+		"/Users/james/Library/Application Support/Sublime Text 2/Packages/User/Comment.py",
+		"/Users/james/Library/Application Support/Sublime Text 2/Packages/User/NewClass.py",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/BitmapFile.cxx",
+		"/Users/james/Courses/CPSC453 Computer Graphics/Assignment 1/BitmapFile.h",
+		"/Users/james/Courses/CPSC453 Computer Graphics/CPSC453.sublime-project",
 		"/Users/james/Projects/Spacegame/src/render/RenderCore.cxx",
 		"/Users/james/Projects/Track3D/room.mesh",
 		"/Users/james/Library/Application Support/Sublime Text 2/Packages/User/James Theme.tmTheme",
@@ -544,42 +731,7 @@
 		"/Users/james/Projects/Spacegame/src/math/Quaternion.h",
 		"/Users/james/Projects/Spacegame/src/math/Quaternion.cxx",
 		"/Users/james/Projects/Spacegame/src/math/Vector.h",
-		"/Users/james/Projects/Spacegame/src/math/Vector.cxx",
-		"/Users/james/Library/Application Support/Sublime Text 2/Packages/User/Expand.py",
-		"/Users/james/Projects/Spacegame/src/world/autopilot/PidController.h",
-		"/Users/james/Projects/Spacegame/src/world/autopilot/PidController.cxx",
-		"/Users/james/Projects/Spacegame/src/world/autopilot/ShipControl.h",
-		"/Users/james/Projects/Spacegame/src/math/RigidBody.cxx",
-		"/Users/james/Projects/Spacegame/src/math/RigidBody.h",
-		"/Users/james/Projects/Spacegame/src/world/modules/Gyro.h",
-		"/Users/james/Projects/Spacegame/src/world/WorldItem.h",
-		"/Users/james/Projects/Spacegame/src/ui/CameraSidebar.h",
-		"/Users/james/Projects/Spacegame/src/render/camera/test",
-		"/Users/james/Projects/Spacegame/src/render/camera/Camera.h",
-		"/Users/james/Projects/Spacegame/src/render/camera/Camera.cxx",
-		"/Users/james/Projects/Spacegame/src/render/camera/Tupfile",
-		"/Users/james/Projects/Starsplosion/src/simulation/ShipControls.py",
-		"/Users/james/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
-		"/Users/james/Projects/Spacegame/src/app/OfflineCore.h",
-		"/Users/james/Projects/Spacegame/src/app/SpacegameCore.h",
-		"/Users/james/Projects/Spacegame/src/world/Hud.h",
-		"/Users/james/Projects/Spacegame/src/world/Hud.cxx",
-		"/Users/james/Projects/Spacegame/src/world/HUD.cxx",
-		"/Users/james/Projects/Spacegame/src/world/HUD.h",
-		"/Users/james/Projects/Spacegame/spacegame.sublime-project",
-		"/Users/james/Projects/Spacegame/runSpacegame.sh",
-		"/Users/james/Projects/Spacegame/src/simulation/testbench/PerformanceDev.h",
-		"/Users/james/Projects/Spacegame/src/simulation/testbench/PerformanceDev.cxx",
-		"/Users/james/Projects/Spacegame/bin/Tupfile",
-		"/Tupfile",
-		"/Users/james/Projects/Spacegame/src/world/Tupfile",
-		"/Users/james/Projects/Spacegame/src/shared/Tupfile",
-		"/Users/james/Projects/Spacegame/src/3rdparty/lodepng/Tupfile",
-		"/Users/james/Projects/Spacegame/src/math/Tupfile",
-		"/Users/james/Projects/Spacegame/src/simulation/testbench/Tup",
-		"/Users/james/Projects/Spacegame/bin/optionsScript.sh",
-		"/Users/james/Library/Application Support/Sublime Text 2/Packages/ShellScript/Shell-Unix-Generic.tmLanguage",
-		"/Users/james/Library/Application Support/Sublime Text 2/Packages/SublimeClang/SublimeClang.sublime-settings"
+		"/Users/james/Projects/Spacegame/src/math/Vector.cxx"
 	],
 	"find":
 	{
@@ -598,6 +750,38 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"openGlDisplay",
+			"OpenGlDisplay",
+			"data",
+			"PostRe",
+			"postredis",
+			"imageRenderer_.",
+			"height_",
+			"r, g, b",
+			"cloned",
+			"Image\\&",
+			"Image\\(file\\)",
+			"file_, ",
+			"std::string file, ",
+			"Pixel\\(y, x",
+			"floor",
+			"column",
+			"row",
+			";",
+			"std::string\\(\\\"landscape3.BMP\\\"\\)",
+			"Selected\\(",
+			"\\(",
+			"void",
+			" = 0",
+			"void (\\w+).*",
+			"setImage",
+			"double",
+			"copy",
+			"GetRgbPixel",
+			"getrgbpix",
+			"-   *",
+			"Qt",
+			"font",
 			"light",
 			"background",
 			"comment",
@@ -693,39 +877,7 @@
 			"color",
 			"5",
 			"500",
-			"0.1",
-			"simulate",
-			"Engine",
-			"CFLAGS",
-			"(Vector|Quaternion)&",
-			"(Quaternion|Vector)&",
-			"return ",
-			"magnitude",
-			"void ",
-			"1[.]0",
-			"Engine",
-			"faces_",
-			"applyForce",
-			"(\\w+) (.*);",
-			"modules_[.]append",
-			"[.][.]",
-			"unsupported",
-			"availableDeflector",
-			"currentShip = ",
-			"focus = ",
-			"WorldEffects",
-			"loadAuto",
-			"design",
-			"loadAuto",
-			"setupWorld",
-			"setupWorldOnFirstSimCycle",
-			"setupWorld",
-			"clearWorld",
-			"damaged",
-			"destroyed",
-			"removeObject",
-			"inWorld",
-			"addShip"
+			"0.1"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -733,6 +885,29 @@
 		"regex": true,
 		"replace_history":
 		[
+			"core",
+			"AssignmentCore",
+			"",
+			"BAR_HEIGHT",
+			"blankCopy",
+			"Image",
+			"originalImage_",
+			"",
+			"Pixel(x, y",
+			"x",
+			"y",
+			"x",
+			" = 0;",
+			"file",
+			"Selected(std::string file, ",
+			"(std::string file, ",
+			"Image&",
+			"",
+			"virtual void handle$1Selected() = 0;",
+			"else if (currentOperationText_ == \"Operation: $1\")\\n   {\\n   }",
+			"operationMenu_.addItem(\"$1\");",
+			"unsigned char",
+			"",
 			"0.55",
 			"0.5",
 			"EndlessBattle",
@@ -815,61 +990,8 @@
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "Lecture Notes.notes",
-					"settings":
-					{
-						"buffer_size": 298,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								298,
-								298
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/User/User.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "Assignment 1/main.cxx",
-					"settings":
-					{
-						"buffer_size": 20,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								20,
-								20
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -922,6 +1044,14 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"main",
+				"Assignment 1/main.cxx"
+			],
+			[
+				"mathe",
+				"Assignment 1/MathHelpers.cxx"
+			],
 			[
 				"endless",
 				"src/simulation/EndlessBattle.cxx"
@@ -1267,8 +1397,8 @@
 	},
 	"show_minimap": true,
 	"show_open_files": false,
-	"show_tabs": true,
+	"show_tabs": false,
 	"side_bar_visible": true,
-	"side_bar_width": 189.0,
+	"side_bar_width": 166.0,
 	"status_bar_visible": false
 }
