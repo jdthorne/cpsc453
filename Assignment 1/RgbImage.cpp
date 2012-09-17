@@ -24,7 +24,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif
-#include "OpenGL/gl.h"
+#include "OpenGl.h"
 #endif
 
 RgbImage::RgbImage( int numRows, int numCols )

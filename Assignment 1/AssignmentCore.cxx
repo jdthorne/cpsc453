@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 // OpenGL
-#include <GLUT/glut.h>
+#include <OpenGl.h>
 
 // Project
 #include <AssignmentCore.h>

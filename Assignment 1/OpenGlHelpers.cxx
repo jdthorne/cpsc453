@@ -2,7 +2,7 @@
 // System
 
 // OpenGl
-#include <GLUT/glut.h>
+#include <OpenGl.h>
 
 // Project
 #include <OpenGlHelpers.h>
@@ -31,7 +31,7 @@ void drawText(int x, int y, std::string text)
 {
    // Draw text using GLUT (yay GLUT for making things easy!)
    glRasterPos2f(x, y);
-   for (int i = 0; i < text.length(); i++)
+   for (unsigned int i = 0; i < text.length(); i++)
    {
       glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, text.data()[i]);
    }

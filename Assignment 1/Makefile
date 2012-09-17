@@ -1,16 +1,36 @@
-LIBPATH += -L"/System/Library/Frameworks/OpenGL.framework/Libraries"
+UNAME := $(shell uname)
 
-FRAMEWORK += -framework GLUT
-FRAMEWORK += -framework OpenGL 
+ifeq ($(UNAME), Linux)
+   LIBPATH += -L"/System/Library/Frameworks/OpenGL.framework/Libraries"
 
-COMPILERFLAGS = -Wall -Werror
-CC = clang 
-CFLAGS = $(COMPILERFLAGS) 
-LIBRARIES = -lGL -lGLU -lm -lobjc -lstdc++ 
+   CC = g++
+   COMPILERFLAGS = -Wall -Werror
+   CFLAGS = $(COMPILERFLAGS) 
 
-INCLUDES += "-I/System/Library/Frameworks/OpenGL.framework/Headers"
-INCLUDES += "-I/System/Library/Frameworks/GLUT.framework/Headers"
-INCLUDES += "-I."
+   INCLUDES += "-I."
+   INCLUDES += "-I/usr/X11R6/include -I/usr/local/include"
 
-assignment1: *.cxx RgbImage.cpp
-	clang -o assignment1 *.cxx RgbImage.cpp $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
+   LIBRARIES = -lGL -lGLU -lglut -lm -lstdc++ 
+
+   assignment1: *.cxx RgbImage.cpp
+	   $(CC) -o assignment1 *.cxx RgbImage.cpp $(COMPILERFLAGS) $(LIBRARIES) $(LIBPATH) $(INCLUDES)
+
+else
+   LIBPATH += -L"/System/Library/Frameworks/OpenGL.framework/Libraries"
+
+   FRAMEWORK += -framework GLUT
+   FRAMEWORK += -framework OpenGL 
+
+   COMPILERFLAGS = -Wall -Werror
+   CC = clang 
+   CFLAGS = $(COMPILERFLAGS) 
+   LIBRARIES = -lGL -lGLU -lm -lstdc++ 
+
+   INCLUDES += "-I/System/Library/Frameworks/OpenGL.framework/Headers"
+   INCLUDES += "-I/System/Library/Frameworks/GLUT.framework/Headers"
+   INCLUDES += "-I."
+
+   assignment1: *.cxx RgbImage.cpp
+	   $(CC) -o assignment1 *.cxx RgbImage.cpp $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
+endif
+

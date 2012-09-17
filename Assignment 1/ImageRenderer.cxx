@@ -99,8 +99,8 @@ void ImageRenderer::render()
 void ImageRenderer::renderImage(int id, int xCenter, int yCenter)
 {
    // Figure out the offsets from the center
-   int dx = imageWidth_[id];
-   int dy = imageHeight_[id];
+   int dx = imageWidth_[id] / 2;
+   int dy = imageHeight_[id] / 2;
 
    // Tell OpenGL which texture we want
    glBindTexture(GL_TEXTURE_2D, textureNames_[id]);

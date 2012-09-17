@@ -2,9 +2,10 @@
 // System
 #include <cmath>
 #include <sstream>
+#include <stdio.h>
 
 // OpenGl
-#include <GLUT/glut.h>
+#include <OpenGl.h>
 
 // Project
 #include <OpenGlHelpers.h>

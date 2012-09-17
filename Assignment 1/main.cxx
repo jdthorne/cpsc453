@@ -1,5 +1,5 @@
 
-#include <GLUT/glut.h>
+#include <OpenGl.h>
 #include <AssignmentCore.h>
 
 AssignmentCore* core = NULL;

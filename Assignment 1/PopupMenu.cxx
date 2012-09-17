@@ -2,7 +2,7 @@
 // System
 
 // OpenGl
-#include <GLUT/glut.h>
+#include <OpenGl.h>
 
 // Project
 #include <PopupMenu.h>
@@ -79,14 +79,14 @@ void PopupMenu::render()
    drawLine(x_, y_ + height(), x_ + width_, y_ + height());
 
    // Draw each individual item
-   for (int i = 0; i < items_.size(); i++)
+   for (unsigned int i = 0; i < items_.size(); i++)
    {
       // Draw the text
       glColor4f(1, 1, 1, 1);
       drawText(x_ + 20, positionOfItem(i) + MENU_ITEM_TEXT_Y, items_[i]);
 
       // Draw the highlight color if necessary
-      if (i == highlightedIndex_)
+      if ((int)i == highlightedIndex_)
       {
          glColor4f(1, 1, 1, 0.2);
          drawRectangularQuad(x_, positionOfItem(i), width_, -MENU_ITEM_HEIGHT);
@@ -117,7 +117,7 @@ void PopupMenu::handleMouseEvent(int x, int y, bool mouseDown)
    }
 
    // Otherwise, check individual items
-   for (int i = 0; i < items_.size(); i++)
+   for (unsigned int i = 0; i < items_.size(); i++)
    {
       bool mouseIsHoveringOverItem = y > positionOfItem(i) - MENU_ITEM_HEIGHT && y < positionOfItem(i);
       if (mouseIsHoveringOverItem)

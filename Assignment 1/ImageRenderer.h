@@ -4,7 +4,7 @@
 // System
 
 // OpenGL
-#include <GLUT/glut.h>
+#include <OpenGl.h>
 
 // Project
 #include <Image.h>
