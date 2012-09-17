@@ -7,6 +7,7 @@
 #include <RgbImage.h>
 
 Image::Image()
+   : image_(NULL)
 {
 }  
 
@@ -22,6 +23,14 @@ Image::Image(const Image& copy)
 
 Image::~Image()
 {
+}
+
+void Image::dispose()
+{
+   if (image_ != NULL)
+   {
+      delete image_;
+   }
 }
 
 /**

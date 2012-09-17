@@ -27,6 +27,8 @@ public:
    Image blankCopy();
    Image blankCopyOfSize(int width, int height);
 
+   void dispose();
+
 public:
    int width();
    int height();

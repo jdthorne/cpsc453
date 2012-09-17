@@ -117,6 +117,9 @@ int AssignmentCore::fixMouseY(int y)
  */
 void AssignmentCore::handleFileOpened(std::string file)
 {
+   // Delete the old image
+   originalImage_.dispose();
+
    // Load the original image
    originalImage_ = Image("images/" + file);
    imageRenderer_.setOriginalImage(originalImage_);
@@ -191,6 +194,9 @@ void AssignmentCore::handleDissolveSelected(double mix)
  */
 void AssignmentCore::setFilteredImage(Image image)
 {
+   // Delete the old image
+   filteredImage_.dispose();
+
    // Store the filtered image (so we can save it later if we want)
    filteredImage_ = image;
 
