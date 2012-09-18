@@ -4,6 +4,7 @@
 // System
 #include <string>
 #include <vector>
+#include <map>
 
 // Project
 
@@ -25,28 +26,21 @@ public:
    ~PopupMenu();
 
 public:
-   void setVisible(bool visible);
+   void setAsActiveMenu();
+   static void deactivateMenus();
+   void handleMenuItemSelected(int glutId);
+
    void addItem(std::string item);
-
-   void render();
-
-   void handleMouseEvent(int x, int y, bool mouseDown);
-
-private: // helpers
-   int height();
-   int positionOfItem(int index);
 
 private: // members
    I_PopupMenuHandler& handler_;
 
    int x_;
    int y_;
-   int width_;
-   bool visible_;
 
-   int highlightedIndex_;
-
+   int glutId_;
    std::vector<std::string> items_;
+   std::map<int, int> glutIdToItemIndex_;
 };
 
 /**

@@ -123,9 +123,6 @@ void ControlBar::renderFileMenu()
       glColor4f(1, 1, 1, 0.2);
       drawRectangularQuad(FILE_MENU_LEFT, 0, OPERATION_MENU_LEFT, BAR_HEIGHT);
    }
-
-   // Render the actual menu
-   fileMenu_.render();
 }
 
 void ControlBar::renderOperationMenu()
@@ -141,9 +138,6 @@ void ControlBar::renderOperationMenu()
       glColor4f(1, 1, 1, 0.2);
       drawRectangularQuad(OPERATION_MENU_LEFT, 0, SLIDER_LEFT - OPERATION_MENU_LEFT, BAR_HEIGHT);
    }
-
-   // Render the actual menu
-   operationMenu_.render();
 }
 
 void ControlBar::renderSlider()
@@ -188,14 +182,23 @@ void ControlBar::handleSizeChanged(int width, int height)
  */
 void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
 {
-   // Delegate to the popup menus
-   fileMenu_.handleMouseEvent(x, y, mouseDown);
-   operationMenu_.handleMouseEvent(x, y, mouseDown);
-
    // Determine if anything should be highlighted
    fileMenuHovered_ = (y < BAR_HEIGHT) && (x > FILE_MENU_LEFT && x < FILE_MENU_RIGHT);
    operationMenuHovered_ = (y < BAR_HEIGHT) && (x > OPERATION_MENU_LEFT && x < SLIDER_LEFT);
    sliderHovered_ = (y < BAR_HEIGHT) && (x > SLIDER_BAR_START && x < width_ - SLIDER_BAR_END_PADDING);
+
+   if (fileMenuHovered_)
+   {
+      fileMenu_.setAsActiveMenu();
+   }
+   else if (operationMenuHovered_)
+   {
+      operationMenu_.setAsActiveMenu();
+   }
+   else
+   {
+      PopupMenu::deactivateMenus();
+   }
 
    if (mouseDown)
    {
@@ -204,10 +207,6 @@ void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
       {
          handleSliderClicked(x);
       }
-
-      // Open/Close the menus as necessary
-      fileMenu_.setVisible(fileMenuHovered_);
-      operationMenu_.setVisible(operationMenuHovered_);
    }
 
    // Redraw the UI, since it's probably changed

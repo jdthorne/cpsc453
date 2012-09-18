@@ -13,14 +13,19 @@ const int NO_ITEM = -1;
 const int MENU_ITEM_HEIGHT = 30;
 const int MENU_ITEM_TEXT_Y = -18;
 
+int glutNextItemId_ = 0;
+
+// GLUT Menu Handling
+PopupMenu* activeMenu = NULL;
+void glutHandleMenu(int);
+
+
 PopupMenu::PopupMenu(I_PopupMenuHandler& handler, int x, int y, int width)
    : handler_(handler)
    , x_(x)
    , y_(y)
-   , width_(width)
-   , visible_(false)
-   , highlightedIndex_(NO_ITEM)
 {
+   glutId_ = glutCreateMenu(glutHandleMenu);
 }
 
 PopupMenu::~PopupMenu()
@@ -34,103 +39,63 @@ PopupMenu::~PopupMenu()
  *
  ******************************************************************************
  */
-void PopupMenu::setVisible(bool visible)
+
+void PopupMenu::setAsActiveMenu()
 {
-   visible_ = visible;
+   glutSetMenu(glutId_);
+   glutAttachMenu(GLUT_LEFT_BUTTON);
+
+   activeMenu = this;
+}
+
+void PopupMenu::deactivateMenus()
+{
+   glutDetachMenu(GLUT_LEFT_BUTTON);
+   
+   activeMenu = NULL;
 }
 
 void PopupMenu::addItem(std::string item)
 {
    items_.push_back(item);
+
+   int glutId = glutNextItemId_++;
+   glutIdToItemIndex_[glutId] = items_.size() - 1;
+
+   glutSetMenu(glutId_);
+   glutAddMenuEntry(item.data(), glutId);
 }
 
 /**
  ******************************************************************************
  *
- *                   Accessors
+ *                   Menu Item Clicking
  *
  ******************************************************************************
  */
-int PopupMenu::height()
+void PopupMenu::handleMenuItemSelected(int glutId)
 {
-   return (items_.size() * MENU_ITEM_HEIGHT);
+   int index = glutIdToItemIndex_[glutId];
+   std::string name = items_[index];
+
+   handler_.handleItemSelected(this, index, name);
 }
 
 /**
  ******************************************************************************
  *
- *                   Menu Rendering
+ *                   GLUT Menu Handling
  *
  ******************************************************************************
  */
-void PopupMenu::render()
+void glutHandleMenu(int itemId)
 {
-   if (!visible_)
+   if (activeMenu == NULL)
    {
       return;
    }
 
-   // Draw the background
-   glColor4f(0, 0, 0, 0.85);
-   drawRectangularQuad(x_, y_, width_, height());
-
-   // Draw the top line
-   glColor4f(1, 1, 1, 1);
-   drawLine(x_, y_ + height(), x_ + width_, y_ + height());
-
-   // Draw each individual item
-   for (unsigned int i = 0; i < items_.size(); i++)
-   {
-      // Draw the text
-      glColor4f(1, 1, 1, 1);
-      drawText(x_ + 20, positionOfItem(i) + MENU_ITEM_TEXT_Y, items_[i]);
-
-      // Draw the highlight color if necessary
-      if ((int)i == highlightedIndex_)
-      {
-         glColor4f(1, 1, 1, 0.2);
-         drawRectangularQuad(x_, positionOfItem(i), width_, -MENU_ITEM_HEIGHT);
-      }
-   }
-}
-int PopupMenu::positionOfItem(int index)
-{
-   // Return the position of an item
-   return y_ + height() - (index * MENU_ITEM_HEIGHT);
+   activeMenu->handleMenuItemSelected(itemId);
 }
 
-/**
- ******************************************************************************
- *
- *                   Mouse Events
- *
- ******************************************************************************
- */
-void PopupMenu::handleMouseEvent(int x, int y, bool mouseDown)
-{
-   highlightedIndex_ = -1;
 
-   // Don't do anything if we're outside of the menu area
-   if (x < x_ || x > x_ + width_)
-   {
-      return;
-   }
-
-   // Otherwise, check individual items
-   for (unsigned int i = 0; i < items_.size(); i++)
-   {
-      bool mouseIsHoveringOverItem = y > positionOfItem(i) - MENU_ITEM_HEIGHT && y < positionOfItem(i);
-      if (mouseIsHoveringOverItem)
-      {
-         // Was it a click?
-         if (visible_ && mouseDown)
-         {
-            handler_.handleItemSelected(this, i, items_[i]);
-         }
-
-         // It was always just a highlight
-         highlightedIndex_ = i;
-         break;
-      }
-   }
-}
