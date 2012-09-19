@@ -24,9 +24,10 @@ ifeq ($(UNAME), Linux)
 else
 
    # Mac is silly, and uses frameworks
-   # Actually, wait, this is way easier than Linux
+   # Actually, wait, this is way easier than Linux's hard-coded paths
    FRAMEWORK += -framework GLUT
    FRAMEWORK += -framework OpenGL 
+   FRAMEWORK += -framework Cocoa
 
    # Same flags as above
    CC = clang 

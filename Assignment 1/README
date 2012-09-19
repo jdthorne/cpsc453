@@ -24,29 +24,31 @@ Compiling and Running:
 
 How to Use the Assignment:
    To use this assignment, perform the following steps:
-   - Select an image by clicking on the "File" menu, then clicking on an image name.
-   - Select an operation by clicking on the "Operation" menu, then clicking on an operation name.
+   - Select an image by clicking on the "File: " menu button, then clicking on an image name.
+   - Select an operation by clicking on the "Operation: " menu button, then clicking on an operation name.
    - Specify the amount of the operation, by clicking anywhere on the "Amount" slider.  The
      original image appears on the left, and the filtered image appears on the right.
 
-   - Optionally, save the image by clicking "Save Filtered Image" from the "File" menu.
+   - Optionally, save the image by clicking "Save Filtered Image" from the "Save As..." menu.
+     The saved filename will appear in the terminal, and will be in the images/ subfolder.
 
 
 Implemented Requirements:
-   I have implemented ALL of the functional requirements listed in the assignment 
+   I have implemented all of the functional requirements listed in the assignment 
    description, including all of the bonus ones.  All features are available from
    the "Operation" menu at the bottom of the main window.
 
    I have also implemented scale, rotate, bilinear scale, and swirl as variable filters, 
-   instead of simply fixed ones.
+   instead of simply fixed ones.  You can change the amount of these transformations by
+   clicking on the "Amount" slider while they are selected.
 
-   For completeness, the implemented requirements are listed below:
+   For completeness, the requirements I have implemented are listed below:
 
    Implemented Required Operations:
-   - Quantize   (levels 2 - 255)
+   - Quantize   (levels 2 - 256)
    - Brighten   (scale factors 0.0 - 2.0)
    - Saturation (scale factors 0.0 - 2.0)
-   - scale      (supports scale factors from 0.0 - 2.0)
+   - Scale      (supports scale factors from 0.0 - 2.0)
    - Rotate     (supports rotations from 0 - 180 degrees)
 
    Implemented Required Interface:
