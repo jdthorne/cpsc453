@@ -22,21 +22,28 @@ class PopupMenu
 {
 
 public:
-   PopupMenu(I_PopupMenuHandler& handler, int x, int y, int width);
+   PopupMenu(I_PopupMenuHandler& handler, std::string text, int x, int y, int width, int height);
    ~PopupMenu();
 
 public:
+   void render();
+   void setText(std::string text);
+
    void setAsActiveMenu();
    static void deactivateMenus();
    void handleMenuItemSelected(int glutId);
+   void handleMouseEvent(int x, int y, bool mouseDown);
 
    void addItem(std::string item);
 
 private: // members
    I_PopupMenuHandler& handler_;
 
+   std::string text_;
    int x_;
    int y_;
+   int width_;
+   int height_;
 
    int glutId_;
    std::vector<std::string> items_;

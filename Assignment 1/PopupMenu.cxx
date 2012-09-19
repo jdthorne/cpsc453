@@ -10,8 +10,8 @@
 
 const int NO_ITEM = -1;
 
-const int MENU_ITEM_HEIGHT = 30;
-const int MENU_ITEM_TEXT_Y = -18;
+const int TEXT_OFFSET_X = 20;
+const int TEXT_OFFSET_Y = 8;
 
 int glutNextItemId_ = 0;
 
@@ -19,10 +19,20 @@ int glutNextItemId_ = 0;
 PopupMenu* activeMenu = NULL;
 void glutHandleMenu(int);
 
-PopupMenu::PopupMenu(I_PopupMenuHandler& handler, int x, int y, int width)
+/**
+ ******************************************************************************
+ *
+ *                   Construction and setup
+ *
+ ******************************************************************************
+ */
+PopupMenu::PopupMenu(I_PopupMenuHandler& handler, std::string text, int x, int y, int width, int height)
    : handler_(handler)
+   , text_(text)
    , x_(x)
    , y_(y)
+   , width_(width)
+   , height_(height)
 {
    // Create the GLUT menu
    glutId_ = glutCreateMenu(glutHandleMenu);
@@ -30,6 +40,33 @@ PopupMenu::PopupMenu(I_PopupMenuHandler& handler, int x, int y, int width)
 
 PopupMenu::~PopupMenu()
 {
+}
+
+void PopupMenu::setText(std::string text)
+{
+   text_ = text;
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Render the menu on the screen
+ *
+ ******************************************************************************
+ */
+void PopupMenu::render()
+{
+   // Render the file menu text
+   glColor4f(1, 1, 1, 1);
+   drawLine(x_, y_, x_, y_ + height_);
+   drawText(x_ + TEXT_OFFSET_X, y_ + TEXT_OFFSET_Y, text_);
+
+   // Render the "highlight" background if necessary
+   if (activeMenu == this)
+   {
+      glColor4f(1, 1, 1, 0.2);
+      drawRectangularQuad(x_, y_, width_, height_);
+   }
 }
 
 /**
@@ -86,6 +123,25 @@ void PopupMenu::addItem(std::string item)
  *
  ******************************************************************************
  */
+void PopupMenu::handleMouseEvent(int x, int y, bool mouseDown)
+{
+   bool mouseIsOverMenuButton =  (x >= x_ && x < x_ + width_)
+                              && (y >= y_ && y < y_ + height_);
+
+   // Become the active menu if the mouse is over us
+   if (mouseIsOverMenuButton)
+   {
+      setAsActiveMenu();
+   }
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Handle an item being selected
+ *
+ ******************************************************************************
+ */
 void PopupMenu::handleMenuItemSelected(int glutId)
 {
    // Figure out which item was clicked
@@ -99,7 +155,8 @@ void PopupMenu::handleMenuItemSelected(int glutId)
 /**
  ******************************************************************************
  *
- *                   Low-level GLUT menu handelr
+ *                   The Low-level GLUT menu handler,
+ *                   which forwards events to the appropriate class
  *
  ******************************************************************************
  */

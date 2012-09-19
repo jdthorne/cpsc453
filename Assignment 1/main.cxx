@@ -45,8 +45,8 @@ void display()
 int main(int argc, char** argv)
 {
    // Figure out the default window size
-   int width = 1150;
-   int height = 450;
+   int width = 800;
+   int height = 400;
 
    // Init GLUT, set up a basic window
    glutInit(&argc, argv);

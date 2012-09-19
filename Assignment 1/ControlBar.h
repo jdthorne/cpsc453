@@ -38,8 +38,6 @@ public: // I_PopupMenuHandler
 private: // helpers
    void renderBackground();
    void renderTitleText();
-   void renderFileMenu();
-   void renderOperationMenu();
    void renderSlider();
 
    double sliderSettingInRange(double min, double max);
@@ -49,6 +47,7 @@ private: // helpers
    void handleSliderClicked(int x);
    void handleFileMenuClicked(std::string item);
    void handleOperationMenuClicked(std::string item);
+   void handleSaveMenuClicked();
 
 private: // members
    I_ControlBarHandler& handler_;
@@ -64,13 +63,12 @@ private: // members
 
    PopupMenu fileMenu_;
    std::string currentFileName_;
-   std::string currentFileText_;
 
    PopupMenu operationMenu_;
    int currentOperationIndex_;
    std::string currentOperationName_;
-   std::string currentOperationText_;
 
+   PopupMenu saveMenu_;
 };
 
 /**

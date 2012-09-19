@@ -15,13 +15,15 @@ const int BAR_HEIGHT = 25;
 
 const int FILE_MENU_LEFT = 0;
 const int FILE_MENU_TEXT = 20;
-const int FILE_MENU_RIGHT = 160;
+const int FILE_MENU_WIDTH = 180;
 
-const int OPERATION_MENU_LEFT = FILE_MENU_RIGHT;
-const int OPERATION_MENU_TEXT = OPERATION_MENU_LEFT + 20;
-const int OPERATION_MENU_RIGHT = OPERATION_MENU_LEFT + 200;
+const int OPERATION_MENU_LEFT = FILE_MENU_LEFT + FILE_MENU_WIDTH;
+const int OPERATION_MENU_WIDTH = 200;
 
-const int SLIDER_LEFT = OPERATION_MENU_RIGHT;
+const int SAVE_MENU_LEFT = OPERATION_MENU_LEFT + OPERATION_MENU_WIDTH;
+const int SAVE_MENU_WIDTH = 100;
+
+const int SLIDER_LEFT = SAVE_MENU_LEFT + SAVE_MENU_WIDTH;
 const int SLIDER_TEXT = SLIDER_LEFT + 20;
 const int SLIDER_BAR_START = SLIDER_TEXT + 60;
 const int SLIDER_BAR_END_PADDING = 20;
@@ -32,17 +34,15 @@ ControlBar::ControlBar(I_ControlBarHandler& handler)
    : handler_(handler)
    , width_(0)
    , sliderSetting_(0.5)
-   , fileMenu_(*this, FILE_MENU_LEFT, BAR_HEIGHT + 1, FILE_MENU_RIGHT)
+   , fileMenu_(*this, "Image: landscape3.BMP", FILE_MENU_LEFT, 0, FILE_MENU_WIDTH, BAR_HEIGHT)
    , currentFileName_("landscape3.BMP")
-   , currentFileText_("File: landscape3.BMP")
-   , operationMenu_(*this, OPERATION_MENU_LEFT, BAR_HEIGHT + 1, SLIDER_LEFT - OPERATION_MENU_LEFT)
+   , operationMenu_(*this, "Operation: Quantilize", OPERATION_MENU_LEFT, 0, OPERATION_MENU_WIDTH, BAR_HEIGHT)
    , currentOperationIndex_(0)
    , currentOperationName_("Quantilize")
-   , currentOperationText_("Operation: Quantilize")
+   , saveMenu_(*this, "Save As...", SAVE_MENU_LEFT, 0, SAVE_MENU_WIDTH, BAR_HEIGHT)
 {
 
    // Setup the file menu
-   fileMenu_.addItem("Save Filtered Image");
    fileMenu_.addItem("clouds1.BMP");
    fileMenu_.addItem("clouds2.BMP");
    fileMenu_.addItem("clouds3.BMP");
@@ -61,6 +61,9 @@ ControlBar::ControlBar(I_ControlBarHandler& handler)
    operationMenu_.addItem("Bilinear Scale");
    operationMenu_.addItem("Swirl");
    operationMenu_.addItem("Dissolve");
+
+   // Setup the save menu
+   saveMenu_.addItem("Save Filtered Image...");
 }
 
 ControlBar::~ControlBar()
@@ -83,8 +86,11 @@ void ControlBar::render()
    // Render individual control bar components
    renderBackground();
    renderTitleText();
-   renderFileMenu();
-   renderOperationMenu();
+
+   fileMenu_.render();
+   operationMenu_.render();
+   saveMenu_.render();
+
    renderSlider();
 
    // Disable blending, so we don't screw up anything that happens next
@@ -109,35 +115,6 @@ void ControlBar::renderTitleText()
    // Render the titlebar text in white
    glColor4f(1, 1, 1, 1);
    drawText(FILE_MENU_TEXT, height_ - BAR_HEIGHT + TEXT_Y, "CPSC453 Computer Graphics - Assignment 1 - James Thorne");
-}
-
-void ControlBar::renderFileMenu()
-{
-   // Render the file menu text
-   glColor4f(1, 1, 1, 1);
-   drawText(FILE_MENU_TEXT, TEXT_Y, currentFileText_);
-
-   // Render the "highlight" background if necessary
-   if (fileMenuHovered_)
-   {
-      glColor4f(1, 1, 1, 0.2);
-      drawRectangularQuad(FILE_MENU_LEFT, 0, OPERATION_MENU_LEFT, BAR_HEIGHT);
-   }
-}
-
-void ControlBar::renderOperationMenu()
-{
-   // Render the operaton menu separator & text
-   glColor4f(1, 1, 1, 1);
-   drawLine(OPERATION_MENU_LEFT, 0, OPERATION_MENU_LEFT, BAR_HEIGHT);
-   drawText(OPERATION_MENU_TEXT, TEXT_Y, currentOperationText_);
-
-   // Render the "highlight" background if necessary
-   if (operationMenuHovered_)
-   {
-      glColor4f(1, 1, 1, 0.2);
-      drawRectangularQuad(OPERATION_MENU_LEFT, 0, SLIDER_LEFT - OPERATION_MENU_LEFT, BAR_HEIGHT);
-   }
 }
 
 void ControlBar::renderSlider()
@@ -182,31 +159,18 @@ void ControlBar::handleSizeChanged(int width, int height)
  */
 void ControlBar::handleMouseEvent(int x, int y, bool mouseDown)
 {
-   // Determine if anything should be highlighted
-   fileMenuHovered_ = (y < BAR_HEIGHT) && (x > FILE_MENU_LEFT && x < FILE_MENU_RIGHT);
-   operationMenuHovered_ = (y < BAR_HEIGHT) && (x > OPERATION_MENU_LEFT && x < SLIDER_LEFT);
+   PopupMenu::deactivateMenus();
+   fileMenu_.handleMouseEvent(x, y, mouseDown);
+   operationMenu_.handleMouseEvent(x, y, mouseDown);
+   saveMenu_.handleMouseEvent(x, y, mouseDown);
+
+   // Determine if the slider should be highlighted
    sliderHovered_ = (y < BAR_HEIGHT) && (x > SLIDER_BAR_START && x < width_ - SLIDER_BAR_END_PADDING);
 
-   if (fileMenuHovered_)
+   // Move the slider if necessary
+   if (sliderHovered_ && mouseDown)
    {
-      fileMenu_.setAsActiveMenu();
-   }
-   else if (operationMenuHovered_)
-   {
-      operationMenu_.setAsActiveMenu();
-   }
-   else
-   {
-      PopupMenu::deactivateMenus();
-   }
-
-   if (mouseDown)
-   {
-      // Move the slider if necessary
-      if (sliderHovered_)
-      {
-         handleSliderClicked(x);
-      }
+      handleSliderClicked(x);
    }
 
    // Redraw the UI, since it's probably changed
@@ -252,24 +216,18 @@ void ControlBar::handleItemSelected(const PopupMenu* menu, int index, std::strin
       handleOperationMenuClicked(item);
    }
 
+   if (menu == &saveMenu_)
+   {
+      handleSaveMenuClicked();
+   }
+
    handleSelectedOperationChanged();
 }
 
 void ControlBar::handleFileMenuClicked(std::string item)
 {
-   // Trigger the save event
-   if (item == "Save Filtered Image")
-   {
-      std::ostringstream filename;
-      filename << currentOperationName_ << "-";
-      filename << sliderSetting_ << "-";
-      filename << currentFileName_;
-      handler_.handleFileSaved(filename.str());
-      return;
-   }
-
    // Trigger the load event
-   currentFileText_ = "File: " + item;
+   fileMenu_.setText("File: " + item);
    handler_.handleFileOpened(item);
 }
 
@@ -277,12 +235,23 @@ void ControlBar::handleOperationMenuClicked(std::string item)
 {
    // Set the operation
    currentOperationName_ = item;
-   currentOperationText_ = "Operation: " + item;
+   operationMenu_.setText("Operation: " + item);
 
    // Reset the slider
    sliderSetting_ = 0.25;
 }
 
+void ControlBar::handleSaveMenuClicked()
+{
+   // Determine the filename to save s
+   std::ostringstream filename;
+   filename << currentOperationName_ << "-";
+   filename << sliderSetting_ << "-";
+   filename << currentFileName_;
+
+   // Trigger the save event
+   handler_.handleFileSaved(filename.str());
+}
 
 /**
  ******************************************************************************
@@ -294,46 +263,46 @@ void ControlBar::handleOperationMenuClicked(std::string item)
 void ControlBar::handleSelectedOperationChanged()
 {
    // Notify the handler of the current selected operation
-   if (currentOperationText_ == "Operation: Quantilize")
+   if (currentOperationName_ == "Quantilize")
    {
       handler_.handleQuantilizeSelected(sliderSettingInRange(2, 255));
    }
-   else if (currentOperationText_ == "Operation: Brighten")
+   else if (currentOperationName_ == "Brighten")
    {
       handler_.handleBrightenSelected(sliderSettingInRange(0, 2));
    }
-   else if (currentOperationText_ == "Operation: Saturate")
+   else if (currentOperationName_ == "Saturate")
    {
       handler_.handleSaturateSelected(sliderSettingInRange(0, 2));
    }
-   else if (currentOperationText_ == "Operation: Scale")
+   else if (currentOperationName_ == "Scale")
    {
       handler_.handleScaleSelected(sliderSettingInRange(0, 2));
    }
-   else if (currentOperationText_ == "Operation: Rotate")
+   else if (currentOperationName_ == "Rotate")
    {
       handler_.handleRotateSelected(sliderSettingInRange(0, 3.14159));
    }
-   else if (currentOperationText_ == "Operation: Contrast")
+   else if (currentOperationName_ == "Contrast")
    {
       handler_.handleContrastSelected(sliderSettingInRange(0, 2));
    }
-   else if (currentOperationText_ == "Operation: Bilinear Scale")
+   else if (currentOperationName_ == "Bilinear Scale")
    {
       handler_.handleBilinearScaleSelected(sliderSettingInRange(0, 2));
    }
-   else if (currentOperationText_ == "Operation: Swirl")
+   else if (currentOperationName_ == "Swirl")
    {
       handler_.handleSwirlSelected(sliderSettingInRange(0, 3.14159));
    }
-   else if (currentOperationText_ == "Operation: Dissolve")
+   else if (currentOperationName_ == "Dissolve")
    {
       handler_.handleDissolveSelected(sliderSettingInRange(0, 1));
    }
 
    else
    {
-      printf("[ControlBar] Error: Unknown operation selected: '%s'\n", currentOperationText_.data());
+      printf("[ControlBar] Error: Unknown operation selected: '%s'\n", currentOperationName_.data());
    }
 }
 

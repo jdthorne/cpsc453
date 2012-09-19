@@ -68,6 +68,8 @@ Image Image::blankCopyOfSize(int width, int height)
 void Image::save(std::string filename)
 {
    image_->WriteBmpFile(filename.data());
+
+   printf("Your filtered image has been saved as %s\n", filename.data());
 }
 
 /**
