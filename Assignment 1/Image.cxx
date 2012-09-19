@@ -176,10 +176,11 @@ Image Image::quantized(unsigned char levels)
    Image result = this->blankCopy();
 
    // Create the quantization list
-   char quantize[255];
+   unsigned char quantize[255];
+   double delta = 255.0 / (levels - 1);
    for (int i = 0; i < 256; i++)
    {
-      quantize[i] = floor(255*floor(i*(levels-1)/255.0)/(levels-1));
+      quantize[i] = floor(i / delta) * delta;
    }
 
    // Quantize the individual pixels
