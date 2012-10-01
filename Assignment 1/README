@@ -24,7 +24,7 @@ Compiling and Running:
 
 How to Use the Assignment:
    To use this assignment, perform the following steps:
-   - Select an image by clicking on the "File: " menu button, then clicking on an image name.
+   - Select an image by clicking on the "Image: " menu button, then clicking on an image name.
    - Select an operation by clicking on the "Operation: " menu button, then clicking on an operation name.
    - Specify the amount of the operation, by clicking anywhere on the "Amount" slider.  The
      original image appears on the left, and the filtered image appears on the right.
