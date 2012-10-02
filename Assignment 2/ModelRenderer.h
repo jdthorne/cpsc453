@@ -3,9 +3,6 @@
 
 // System
 
-// 3rdparty
-#include <md2.h>
-
 // Qt
 #include <QObject>
 #include <QMap>
@@ -13,21 +10,22 @@
 // Project
 #include <I_RenderOptions.h>
 #include <Vector.h>
+#include <Model.h>
 
 /**
  ******************************************************************************
  *
- *                   Md2Renderer
+ *                   ModelRenderer
  *
  ******************************************************************************
  */
-class Md2Renderer : public QObject, public I_RenderOptions
+class ModelRenderer : public QObject, public I_RenderOptions
 {
    Q_OBJECT
 
 public:
-   Md2Renderer();
-   virtual ~Md2Renderer();
+   ModelRenderer();
+   virtual ~ModelRenderer();
 
 public:
    void render();
@@ -41,11 +39,12 @@ signals:
    void optionsChanged();
 
 private: // helpers
-   void calculateFaceNormals();
-   void calculateVertexNormals();
-
    void setupRenderMode();
-   void renderTriangle(triangle_t& triangle);
+   void setupEyePosition();
+   void setupTransformation();
+
+   void renderModel(Model& model);
+   void renderNormalsIfNecessary(Model& model);
 
 private: // settings
    Vector translation_;
@@ -53,11 +52,7 @@ private: // settings
    bool displayNormals_;
 
 private: // members
-   MD2* model_; 
-
-   QMap<int, Vector> faceCenters_;
-   QMap<int, Vector> faceNormals_;
-   QMap<int, Vector> vertexNormals_;
+   QList<Model*> models_;
 };
 
 #endif

@@ -20,6 +20,8 @@ public: // Operators
    Vector operator + (const Vector& rhs) const;
    Vector operator - (const Vector& rhs) const;
 
+   double largestElement() const;
+
    Vector cross(const Vector& rhs) const;
    double dot(const Vector& rhs) const;
 

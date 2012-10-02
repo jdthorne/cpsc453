@@ -60,10 +60,6 @@ void OpenGlCore::resizeGL(int width, int height)
 
 void OpenGlCore::paintGL()
 {
-   glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity();
-   gluLookAt(0, 0, 100, 0, 0, 0, 0, 1, 0);
-
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
    glColor3f(1, 0, 0);

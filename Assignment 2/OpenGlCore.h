@@ -7,7 +7,7 @@
 #include <QGLWidget>
 
 // Project
-#include <Md2Renderer.h>
+#include <ModelRenderer.h>
 #include <I_RenderOptions.h>
 
 /**
@@ -38,7 +38,7 @@ private slots:
 private: // helpers
 
 private: // members
-   Md2Renderer renderer_;
+   ModelRenderer renderer_;
 };
 
 #endif

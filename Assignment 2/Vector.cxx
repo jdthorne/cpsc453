@@ -1,3 +1,5 @@
+#include <QtGlobal>
+
 #include <Vector.h>
 #include <Quaternion.h>
 #include <cmath>
@@ -50,6 +52,11 @@ Vector Vector::operator + (const Vector& rhs) const
 Vector Vector::operator - (const Vector& rhs) const
 {
    return Vector(x - rhs.x, y - rhs.y, z - rhs.z);
+}
+
+double Vector::largestElement() const
+{
+   return qMax(qMax(x, y), z);
 }
 
 Vector Vector::cross(const Vector& rhs) const
