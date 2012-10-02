@@ -7,7 +7,7 @@
 #include <QGLWidget>
 
 // Project
-#include <Md5Renderer.h>
+#include <Md2Renderer.h>
 
 /**
  ******************************************************************************
@@ -32,7 +32,7 @@ public:
 private: // helpers
 
 private: // members
-   Md5Renderer renderer_;
+   Md2Renderer renderer_;
 };
 
 #endif

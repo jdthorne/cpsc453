@@ -1,12 +1,17 @@
 
 // System
 
+// Qt
+#include <QVBoxLayout>
+#include <QRadioButton>
+#include <QGroupBox>
+
 // Project
 #include <Sidebar.h>
 
 Sidebar::Sidebar()
 {
-   this->setMinimumWidth(220);
+   
 }
 
 Sidebar::~Sidebar()

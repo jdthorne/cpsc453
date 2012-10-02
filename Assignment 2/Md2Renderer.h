@@ -1,31 +1,43 @@
-#ifndef MD5RENDERER_H
-#define MD5RENDERER_H
+#ifndef MD2RENDERER_H
+#define MD2RENDERER_H
 
 // System
 
+// Qt
+#include <QMap>
+
 // Project
+#include <Vector.h>
+#include <md2.h>
 
 /**
  ******************************************************************************
  *
- *                   Md5Renderer
+ *                   Md2Renderer
  *
  ******************************************************************************
  */
-class Md5Renderer
+class Md2Renderer
 {
 
 public:
-   Md5Renderer();
-   ~Md5Renderer();
+   Md2Renderer();
+   ~Md2Renderer();
 
 public:
    void render();
 
 private: // helpers
+   void calculateFaceNormals();
+   void calculateVertexNormals();
+
+   void renderTriangle(triangle_t& triangle);
 
 private: // members
-   
+   MD2* model_; 
+
+   QMap<int, Vector> faceNormals_;
+   QMap<int, Vector> vertexNormals_;
 };
 
 #endif

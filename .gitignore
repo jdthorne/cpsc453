@@ -4,3 +4,4 @@
 *.sublime-*
 
 *.moc.cxx
+*.ui.h

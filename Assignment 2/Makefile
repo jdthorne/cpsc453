@@ -19,7 +19,7 @@ LIBRARIES = -lGL -lGLU -lglut -lm -lstdc++
 
 # Actually compile the assignment
 assignment1: *.cxx *.cpp
-	$(CC) -o assignment1 *.cxx *.cpp $(COMPILERFLAGS) $(LIBRARIES) $(LIBPATH) $(INCLUDES)
+	$(CC) -o assignment2 *.cxx *.cpp $(COMPILERFLAGS) $(LIBRARIES) $(LIBPATH) $(INCLUDES)
 
 else
 
@@ -50,8 +50,8 @@ INCLUDES += "-I/Library/Frameworks/QtOpenGL.framework/Versions/4/Headers/"
 INCLUDES += "-I."
 
 # Actually compile the assignment
-assignment1 : *.cxx *.cpp OpenGlCore.moc.cxx AssignmentCore.moc.cxx Sidebar.moc.cxx
-	$(CC) -o assignment1 *.cxx *.cpp $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
+assignment1 : *.cxx *.cpp OpenGlCore.moc.cxx AssignmentCore.moc.cxx Sidebar.moc.cxx SidebarUi.ui.h
+	$(CC) -o assignment2 *.cxx *.cpp $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
 
 # Run the QT Moc
 OpenGlCore.moc.cxx : OpenGlCore.h
@@ -61,7 +61,10 @@ AssignmentCore.moc.cxx : AssignmentCore.h
 	moc AssignmentCore.h -oAssignmentCore.moc.cxx
 
 Sidebar.moc.cxx : Sidebar.h
-	moc Sidebar.h -oSidebar.moc.cxx
+	moc Sidebar.h -o Sidebar.moc.cxx
+
+SidebarUi.ui.h : SidebarUi.ui
+	uic SidebarUi.ui -o SidebarUi.ui.h
 
 endif
 
