@@ -7,7 +7,7 @@
 
 OpenGlCore::OpenGlCore()
 {
-
+   connect(&renderer_, SIGNAL(optionsChanged()), this, SLOT(handleOptionsChanged()));
 }
 
 OpenGlCore::~OpenGlCore()
@@ -71,5 +71,15 @@ void OpenGlCore::paintGL()
    renderer_.render();
 
    glFlush();
+}
+
+I_RenderOptions& OpenGlCore::renderOptions()
+{
+   return renderer_;
+}
+
+void OpenGlCore::handleOptionsChanged()
+{
+   update();
 }
 

@@ -6,6 +6,9 @@
 
 // Project
 
+class I_RenderOptions;
+class Ui_SidebarUi;
+
 /**
  ******************************************************************************
  *
@@ -18,15 +21,22 @@ class Sidebar : public QWidget
    Q_OBJECT
    
 public:
-   Sidebar();
+   Sidebar(I_RenderOptions& options);
    ~Sidebar();
 
 public:
 
+protected slots:
+   void handleRenderModeChanged();
+   void handleTranslationChanged();
+   void handleShowNormalsChanged();
+
 private: // helpers
 
 private: // members
-   
+   Ui_SidebarUi* ui_;
+
+   I_RenderOptions& options_;
 };
 
 #endif

@@ -16,6 +16,8 @@
 using namespace RenderHelpers;
 
 Md2Renderer::Md2Renderer()
+   : renderMode_(SmoothShading)
+   , displayNormals_(false)
 {
    model_ = new MD2();
    model_->LoadModel("models/cobra/tris.md2");
@@ -28,6 +30,39 @@ Md2Renderer::~Md2Renderer()
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Settings
+ *
+ ******************************************************************************
+ */
+void Md2Renderer::setRenderMode(RenderMode mode)
+{
+   renderMode_ = mode;
+   emit optionsChanged();
+}
+
+void Md2Renderer::setTranslation(Vector translation)
+{
+   translation_ = translation;
+   emit optionsChanged();
+}
+
+void Md2Renderer::setDisplayNormals(bool displayNormals)
+{
+   displayNormals_ = displayNormals;
+   emit optionsChanged();
+}
+
+
+/**
+ ******************************************************************************
+ *
+ *                   Model Loading & Calculations
+ *
+ ******************************************************************************
+ */
 void Md2Renderer::calculateFaceNormals()
 {
    for (int i = 0; i < model_->num_tris; i++)
@@ -43,6 +78,7 @@ void Md2Renderer::calculateFaceNormals()
       Vector normal = line01.cross(line02).normalized(); 
 
       faceNormals_[i] = normal;
+      faceCenters_[i] = (vertex0 + vertex1 + vertex2) * (1.0/3.0);
    }   
 }
 
@@ -75,16 +111,82 @@ void Md2Renderer::calculateVertexNormals()
    }
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Rendering
+ *
+ ******************************************************************************
+ */
 void Md2Renderer::render()
 {
+   setupRenderMode();
+
+   glPushMatrix();
+
+   glTranslatev(translation_);
    glRotatef(-90, 1, 0, 0);
 
+   glEnable(GL_LIGHTING);
+   glColor3f(1, 0, 0);
    glBegin(GL_TRIANGLES);
    for (int i = 0; i < model_->num_tris; i++)
    {
       renderTriangle(model_->tris[i]);
    }
    glEnd();
+   glDisable(GL_LIGHTING);
+
+   if (displayNormals_)
+   {
+      glBegin(GL_LINES);
+      glColor3f(0, 1, 0);
+      for (int i = 0; i < model_->num_tris; i++)
+      {
+         Vector centerOfFace = faceCenters_[i];
+         Vector normal = faceNormals_[i] * 3;
+
+         glVertexv(centerOfFace - normal);
+         glVertexv(centerOfFace + normal);
+      }
+
+      glColor3f(0, 0, 1);
+      for (int i = 0; i < model_->num_xyz; i++)
+      {
+         Vector vertex = Vector(model_->m_vertices[i]);
+         Vector normal = vertexNormals_[i] * 3;
+
+         glVertexv(vertex - normal);
+         glVertexv(vertex + normal);
+      }
+      glEnd();
+   }
+
+   glPopMatrix();
+}
+
+void Md2Renderer::setupRenderMode()
+{
+   switch (renderMode_)
+   {
+      case Wireframe:
+      {
+         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+         break;
+      }
+      case FlatShading:
+      {
+         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+         glShadeModel(GL_FLAT);
+         break;
+      }
+      case SmoothShading:
+      {
+         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+         glShadeModel(GL_SMOOTH);
+         break;
+      }
+   }
 }
 
 void Md2Renderer::renderTriangle(triangle_t& triangle)

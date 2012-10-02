@@ -8,6 +8,7 @@
 
 // Project
 #include <Md2Renderer.h>
+#include <I_RenderOptions.h>
 
 /**
  ******************************************************************************
@@ -28,6 +29,11 @@ public:
    virtual void initializeGL();
    virtual void resizeGL(int width, int height);
    virtual void paintGL();
+
+   I_RenderOptions& renderOptions();
+
+private slots:
+   void handleOptionsChanged();
 
 private: // helpers
 
