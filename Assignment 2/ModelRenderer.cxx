@@ -13,18 +13,46 @@
 #include <RenderHelpers.h>
 #include <Vector.h>
 
+#include <GroundModel.h>
+#include <Md2Model.h>
+
 using namespace RenderHelpers;
 
 ModelRenderer::ModelRenderer()
    : renderMode_(SmoothShading)
    , displayNormals_(false)
+   , groundModel_(NULL)
 {
-   models_.append(new Model("models/battroid/tris.md2"));
-   models_.append(new Model("models/battroid/weapon.md2"));
 }
 
 ModelRenderer::~ModelRenderer()
 {
+   delete groundModel_;
+
+   foreach(Model* model, models_)
+   {
+      models_.removeAll(model);
+      delete model;
+   }
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Setup
+ *
+ *    Setup can't Happen until OpenGL is ready, so we need a separate function
+ *    for it.
+ *
+ ******************************************************************************
+ */
+void ModelRenderer::initialize()
+{
+   models_.append(new Md2Model("models/bobafett/tris.md2", "models/bobafett/ROTJ_Fett.pcx"));
+   //models_.append(new Md2Model("models/bobafett/calvin_w_bfg.md2", "models/calvin/calvin_w_bfg.bmp"));   
+
+   groundModel_ = new GroundModel();
+   groundModel_->setZPosition(models_[0]->center().z - (models_[0]->size().z / 2.0));
 }
 
 /**
@@ -66,12 +94,12 @@ void ModelRenderer::render()
 
    setupRenderMode();
    setupEyePosition();
-   setupTransformation();
+   renderModel(*groundModel_);
 
+   setupTransformation();
    foreach(Model* model, models_)
    {
       renderModel(*model);
-      renderNormalsIfNecessary(*model);
    }
 }
 
@@ -119,58 +147,11 @@ void ModelRenderer::setupTransformation()
 
 void ModelRenderer::renderModel(Model& model)
 {
-   glEnable(GL_LIGHTING);
+   model.renderMesh();
 
-   glColor3f(1, 0, 0);
-   glBegin(GL_TRIANGLES);
-   for (int i = 0; i < model.data().num_tris; i++)
+   if (displayNormals_)
    {
-      triangle_t triangle = model.data().tris[i];
-
-      for (int v = 0; v < 3; v++)
-      {
-         int vertexId = triangle.index_xyz[v];
-
-         Vector vertex = Vector(model.data().m_vertices[vertexId]);
-         Vector normal = model.vertexNormals()[vertexId] * -1;
-
-         glNormalv(normal);
-         glVertexv(vertex);
-      }
+      model.renderNormals();
    }
-   glEnd();
-
-   glDisable(GL_LIGHTING);
 }
 
-void ModelRenderer::renderNormalsIfNecessary(Model& model)
-{
-   if (!displayNormals_)
-   {
-      return;
-   }
-
-   glBegin(GL_LINES);
-
-   glColor3f(0, 1, 0);
-   for (int i = 0; i < model.data().num_tris; i++)
-   {
-      Vector centerOfFace = model.faceCenters()[i];
-      Vector normal = model.faceNormals()[i] * 3;
-
-      glVertexv(centerOfFace - normal);
-      glVertexv(centerOfFace + normal);
-   }
-
-   glColor3f(0, 0, 1);
-   for (int i = 0; i < model.data().num_xyz; i++)
-   {
-      Vector vertex = Vector(model.data().m_vertices[i]);
-      Vector normal = model.vertexNormals()[i] * 3;
-
-      glVertexv(vertex - normal);
-      glVertexv(vertex + normal);
-   }
-
-   glEnd();
-}

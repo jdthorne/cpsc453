@@ -1,4 +1,7 @@
 
+// System
+#include <OpenGl.h>
+
 // Qt
 #include <QGLWidget>
 
@@ -10,6 +13,13 @@ double toDeg(double rad)
    return (rad * 180) / 3.1415926535;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Vector- and Quaternion- versions of standard functions
+ *
+ ******************************************************************************
+ */
 void RenderHelpers::glRotateq(const Quaternion quat)
 {
    double angle = quat.angle();
@@ -35,6 +45,13 @@ void RenderHelpers::glNormalv(const Vector vertex)
    glNormal3f(vertex.x, vertex.y, vertex.z);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Fancy Helpers
+ *
+ ******************************************************************************
+ */
 void RenderHelpers::glBillboard()
 {
    float modelView[16];
@@ -65,6 +82,62 @@ void RenderHelpers::glSphere(const Vector position, double scale)
 
    glEnd();
    glPopMatrix();
+}
 
+/**
+ ******************************************************************************
+ *
+ *                   Load a texture from a file, returning the texture id
+ *
+ ******************************************************************************
+ */
+GLuint RenderHelpers::loadTexture(QImage image)
+{
+   GLuint name = nextOpenGlTextureName();
+
+   qDebug("Creating texture %d from %dx%d image", name, image.width(), image.height());
+
+   QImage glImage = QGLWidget::convertToGLFormat(image);
+
+   glBindTexture(GL_TEXTURE_2D, name);
+
+   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+   gluBuild2DMipmaps(GL_TEXTURE_2D, 4, glImage.width(), glImage.height(), 
+                     GL_RGBA, GL_UNSIGNED_BYTE, glImage.bits());
+
+   return name;
+}
+
+GLuint RenderHelpers::loadTextureFromFile(QString file, const char* format)
+{
+   return loadTexture(QImage(file, format));
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Texture Management
+ *
+ ******************************************************************************
+ */
+const int MAX_TEXTURES = 8;
+GLuint textureNames[MAX_TEXTURES];
+
+bool textureNamesWereGenerated = false;
+
+GLuint RenderHelpers::nextOpenGlTextureName()
+{
+   if (!textureNamesWereGenerated)
+   {
+      glGenTextures(MAX_TEXTURES, textureNames);
+      textureNamesWereGenerated = true;
+   }
+
+   static int nextIndex = 0;
+   return textureNames[nextIndex++];
 }
 

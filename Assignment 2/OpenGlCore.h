@@ -33,7 +33,7 @@ public:
    I_RenderOptions& renderOptions();
 
 private slots:
-   void handleOptionsChanged();
+   void handleRenderOptionsChanged();
 
 private: // helpers
 

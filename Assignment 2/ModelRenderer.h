@@ -10,7 +10,9 @@
 // Project
 #include <I_RenderOptions.h>
 #include <Vector.h>
-#include <Model.h>
+
+class Model;
+class GroundModel;
 
 /**
  ******************************************************************************
@@ -28,6 +30,7 @@ public:
    virtual ~ModelRenderer();
 
 public:
+   void initialize();
    void render();
 
 public: // I_RenderOptions
@@ -44,7 +47,6 @@ private: // helpers
    void setupTransformation();
 
    void renderModel(Model& model);
-   void renderNormalsIfNecessary(Model& model);
 
 private: // settings
    Vector translation_;
@@ -52,6 +54,7 @@ private: // settings
    bool displayNormals_;
 
 private: // members
+   GroundModel* groundModel_;
    QList<Model*> models_;
 };
 

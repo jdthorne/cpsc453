@@ -1,7 +1,11 @@
 #ifndef RENDERHELPERS
 #define RENDERHELPERS
 
+// System
+#include <OpenGl.h>
+
 // Qt
+#include <QImage>
 #include <QString>
 
 // Spacegame
@@ -18,6 +22,12 @@ namespace RenderHelpers
    void glSphere(const Vector position, double scale);
 
    void glBillboard();
+
+   GLuint loadTexture(QImage image);
+   GLuint loadTextureFromFile(QString file, const char* format = NULL);
+
+   void generateTextureNames();
+   GLuint nextOpenGlTextureName();
 }
 
 #endif

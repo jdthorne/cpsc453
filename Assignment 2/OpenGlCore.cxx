@@ -2,12 +2,15 @@
 // System
 
 // Project
+#include <RenderHelpers.h>
 #include <OpenGlCore.h>
 #include <OpenGl.h>
 
+using namespace RenderHelpers;
+
 OpenGlCore::OpenGlCore()
 {
-   connect(&renderer_, SIGNAL(optionsChanged()), this, SLOT(handleOptionsChanged()));
+   connect(&renderer_, SIGNAL(optionsChanged()), this, SLOT(handleRenderOptionsChanged()));
 }
 
 OpenGlCore::~OpenGlCore()
@@ -16,9 +19,6 @@ OpenGlCore::~OpenGlCore()
 
 void OpenGlCore::initializeGL()
 {
-   glClearColor(0.0, 0.0, 0.0, 0.0);
-
-   glEnable(GL_LIGHTING);
    glEnable(GL_LIGHT0);
 
    GLfloat materialSpecular[] = { 0.2, 0.2, 0.2, 1.0 };
@@ -35,7 +35,6 @@ void OpenGlCore::initializeGL()
    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
    glEnable(GL_COLOR_MATERIAL);
 
-   glShadeModel(GL_SMOOTH);
    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
    glClearDepth(1.0);
 
@@ -44,7 +43,10 @@ void OpenGlCore::initializeGL()
 
    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-   glEnable(GL_SMOOTH);
+   glEnable(GL_BLEND);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+   renderer_.initialize();
 
    resizeGL(width(), height());
 }
@@ -74,7 +76,7 @@ I_RenderOptions& OpenGlCore::renderOptions()
    return renderer_;
 }
 
-void OpenGlCore::handleOptionsChanged()
+void OpenGlCore::handleRenderOptionsChanged()
 {
    update();
 }
