@@ -36,6 +36,8 @@ public:
 public: // I_RenderOptions
    virtual void setRenderMode(RenderMode mode);
    virtual void setTranslation(Vector translation);
+   virtual void setRotation(Quaternion rotation);
+   virtual void setScale(Vector scale);
    virtual void setDisplayNormals(bool displayNormals);
 
 signals:
@@ -50,6 +52,8 @@ private: // helpers
 
 private: // settings
    Vector translation_;
+   Quaternion rotation_;
+   Vector scale_;
    RenderMode renderMode_;
    bool displayNormals_;
 

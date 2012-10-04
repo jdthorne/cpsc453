@@ -8,6 +8,7 @@
 
 // Project
 #include <Model.h>
+#include <OpenGlTexture.h>
 
 /**
  ******************************************************************************
@@ -39,9 +40,7 @@ private: // helpers
 private: // members
    MD2* data_;
    
-   GLuint texture_;
-   int textureWidth_;
-   int textureHeight_;
+   OpenGlTexture texture_;
 
    QMap<int, Vector> faceCenters_;
    QMap<int, Vector> faceNormals_;

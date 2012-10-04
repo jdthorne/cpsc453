@@ -6,8 +6,11 @@
 
 // Qt
 #include <QString>
+#include <QList>
 
 // Project
+
+typedef GLuint GlTextureName;
 
 /**
  ******************************************************************************
@@ -30,14 +33,19 @@ public:
    double height();
 
 private: // helpers
+   void ensureOpenGlTexturesAreInitialized();
+
+   void loadFromFile(QString filename);
    void loadFromPcx(QString filename);
    void loadFromQImage(QString filename);
-   void loadFromBinary(char* data, int width, int height);
+   void loadFromBinary(unsigned char* data, int width, int height);
 
 private: // members
+   static QList<GlTextureName> availableTextureNames_;
+
    int width_;
    int height_;
-   GLuint textureName_;
+   GlTextureName textureName_;
 };
 
 #endif

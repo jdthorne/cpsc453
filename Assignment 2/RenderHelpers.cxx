@@ -8,9 +8,21 @@
 // Spacegame
 #include <RenderHelpers.h>
 
-double toDeg(double rad)
+/**
+ ******************************************************************************
+ *
+ *                   Conversions
+ *
+ ******************************************************************************
+ */
+double RenderHelpers::toDeg(double rad)
 {
    return (rad * 180) / 3.1415926535;
+}
+
+double RenderHelpers::toRad(double deg)
+{
+   return (deg / 180) * 3.1415926535;
 }
 
 /**
@@ -43,6 +55,11 @@ void RenderHelpers::glTranslatev(const Vector vertex)
 void RenderHelpers::glNormalv(const Vector vertex)
 {
    glNormal3f(vertex.x, vertex.y, vertex.z);
+}
+
+void RenderHelpers::glScalev(const Vector scale)
+{
+   glScalef(scale.x, scale.y, scale.z);
 }
 
 /**

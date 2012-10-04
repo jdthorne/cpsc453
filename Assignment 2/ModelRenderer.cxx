@@ -19,7 +19,9 @@
 using namespace RenderHelpers;
 
 ModelRenderer::ModelRenderer()
-   : renderMode_(SmoothShading)
+   : translation_(0, 0, 0)
+   , scale_(1, 1, 1)
+   , renderMode_(SmoothShading)
    , displayNormals_(false)
    , groundModel_(NULL)
 {
@@ -48,8 +50,8 @@ ModelRenderer::~ModelRenderer()
  */
 void ModelRenderer::initialize()
 {
-   models_.append(new Md2Model("models/bug/tris.MD2", "models/bug/bug.pcx"));
-   models_.append(new Md2Model("models/bug/weapon.MD2", "models/bug/weapon.pcx"));   
+   models_.append(new Md2Model("models/infantry/tris.md2", "models/infantry/skin.PCX"));
+   models_.append(new Md2Model("models/infantry/weapon.md2", "models/infantry/weapon.pcx"));   
 
    groundModel_ = new GroundModel();
    groundModel_->setZPosition(models_[0]->center().z - (models_[0]->size().z / 2.0));
@@ -71,6 +73,18 @@ void ModelRenderer::setRenderMode(RenderMode mode)
 void ModelRenderer::setTranslation(Vector translation)
 {
    translation_ = translation;
+   emit optionsChanged();
+}
+
+void ModelRenderer::setRotation(Quaternion rotation)
+{
+   rotation_ = rotation;
+   emit optionsChanged();
+}
+
+void ModelRenderer::setScale(Vector scale)
+{
+   scale_ = scale;
    emit optionsChanged();
 }
 
@@ -143,6 +157,8 @@ void ModelRenderer::setupEyePosition()
 void ModelRenderer::setupTransformation()
 {
    glTranslatev(translation_);
+   glRotateq(rotation_);
+   glScalev(scale_);
 }
 
 void ModelRenderer::renderModel(Model& model)

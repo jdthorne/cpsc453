@@ -31,6 +31,7 @@ public: // operations
    Quaternion inverse() const;
 
    static const Quaternion slerp(Quaternion q1, Quaternion q2, double t);
+   static const Quaternion fromEuler(double roll, double pitch, double yaw);
 
 public: // constants
    static const Quaternion DEFAULT;

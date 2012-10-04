@@ -8,17 +8,15 @@
 // Project
 #include <GroundModel.h>
 #include <RenderHelpers.h>
-#include <TextureHelpers.h>
 
 using namespace RenderHelpers;
-using namespace TextureHelpers;
 
 const int SIZE = 100;
 
 GroundModel::GroundModel()
-   : zPosition_(0)
+   : texture_("ground.jpg")
+   , zPosition_(0)
 {
-   textureName_ = loadTextureFromFile("ground.jpg");
 }
 
 GroundModel::~GroundModel()
@@ -53,7 +51,7 @@ void GroundModel::renderMesh()
 
    glEnable(GL_TEXTURE_2D);
 
-   glBindTexture(GL_TEXTURE_2D, textureName_);
+   texture_.bind();
 
    glBegin(GL_QUADS);
 

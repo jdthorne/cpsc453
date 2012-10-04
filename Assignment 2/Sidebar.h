@@ -6,6 +6,9 @@
 
 // Project
 
+class QSpinBox;
+class QAbstractSlider;
+
 class I_RenderOptions;
 class Ui_SidebarUi;
 
@@ -29,9 +32,12 @@ public:
 protected slots:
    void handleRenderModeChanged();
    void handleTranslationChanged();
+   void handleScaleChanged();
+   void handleRotationChanged();
    void handleShowNormalsChanged();
 
 private: // helpers
+   void setupInput(QAbstractSlider* slider, QSpinBox* spin, const char* slotToCallOnChange);
 
 private: // members
    Ui_SidebarUi* ui_;

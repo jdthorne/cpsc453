@@ -4,6 +4,7 @@
 // System
 
 // Project
+#include <OpenGlTexture.h>
 #include <Model.h>
 
 /**
@@ -31,7 +32,7 @@ public: // accessors
    virtual Vector size();
 
 private: // members
-   int textureName_;
+   OpenGlTexture texture_;
    double zPosition_;
 };
 

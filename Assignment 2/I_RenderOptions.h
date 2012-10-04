@@ -5,6 +5,7 @@
 
 // Project
 #include <Vector.h>
+#include <Quaternion.h>
 
 enum RenderMode
 {
@@ -29,6 +30,8 @@ public:
 public:
    virtual void setRenderMode(RenderMode mode) = 0;
    virtual void setTranslation(Vector translation) = 0;
+   virtual void setRotation(Quaternion rotation) = 0;
+   virtual void setScale(Vector scale) = 0;
    virtual void setDisplayNormals(bool displayNormals) = 0;
 
 public: // signals

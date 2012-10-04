@@ -132,3 +132,14 @@ const Quaternion Quaternion::slerp(Quaternion q1, Quaternion q2, double t)
    return result;
 }
 
+const Quaternion Quaternion::fromEuler(double roll, double pitch, double yaw)
+{
+   Quaternion result = Quaternion(1, 0, 0, 0);
+
+   result = result * Quaternion(roll, Vector(0, 0, 1));
+   result = result * Quaternion(pitch, Vector(1, 0, 0));
+   result = result * Quaternion(yaw, Vector(0, 1, 0));
+
+   return result;   
+}
+

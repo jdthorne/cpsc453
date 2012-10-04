@@ -14,10 +14,14 @@
 
 namespace RenderHelpers
 {
+   double toDeg(double rad);
+   double toRad(double deg);
+
    void glRotateq(const Quaternion quat);
-   void glTranslatev(const Vector vertex);
+   void glTranslatev(const Vector translation);
+   void glScalev(const Vector scale);
    void glVertexv(const Vector vertex);
-   void glNormalv(const Vector vertex);
+   void glNormalv(const Vector normal);
 
    void glSphere(const Vector position, double scale);
 

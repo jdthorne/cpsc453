@@ -7,21 +7,14 @@
 // Project
 #include <Md2Model.h>
 #include <RenderHelpers.h>
-#include <TextureHelpers.h>
 
 using namespace RenderHelpers;
-using namespace TextureHelpers;
 
 Md2Model::Md2Model(QString modelDataFilename, QString skinTextureFilename)
+   : texture_(skinTextureFilename)
 {
    data_ = new MD2();
    data_->LoadModel(qPrintable(modelDataFilename));
-
-   QImage textureImage = loadImageFromFile(skinTextureFilename);
-
-   texture_ = loadTexture(textureImage);
-   textureWidth_ = textureImage.width();
-   textureHeight_ = textureImage.height();
 
    calculateBounds();
    calculateFaceNormals();
@@ -44,7 +37,7 @@ void Md2Model::renderMesh()
 {
    glEnable(GL_LIGHTING);
    glEnable(GL_TEXTURE_2D);
-   glBindTexture(GL_TEXTURE_2D, texture_);
+   texture_.bind();
 
    glColor3f(1, 1, 1);
    glBegin(GL_TRIANGLES);
@@ -63,7 +56,7 @@ void Md2Model::renderMesh()
          tex_coord& tex = data_->texs[texId];
 
          glNormalv(normal);
-         glTexCoord2f((float)tex.u / textureWidth_, (float)tex.v / textureHeight_);
+         glTexCoord2f((float)tex.u / data_->skin_width, (float)tex.v / data_->skin_height);
          glVertexv(vertex);
       }
    }
