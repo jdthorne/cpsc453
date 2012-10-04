@@ -22,12 +22,6 @@ namespace RenderHelpers
    void glSphere(const Vector position, double scale);
 
    void glBillboard();
-
-   GLuint loadTexture(QImage image);
-   GLuint loadTextureFromFile(QString file, const char* format = NULL);
-
-   void generateTextureNames();
-   GLuint nextOpenGlTextureName();
 }
 
 #endif

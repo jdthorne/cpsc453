@@ -48,8 +48,8 @@ ModelRenderer::~ModelRenderer()
  */
 void ModelRenderer::initialize()
 {
-   models_.append(new Md2Model("models/bobafett/tris.md2", "models/bobafett/ROTJ_Fett.pcx"));
-   //models_.append(new Md2Model("models/bobafett/calvin_w_bfg.md2", "models/calvin/calvin_w_bfg.bmp"));   
+   models_.append(new Md2Model("models/bug/tris.MD2", "models/bug/bug.pcx"));
+   models_.append(new Md2Model("models/bug/weapon.MD2", "models/bug/weapon.pcx"));   
 
    groundModel_ = new GroundModel();
    groundModel_->setZPosition(models_[0]->center().z - (models_[0]->size().z / 2.0));

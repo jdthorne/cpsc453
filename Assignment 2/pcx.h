@@ -11,7 +11,7 @@
 
 
 
-#pragma warning( disable : 4103 ) // used #pragma pack to change alignment
+//#pragma warning( disable : 4103 ) // used #pragma pack to change alignment
 
 
 

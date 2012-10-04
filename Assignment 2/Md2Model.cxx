@@ -7,15 +7,17 @@
 // Project
 #include <Md2Model.h>
 #include <RenderHelpers.h>
+#include <TextureHelpers.h>
 
 using namespace RenderHelpers;
+using namespace TextureHelpers;
 
 Md2Model::Md2Model(QString modelDataFilename, QString skinTextureFilename)
 {
    data_ = new MD2();
    data_->LoadModel(qPrintable(modelDataFilename));
 
-   QImage textureImage(skinTextureFilename);
+   QImage textureImage = loadImageFromFile(skinTextureFilename);
 
    texture_ = loadTexture(textureImage);
    textureWidth_ = textureImage.width();

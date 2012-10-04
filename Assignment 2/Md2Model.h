@@ -39,7 +39,7 @@ private: // helpers
 private: // members
    MD2* data_;
    
-   int texture_;
+   GLuint texture_;
    int textureWidth_;
    int textureHeight_;
 

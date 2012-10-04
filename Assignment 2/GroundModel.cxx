@@ -8,8 +8,10 @@
 // Project
 #include <GroundModel.h>
 #include <RenderHelpers.h>
+#include <TextureHelpers.h>
 
 using namespace RenderHelpers;
+using namespace TextureHelpers;
 
 const int SIZE = 100;
 
