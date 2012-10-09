@@ -2,6 +2,7 @@
 // System
 
 // Project
+#include <I_ModelSelector.h>
 #include <RenderHelpers.h>
 #include <OpenGlCore.h>
 #include <OpenGl.h>
@@ -10,7 +11,7 @@ using namespace RenderHelpers;
 
 OpenGlCore::OpenGlCore()
 {
-   connect(&renderer_, SIGNAL(optionsChanged()), this, SLOT(handleRenderOptionsChanged()));
+   connect(&renderer_, SIGNAL(renderChanged()), this, SLOT(handleRenderOptionsChanged()));
 }
 
 OpenGlCore::~OpenGlCore()
@@ -21,6 +22,7 @@ void OpenGlCore::initializeGL()
 {
    glEnable(GL_LIGHT0);
 
+   GLfloat ambientLight[] = { 0.5, 0.5, 0.5, 1.0 };
    GLfloat materialSpecular[] = { 0.2, 0.2, 0.2, 1.0 };
    GLfloat materialShininess[] = { 1.0 };
    GLfloat lightPosition[] = { 0, 0, 100.0, 100.0 };
@@ -31,6 +33,7 @@ void OpenGlCore::initializeGL()
    glMaterialfv(GL_FRONT, GL_SHININESS, materialShininess);
    glMaterialfv(GL_BACK, GL_SHININESS, materialShininess);
    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+   glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
 
    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
    glEnable(GL_COLOR_MATERIAL);
@@ -79,5 +82,10 @@ I_RenderOptions& OpenGlCore::renderOptions()
 void OpenGlCore::handleRenderOptionsChanged()
 {
    update();
+}
+
+I_ModelSelector& OpenGlCore::modelSelector()
+{
+   return renderer_.modelSelector();
 }
 

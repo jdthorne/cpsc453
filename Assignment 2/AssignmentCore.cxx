@@ -23,7 +23,7 @@ AssignmentCore::AssignmentCore()
    openGlCore_ = new OpenGlCore();
    layout->addWidget(openGlCore_);
 
-   sidebar_ = new Sidebar(openGlCore_->renderOptions());
+   sidebar_ = new Sidebar(openGlCore_->renderOptions(), openGlCore_->modelSelector());
    layout->addWidget(sidebar_);
 
    layout->setStretch(0, 1);

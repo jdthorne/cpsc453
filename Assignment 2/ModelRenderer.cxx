@@ -25,17 +25,12 @@ ModelRenderer::ModelRenderer()
    , displayNormals_(false)
    , groundModel_(NULL)
 {
+   connect(&modelManager_, SIGNAL(modelsChanged()), this, SIGNAL(renderChanged()));
 }
 
 ModelRenderer::~ModelRenderer()
 {
    delete groundModel_;
-
-   foreach(Model* model, models_)
-   {
-      models_.removeAll(model);
-      delete model;
-   }
 }
 
 /**
@@ -50,11 +45,10 @@ ModelRenderer::~ModelRenderer()
  */
 void ModelRenderer::initialize()
 {
-   models_.append(new Md2Model("models/infantry/tris.md2", "models/infantry/skin.PCX"));
-   models_.append(new Md2Model("models/infantry/weapon.md2", "models/infantry/weapon.pcx"));   
+   modelManager_.loadDefaultModelSet();
 
    groundModel_ = new GroundModel();
-   groundModel_->setZPosition(models_[0]->center().z - (models_[0]->size().z / 2.0));
+   groundModel_->setZPosition(modelManager_.overallCenter().z - (modelManager_.overallSize().z / 2.0));
 }
 
 /**
@@ -67,31 +61,31 @@ void ModelRenderer::initialize()
 void ModelRenderer::setRenderMode(RenderMode mode)
 {
    renderMode_ = mode;
-   emit optionsChanged();
+   emit renderChanged();
 }
 
 void ModelRenderer::setTranslation(Vector translation)
 {
    translation_ = translation;
-   emit optionsChanged();
+   emit renderChanged();
 }
 
 void ModelRenderer::setRotation(Quaternion rotation)
 {
    rotation_ = rotation;
-   emit optionsChanged();
+   emit renderChanged();
 }
 
 void ModelRenderer::setScale(Vector scale)
 {
    scale_ = scale;
-   emit optionsChanged();
+   emit renderChanged();
 }
 
 void ModelRenderer::setDisplayNormals(bool displayNormals)
 {
    displayNormals_ = displayNormals;
-   emit optionsChanged();
+   emit renderChanged();
 }
 
 /**
@@ -111,7 +105,7 @@ void ModelRenderer::render()
    renderModel(*groundModel_);
 
    setupTransformation();
-   foreach(Model* model, models_)
+   foreach(Model* model, modelManager_.models())
    {
       renderModel(*model);
    }
@@ -143,8 +137,8 @@ void ModelRenderer::setupRenderMode()
 
 void ModelRenderer::setupEyePosition()
 {
-   Vector center = models_[0]->center();
-   Vector size = models_[0]->size();
+   Vector center = modelManager_.overallCenter();
+   Vector size = modelManager_.overallSize();
 
    double maxSize = size.largestElement();
    double distanceRequiredToViewEntireModel = maxSize * 1.5;
@@ -169,5 +163,10 @@ void ModelRenderer::renderModel(Model& model)
    {
       model.renderNormals();
    }
+}
+
+I_ModelSelector& ModelRenderer::modelSelector()
+{
+   return modelManager_;
 }
 

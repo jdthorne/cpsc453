@@ -9,6 +9,7 @@
 
 // Project
 #include <I_RenderOptions.h>
+#include <ModelManager.h>
 #include <Vector.h>
 
 class Model;
@@ -33,6 +34,8 @@ public:
    void initialize();
    void render();
 
+   I_ModelSelector& modelSelector();
+
 public: // I_RenderOptions
    virtual void setRenderMode(RenderMode mode);
    virtual void setTranslation(Vector translation);
@@ -41,7 +44,7 @@ public: // I_RenderOptions
    virtual void setDisplayNormals(bool displayNormals);
 
 signals:
-   void optionsChanged();
+   void renderChanged();
 
 private: // helpers
    void setupRenderMode();
@@ -59,7 +62,8 @@ private: // settings
 
 private: // members
    GroundModel* groundModel_;
-   QList<Model*> models_;
+   
+   ModelManager modelManager_;
 };
 
 #endif

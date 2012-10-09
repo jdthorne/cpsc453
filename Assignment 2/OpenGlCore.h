@@ -9,6 +9,7 @@
 // Project
 #include <ModelRenderer.h>
 #include <I_RenderOptions.h>
+#include <I_ModelSelector.h>
 
 /**
  ******************************************************************************
@@ -31,6 +32,7 @@ public:
    virtual void paintGL();
 
    I_RenderOptions& renderOptions();
+   I_ModelSelector& modelSelector();
 
 private slots:
    void handleRenderOptionsChanged();

@@ -34,9 +34,6 @@ public:
    virtual void setScale(Vector scale) = 0;
    virtual void setDisplayNormals(bool displayNormals) = 0;
 
-public: // signals
-   virtual void optionsChanged() = 0;
-
 };
 
 #endif

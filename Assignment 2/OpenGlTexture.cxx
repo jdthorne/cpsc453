@@ -19,6 +19,7 @@ OpenGlTexture::OpenGlTexture(QString filename)
 
 OpenGlTexture::~OpenGlTexture()
 {
+   availableTextureNames_.append(textureName_);
 }
 
 /**

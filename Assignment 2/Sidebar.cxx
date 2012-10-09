@@ -14,11 +14,13 @@
 #include <Sidebar.h>
 #include <RenderHelpers.h>
 #include <I_RenderOptions.h>
+#include <I_ModelSelector.h>
 
 using namespace RenderHelpers;
 
-Sidebar::Sidebar(I_RenderOptions& options)
+Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
    : options_(options)
+   , modelSelector_(modelSelector)
 {
    ui_ = new Ui_SidebarUi();
    ui_->setupUi(this);
@@ -42,6 +44,13 @@ Sidebar::Sidebar(I_RenderOptions& options)
    connect(ui_->wireframe, SIGNAL(toggled(bool)), this, SLOT(handleRenderModeChanged()));
    connect(ui_->flat, SIGNAL(toggled(bool)), this, SLOT(handleRenderModeChanged()));
    connect(ui_->smooth, SIGNAL(toggled(bool)), this, SLOT(handleRenderModeChanged()));
+
+   foreach(QString modelSet, modelSelector_.availableModelSets())
+   {
+      ui_->selectModel->addItem(modelSet);
+   }
+   ui_->selectModel->setCurrentIndex(modelSelector_.availableModelSets().count() - 1);
+   connect(ui_->selectModel, SIGNAL(currentIndexChanged(int)), this, SLOT(handleModelSelected()));
 }
 
 void Sidebar::setupInput(QAbstractSlider* slider, QSpinBox* spin, const char* slotToCallOnChange)
@@ -111,4 +120,7 @@ void Sidebar::handleShowNormalsChanged()
    options_.setDisplayNormals(ui_->showNormals->isChecked());
 }
 
-
+void Sidebar::handleModelSelected()
+{
+   modelSelector_.loadModelSet(ui_->selectModel->currentText());
+}

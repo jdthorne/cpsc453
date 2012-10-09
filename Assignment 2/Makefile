@@ -50,7 +50,7 @@ INCLUDES += "-I/Library/Frameworks/QtOpenGL.framework/Versions/4/Headers/"
 INCLUDES += "-I."
 
 # Actually compile the assignment
-assignment1 : *.cxx *.cpp OpenGlCore.moc.cxx AssignmentCore.moc.cxx Sidebar.moc.cxx ModelRenderer.moc.cxx SidebarUi.ui.h
+assignment1 : *.cxx *.cpp OpenGlCore.moc.cxx AssignmentCore.moc.cxx Sidebar.moc.cxx ModelRenderer.moc.cxx SidebarUi.ui.h ModelManager.moc.cxx
 	$(CC) -o assignment2 *.cxx *.cpp $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
 
 # Run the QT Moc
@@ -65,6 +65,9 @@ Sidebar.moc.cxx : Sidebar.h
 
 ModelRenderer.moc.cxx : ModelRenderer.h
 	moc ModelRenderer.h -o ModelRenderer.moc.cxx
+
+ModelManager.moc.cxx : ModelManager.h
+	moc ModelManager.h -o ModelManager.moc.cxx
 
 SidebarUi.ui.h : SidebarUi.ui
 	uic SidebarUi.ui -o SidebarUi.ui.h
