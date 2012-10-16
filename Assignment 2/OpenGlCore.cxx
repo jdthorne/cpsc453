@@ -1,6 +1,10 @@
 
 // System
 
+// Qt
+#include <QMouseEvent>
+#include <qmath.h>
+
 // Project
 #include <I_ModelSelector.h>
 #include <RenderHelpers.h>
@@ -11,13 +15,20 @@ using namespace RenderHelpers;
 
 OpenGlCore::OpenGlCore()
 {
-   connect(&renderer_, SIGNAL(renderChanged()), this, SLOT(handleRenderOptionsChanged()));
+   connect(&renderer_, SIGNAL(renderChanged()), this, SLOT(handleRenderChanged()));
 }
 
 OpenGlCore::~OpenGlCore()
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   OpenGL Setup
+ *
+ ******************************************************************************
+ */
 void OpenGlCore::initializeGL()
 {
    glEnable(GL_LIGHT0);
@@ -60,6 +71,18 @@ void OpenGlCore::resizeGL(int width, int height)
    renderer_.setFrameSize(width, height);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   OpenGL Painting
+ *
+ ******************************************************************************
+ */
+void OpenGlCore::handleRenderChanged()
+{
+   update();
+}
+
 void OpenGlCore::paintGL()
 {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -71,18 +94,48 @@ void OpenGlCore::paintGL()
    glFlush();
 }
 
+
+/**
+ ******************************************************************************
+ *
+ *                   Accessors
+ *
+ ******************************************************************************
+ */
 I_RenderOptions& OpenGlCore::renderOptions()
 {
    return renderer_;
 }
 
-void OpenGlCore::handleRenderOptionsChanged()
-{
-   update();
-}
-
 I_ModelSelector& OpenGlCore::modelSelector()
 {
    return renderer_.modelSelector();
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Mouse Handling
+ *
+ ******************************************************************************
+ */
+void OpenGlCore::mousePressEvent(QMouseEvent* event)
+{
+   xInitialMouse_ = event->x();
+   yInitialMouse_ = event->y();
+}
+
+void OpenGlCore::mouseMoveEvent(QMouseEvent* event)
+{
+   double xDelta = (event->x() - xInitialMouse_);
+   double yDelta = (event->y() - yInitialMouse_);
+
+   Euler rotation = renderer_.rotation();
+   rotation.roll = wrap(-M_PI, rotation.roll + toRad(xDelta), M_PI);
+   rotation.yaw = wrap(-M_PI, rotation.yaw + toRad(yDelta), M_PI);
+   renderer_.setRotation(rotation);
+
+   xInitialMouse_ = event->x();
+   yInitialMouse_ = event->y();
 }
 

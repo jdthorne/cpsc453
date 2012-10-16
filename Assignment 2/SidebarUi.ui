@@ -17,7 +17,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page">
       <property name="geometry">
@@ -630,7 +630,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QSlider" name="xLookAt_2">
+           <widget class="QSlider" name="xUp">
             <property name="minimum">
              <number>-100</number>
             </property>
@@ -643,7 +643,7 @@
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QSpinBox" name="xLookAtSpin_2"/>
+           <widget class="QSpinBox" name="xUpSpin"/>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_21">
@@ -653,7 +653,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QSlider" name="yLookAt_2">
+           <widget class="QSlider" name="yUp">
             <property name="minimum">
              <number>-100</number>
             </property>
@@ -666,7 +666,7 @@
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QSpinBox" name="yLookAtSpin_2"/>
+           <widget class="QSpinBox" name="yUpSpin"/>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_20">
@@ -676,7 +676,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QSlider" name="zLookAt_2">
+           <widget class="QSlider" name="zUp">
             <property name="minimum">
              <number>-100</number>
             </property>
@@ -689,7 +689,7 @@
            </widget>
           </item>
           <item row="2" column="2">
-           <widget class="QSpinBox" name="zLookAtSpin_2"/>
+           <widget class="QSpinBox" name="zUpSpin"/>
           </item>
          </layout>
         </widget>

@@ -22,7 +22,7 @@ class GroundModel;
  *
  ******************************************************************************
  */
-class ModelRenderer : public QObject, public I_RenderOptions
+class ModelRenderer : public I_RenderOptions
 {
    Q_OBJECT
 
@@ -39,14 +39,17 @@ public:
    I_ModelSelector& modelSelector();
 
 public: // I_RenderOptions
+   virtual Euler rotation();
+
    virtual void setRenderMode(RenderMode mode);
    virtual void setTranslation(Vector translation);
-   virtual void setRotation(Quaternion rotation);
+   virtual void setRotation(Euler rotation);
    virtual void setScale(Vector scale);
    virtual void setDisplayNormals(bool displayNormals);
    virtual void setProjectionMode(ProjectionMode mode);
 
 signals:
+   void rotationChanged();
    void renderChanged();
 
 private: // helpers
@@ -59,7 +62,7 @@ private: // helpers
 
 private: // settings
    Vector translation_;
-   Quaternion rotation_;
+   Euler rotation_;
    Vector scale_;
    RenderMode renderMode_;
    bool displayNormals_;

@@ -4,8 +4,6 @@
 
 #include <QString>
 
-class Quaternion;
-
 class Vector
 {
 
@@ -13,7 +11,6 @@ public:
    Vector();
    Vector(double x, double y, double z);
    Vector(float coords[]);
-   explicit Vector(const Quaternion& quaternion);
 
 public: // Operators
    Vector& operator += (const Vector& rhs);
@@ -25,16 +22,12 @@ public: // Operators
    Vector cross(const Vector& rhs) const;
    double dot(const Vector& rhs) const;
 
-   Vector rotate(const Quaternion& rotation) const;
-
    void normalize();
 
    Vector inverse() const;
    Vector normalized() const;
 
    Vector multiplyElementsBy(const Vector& rhs) const;
-
-   Quaternion rotationTo(const Vector& lookAt) const;
 
    QString toString() const;
 

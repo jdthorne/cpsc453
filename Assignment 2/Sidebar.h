@@ -30,7 +30,7 @@ public:
 
 public:
 
-protected slots:
+protected slots: // Sidebar Interface Changes
    void handleRenderModeChanged();
    void handleTranslationChanged();
    void handleScaleChanged();
@@ -39,6 +39,10 @@ protected slots:
    void handleProjectionChanged();
 
    void handleModelSelected();
+
+protected slots: // Render Option Changes
+   void handleRotationChangedByRenderOptions();
+
 
 private: // helpers
    void setupInput(QAbstractSlider* slider, QSpinBox* spin, const char* slotToCallOnChange);

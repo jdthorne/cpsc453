@@ -65,6 +65,11 @@ void ModelRenderer::setFrameSize(double width, double height)
  *
  ******************************************************************************
  */
+Euler ModelRenderer::rotation()
+{
+   return rotation_;
+}
+
 void ModelRenderer::setRenderMode(RenderMode mode)
 {
    renderMode_ = mode;
@@ -77,9 +82,11 @@ void ModelRenderer::setTranslation(Vector translation)
    emit renderChanged();
 }
 
-void ModelRenderer::setRotation(Quaternion rotation)
+void ModelRenderer::setRotation(Euler rotation)
 {
    rotation_ = rotation;
+
+   emit rotationChanged();
    emit renderChanged();
 }
 
@@ -187,7 +194,7 @@ void ModelRenderer::setupEyePosition()
 void ModelRenderer::setupTransformation()
 {
    glTranslatev(translation_);
-   glRotateq(rotation_);
+   glRotatee(rotation_);
    glScalev(scale_);
 }
 

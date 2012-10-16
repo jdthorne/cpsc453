@@ -26,6 +26,7 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
    ui_->setupUi(this);
    setMinimumWidth(260);
 
+   // Input Controls
    setupInput(ui_->xTranslation, ui_->xTranslationSpin, SLOT(handleTranslationChanged()));
    setupInput(ui_->yTranslation, ui_->yTranslationSpin, SLOT(handleTranslationChanged()));
    setupInput(ui_->zTranslation, ui_->zTranslationSpin, SLOT(handleTranslationChanged()));
@@ -54,6 +55,9 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
    }
    ui_->selectModel->setCurrentIndex(modelSelector_.availableModelSets().count() - 1);
    connect(ui_->selectModel, SIGNAL(currentIndexChanged(int)), this, SLOT(handleModelSelected()));
+
+   // Render Options
+   connect(&options_, SIGNAL(rotationChanged()), this, SLOT(handleRotationChangedByRenderOptions()));
 }
 
 void Sidebar::setupInput(QAbstractSlider* slider, QSpinBox* spin, const char* slotToCallOnChange)
@@ -111,9 +115,9 @@ void Sidebar::handleScaleChanged()
 
 void Sidebar::handleRotationChanged()
 {
-   Quaternion rotation = Quaternion::fromEuler(toRad(ui_->rRotation->value()), 
-                                               toRad(ui_->pRotation->value()),
-                                               toRad(ui_->yRotation->value()));
+   Euler rotation = Euler(toRad(ui_->rRotation->value()), 
+                          toRad(ui_->pRotation->value()),
+                          toRad(ui_->yRotation->value()));
 
    options_.setRotation(rotation);
 }
@@ -134,5 +138,26 @@ void Sidebar::handleProjectionChanged()
                                                         : Parallel);
 
    options_.setProjectionMode(mode);
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Handle RenderOptions changing from external source
+ *                   (e.g. mouse)
+ *
+ ******************************************************************************
+ */
+void Sidebar::handleRotationChangedByRenderOptions()
+{
+   Euler rotation = options_.rotation();
+
+   ui_->rRotation->setValue(toDeg(rotation.roll));
+   ui_->pRotation->setValue(toDeg(rotation.pitch));
+   ui_->yRotation->setValue(toDeg(rotation.yaw));
+
+   ui_->rRotationSpin->setValue(toDeg(rotation.roll));
+   ui_->pRotationSpin->setValue(toDeg(rotation.pitch));
+   ui_->yRotationSpin->setValue(toDeg(rotation.yaw));
 }
 

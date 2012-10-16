@@ -1,7 +1,6 @@
 #include <QtGlobal>
 
 #include <Vector.h>
-#include <Quaternion.h>
 #include <cmath>
 
 Vector::Vector()
@@ -22,13 +21,6 @@ Vector::Vector(float coords[])
    : x(coords[0])
    , y(coords[1])
    , z(coords[2])
-{
-}
-
-Vector::Vector(const Quaternion& quaternion)
-   : x(quaternion.x)
-   , y(quaternion.y)
-   , z(quaternion.z)
 {
 }
 
@@ -74,11 +66,6 @@ double Vector::dot(const Vector& rhs) const
    return (x*rhs.x) + (y*rhs.y) + (z*rhs.z);
 }
 
-Vector Vector::rotate(const Quaternion& angle) const
-{
-   return Vector(angle * Quaternion(*this) * angle.inverse());
-}
-
 double Vector::magnitude() const
 {
    return sqrt(x*x + y*y + z*z);
@@ -122,24 +109,6 @@ Vector Vector::inverse() const
 Vector Vector::multiplyElementsBy(const Vector& rhs) const
 {
    return Vector(x*rhs.x, y*rhs.y, z*rhs.z);
-}
-
-Quaternion Vector::rotationTo(const Vector& lookAt) const
-{
-   Vector axis = this->cross(lookAt);
-   axis.normalize();
-
-   double angle = acos(this->dot(lookAt));
-
-   if (angle < 0.000001)
-   {
-      return Quaternion();
-   }
-
-   Quaternion result = Quaternion(angle, axis);
-   result.normalize();
-
-   return result;
 }
 
 Vector Vector::boundedToMagnitude(double maxMagnitude) const

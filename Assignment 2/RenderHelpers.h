@@ -8,16 +8,17 @@
 #include <QImage>
 #include <QString>
 
-// Spacegame
-#include <Quaternion.h>
+// Assignment
+#include <Euler.h>
 #include <Vector.h>
 
 namespace RenderHelpers
 {
+   double wrap(double min, double value, double max);
    double toDeg(double rad);
    double toRad(double deg);
 
-   void glRotateq(const Quaternion quat);
+   void glRotatee(const Euler rotation);
    void glTranslatev(const Vector translation);
    void glScalev(const Vector scale);
    void glVertexv(const Vector vertex);

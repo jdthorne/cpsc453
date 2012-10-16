@@ -5,16 +5,32 @@
 // Qt
 #include <QGLWidget>
 
-// Spacegame
+// Assignment
 #include <RenderHelpers.h>
 
 /**
  ******************************************************************************
  *
- *                   Conversions
+ *                   Misc Helpers
  *
  ******************************************************************************
  */
+double RenderHelpers::wrap(double min, double value, double max)
+{
+   while (value < min)
+   {
+      value += (max - min);
+   }
+
+   while (value > max)
+   {
+      value -= (max - min);
+   }
+
+   return value;
+}
+
+
 double RenderHelpers::toDeg(double rad)
 {
    return (rad * 180) / 3.1415926535;
@@ -28,18 +44,15 @@ double RenderHelpers::toRad(double deg)
 /**
  ******************************************************************************
  *
- *                   Vector- and Quaternion- versions of standard functions
+ *                   Vector- and Euler- versions of standard functions
  *
  ******************************************************************************
  */
-void RenderHelpers::glRotateq(const Quaternion quat)
+void RenderHelpers::glRotatee(const Euler rotation)
 {
-   double angle = quat.angle();
-   if (angle > 0.000001)
-   {
-      Vector axis = quat.axis();
-      glRotatef(toDeg(angle), axis.x, axis.y, axis.z);
-   }
+   glRotatef(toDeg(rotation.roll), 0, 0, 1);
+   glRotatef(toDeg(rotation.pitch), 1, 0, 0);
+   glRotatef(toDeg(rotation.yaw), 0, 1, 0);
 }
 
 void RenderHelpers::glVertexv(const Vector vertex)

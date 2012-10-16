@@ -11,6 +11,8 @@
 #include <I_RenderOptions.h>
 #include <I_ModelSelector.h>
 
+class QMouseEvent;
+
 /**
  ******************************************************************************
  *
@@ -34,12 +36,19 @@ public:
    I_RenderOptions& renderOptions();
    I_ModelSelector& modelSelector();
 
+protected:
+   void mousePressEvent(QMouseEvent* event);
+   void mouseMoveEvent(QMouseEvent* event);
+
 private slots:
-   void handleRenderOptionsChanged();
+   void handleRenderChanged();
 
 private: // helpers
 
 private: // members
+   double xInitialMouse_;
+   double yInitialMouse_;
+
    ModelRenderer renderer_;
 };
 
