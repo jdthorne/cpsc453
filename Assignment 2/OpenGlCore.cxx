@@ -57,10 +57,7 @@ void OpenGlCore::initializeGL()
 void OpenGlCore::resizeGL(int width, int height)
 {
    glViewport(0, 0, width, height);
-
-   glMatrixMode(GL_PROJECTION);
-   glLoadIdentity();
-   gluPerspective(55.0f, (GLfloat)width/(GLfloat)height, 0.1f, 5000.0f);
+   renderer_.setFrameSize(width, height);
 }
 
 void OpenGlCore::paintGL()

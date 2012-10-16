@@ -23,6 +23,7 @@ ModelRenderer::ModelRenderer()
    , scale_(1, 1, 1)
    , renderMode_(SmoothShading)
    , displayNormals_(false)
+   , projectionMode_(Perspective)
    , groundModel_(NULL)
 {
    connect(&modelManager_, SIGNAL(modelsChanged()), this, SIGNAL(renderChanged()));
@@ -49,6 +50,12 @@ void ModelRenderer::initialize()
 
    groundModel_ = new GroundModel();
    groundModel_->setZPosition(modelManager_.overallCenter().z - (modelManager_.overallSize().z / 2.0));
+}
+
+void ModelRenderer::setFrameSize(double width, double height)
+{
+   width_ = width;
+   height_ = height;
 }
 
 /**
@@ -88,6 +95,12 @@ void ModelRenderer::setDisplayNormals(bool displayNormals)
    emit renderChanged();
 }
 
+void ModelRenderer::setProjectionMode(ProjectionMode mode)
+{
+   projectionMode_ = mode;
+   emit renderChanged();
+}
+
 /**
  ******************************************************************************
  *
@@ -97,8 +110,7 @@ void ModelRenderer::setDisplayNormals(bool displayNormals)
  */
 void ModelRenderer::render()
 {
-   glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity();
+   setupProjectionMode();
 
    setupRenderMode();
    setupEyePosition();
@@ -135,8 +147,32 @@ void ModelRenderer::setupRenderMode()
    }
 }
 
+void ModelRenderer::setupProjectionMode()
+{
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+
+   switch (projectionMode_)
+   {
+      case Perspective:
+      {
+         gluPerspective(55.0f, (GLfloat)width_/(GLfloat)height_, 0.1f, 5000.0f);
+         break;
+      }
+
+      case Parallel:
+      {
+         glOrtho(-50.0f, 50.0f, -50.0f, 50.0f, 0.1f, 5000.0f);
+         break;
+      }
+   }
+}
+
 void ModelRenderer::setupEyePosition()
 {
+   glMatrixMode(GL_MODELVIEW);
+   glLoadIdentity();
+
    Vector center = modelManager_.overallCenter();
    Vector size = modelManager_.overallSize();
 

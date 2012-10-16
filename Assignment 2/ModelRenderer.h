@@ -34,6 +34,8 @@ public:
    void initialize();
    void render();
 
+   void setFrameSize(double width, double height);
+
    I_ModelSelector& modelSelector();
 
 public: // I_RenderOptions
@@ -42,12 +44,14 @@ public: // I_RenderOptions
    virtual void setRotation(Quaternion rotation);
    virtual void setScale(Vector scale);
    virtual void setDisplayNormals(bool displayNormals);
+   virtual void setProjectionMode(ProjectionMode mode);
 
 signals:
    void renderChanged();
 
 private: // helpers
    void setupRenderMode();
+   void setupProjectionMode();
    void setupEyePosition();
    void setupTransformation();
 
@@ -59,11 +63,16 @@ private: // settings
    Vector scale_;
    RenderMode renderMode_;
    bool displayNormals_;
+   ProjectionMode projectionMode_;
+
+   double width_;
+   double height_;
 
 private: // members
    GroundModel* groundModel_;
    
    ModelManager modelManager_;
+
 };
 
 #endif

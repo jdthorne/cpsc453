@@ -36,6 +36,7 @@ protected slots:
    void handleScaleChanged();
    void handleRotationChanged();
    void handleShowNormalsChanged();
+   void handleProjectionChanged();
 
    void handleModelSelected();
 

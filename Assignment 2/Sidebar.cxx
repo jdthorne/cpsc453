@@ -24,7 +24,7 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
 {
    ui_ = new Ui_SidebarUi();
    ui_->setupUi(this);
-   setMinimumWidth(280);
+   setMinimumWidth(260);
 
    setupInput(ui_->xTranslation, ui_->xTranslationSpin, SLOT(handleTranslationChanged()));
    setupInput(ui_->yTranslation, ui_->yTranslationSpin, SLOT(handleTranslationChanged()));
@@ -44,6 +44,9 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
    connect(ui_->wireframe, SIGNAL(toggled(bool)), this, SLOT(handleRenderModeChanged()));
    connect(ui_->flat, SIGNAL(toggled(bool)), this, SLOT(handleRenderModeChanged()));
    connect(ui_->smooth, SIGNAL(toggled(bool)), this, SLOT(handleRenderModeChanged()));
+
+   connect(ui_->perspective, SIGNAL(toggled(bool)), this, SLOT(handleProjectionChanged()));
+   connect(ui_->parallel, SIGNAL(toggled(bool)), this, SLOT(handleProjectionChanged()));
 
    foreach(QString modelSet, modelSelector_.availableModelSets())
    {
@@ -124,3 +127,12 @@ void Sidebar::handleModelSelected()
 {
    modelSelector_.loadModelSet(ui_->selectModel->currentText());
 }
+
+void Sidebar::handleProjectionChanged()
+{
+   ProjectionMode mode = (ui_->perspective->isChecked() ? Perspective
+                                                        : Parallel);
+
+   options_.setProjectionMode(mode);
+}
+

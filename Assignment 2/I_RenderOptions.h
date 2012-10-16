@@ -14,6 +14,12 @@ enum RenderMode
    SmoothShading
 };
 
+enum ProjectionMode
+{
+   Perspective,
+   Parallel
+};
+
 /**
  ******************************************************************************
  *
@@ -33,6 +39,7 @@ public:
    virtual void setRotation(Quaternion rotation) = 0;
    virtual void setScale(Vector scale) = 0;
    virtual void setDisplayNormals(bool displayNormals) = 0;
+   virtual void setProjectionMode(ProjectionMode mode) = 0;
 
 };
 
