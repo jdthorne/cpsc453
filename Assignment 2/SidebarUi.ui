@@ -17,7 +17,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <property name="geometry">
@@ -43,7 +43,7 @@
          <property name="title">
           <string>Model Selection</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_6" columnstretch="0,1">
+         <layout class="QGridLayout" name="gridLayout_6" columnstretch="0,0">
           <item row="1" column="0">
            <widget class="QLabel" name="label_15">
             <property name="text">
@@ -52,7 +52,14 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QComboBox" name="selectSkin"/>
+           <widget class="QComboBox" name="selectSkin">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
           </item>
           <item row="0" column="0" colspan="2">
            <widget class="QComboBox" name="selectModel"/>
@@ -72,51 +79,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_8">
-         <property name="title">
-          <string>Animation Controls</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="0" colspan="2">
-           <widget class="QComboBox" name="selectAnimation"/>
-          </item>
-          <item row="0" column="2">
-           <widget class="QPushButton" name="playPause">
-            <property name="text">
-             <string>Play</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_14">
-            <property name="text">
-             <string>FPS</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSlider" name="animationFps">
-            <property name="minimum">
-             <number>2</number>
-            </property>
-            <property name="maximum">
-             <number>120</number>
-            </property>
-            <property name="value">
-             <number>10</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="animationFpsSpin"/>
-          </item>
-         </layout>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -484,10 +446,10 @@
           <item row="0" column="1">
            <widget class="QSlider" name="xView">
             <property name="minimum">
-             <number>-100</number>
+             <number>-1000</number>
             </property>
             <property name="maximum">
-             <number>100</number>
+             <number>1000</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -497,10 +459,10 @@
           <item row="1" column="1">
            <widget class="QSlider" name="yView">
             <property name="minimum">
-             <number>-100</number>
+             <number>-1000</number>
             </property>
             <property name="maximum">
-             <number>100</number>
+             <number>1000</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -510,10 +472,10 @@
           <item row="2" column="1">
            <widget class="QSlider" name="zView">
             <property name="minimum">
-             <number>-100</number>
+             <number>-1000</number>
             </property>
             <property name="maximum">
-             <number>100</number>
+             <number>1000</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -521,13 +483,13 @@
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QSpinBox" name="xTranslationSpin_2"/>
+           <widget class="QSpinBox" name="xViewSpin"/>
           </item>
           <item row="1" column="2">
-           <widget class="QSpinBox" name="yTranslationSpin_2"/>
+           <widget class="QSpinBox" name="yViewSpin"/>
           </item>
           <item row="2" column="2">
-           <widget class="QSpinBox" name="zTranslationSpin_2"/>
+           <widget class="QSpinBox" name="zViewSpin"/>
           </item>
          </layout>
         </widget>
@@ -683,13 +645,20 @@
             <property name="maximum">
              <number>100</number>
             </property>
+            <property name="value">
+             <number>1</number>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
            </widget>
           </item>
           <item row="2" column="2">
-           <widget class="QSpinBox" name="zUpSpin"/>
+           <widget class="QSpinBox" name="zUpSpin">
+            <property name="value">
+             <number>1</number>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -861,10 +830,6 @@
  <tabstops>
   <tabstop>showNormals</tabstop>
   <tabstop>selectSkin</tabstop>
-  <tabstop>selectAnimation</tabstop>
-  <tabstop>playPause</tabstop>
-  <tabstop>animationFps</tabstop>
-  <tabstop>animationFpsSpin</tabstop>
   <tabstop>xTranslation</tabstop>
   <tabstop>xTranslationSpin</tabstop>
   <tabstop>yTranslation</tabstop>
@@ -886,11 +851,11 @@
   <tabstop>zScale</tabstop>
   <tabstop>zScaleSpin</tabstop>
   <tabstop>xView</tabstop>
-  <tabstop>xTranslationSpin_2</tabstop>
+  <tabstop>xViewSpin</tabstop>
   <tabstop>yView</tabstop>
-  <tabstop>yTranslationSpin_2</tabstop>
+  <tabstop>yViewSpin</tabstop>
   <tabstop>zView</tabstop>
-  <tabstop>zTranslationSpin_2</tabstop>
+  <tabstop>zViewSpin</tabstop>
   <tabstop>selectModel</tabstop>
   <tabstop>smooth</tabstop>
   <tabstop>flat</tabstop>

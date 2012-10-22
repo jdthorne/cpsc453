@@ -26,7 +26,7 @@ ModelRenderer::ModelRenderer()
    , projectionMode_(Perspective)
    , groundModel_(NULL)
 {
-   connect(&modelManager_, SIGNAL(modelsChanged()), this, SIGNAL(renderChanged()));
+   connect(&modelManager_, SIGNAL(modelsChanged()), this, SLOT(handleModelsChanged()));
 }
 
 ModelRenderer::~ModelRenderer()
@@ -46,16 +46,39 @@ ModelRenderer::~ModelRenderer()
  */
 void ModelRenderer::initialize()
 {
-   modelManager_.loadDefaultModelSet();
-
    groundModel_ = new GroundModel();
-   groundModel_->setZPosition(modelManager_.overallCenter().z - (modelManager_.overallSize().z / 2.0));
+
+   modelManager_.loadDefaultModelSet();
 }
 
 void ModelRenderer::setFrameSize(double width, double height)
 {
    width_ = width;
    height_ = height;
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Model Loading
+ *
+ ******************************************************************************
+ */
+void ModelRenderer::handleModelsChanged()
+{
+   groundModel_->setZPosition(modelManager_.overallCenter().z - (modelManager_.overallSize().z / 2.0));
+
+   Vector center = modelManager_.overallCenter();
+   Vector size = modelManager_.overallSize();
+
+   double maxSize = size.largestElement();
+   double distanceRequiredToViewEntireModel = maxSize * 1.5;
+
+   setEyePosition(Vector(distanceRequiredToViewEntireModel, 0, 0));
+   setLookAtPosition(Vector(center.x, center.y, center.z));
+   setUpDirection(Vector(0, 0, 1));
+   
+   emit renderChanged();
 }
 
 /**
@@ -68,6 +91,16 @@ void ModelRenderer::setFrameSize(double width, double height)
 Euler ModelRenderer::rotation()
 {
    return rotation_;
+}
+
+Vector ModelRenderer::eyePosition()
+{
+   return eyePosition_;
+}
+
+Vector ModelRenderer::lookAtPosition()
+{
+   return lookAtPosition_;
 }
 
 void ModelRenderer::setRenderMode(RenderMode mode)
@@ -107,6 +140,30 @@ void ModelRenderer::setProjectionMode(ProjectionMode mode)
    projectionMode_ = mode;
    emit renderChanged();
 }
+
+void ModelRenderer::setEyePosition(Vector position)
+{
+   eyePosition_ = position;
+
+   emit eyePositionChanged();
+   emit renderChanged();
+}
+
+void ModelRenderer::setLookAtPosition(Vector position)
+{
+   lookAtPosition_ = position;
+
+   emit lookAtPositionChanged();
+   emit renderChanged();
+}
+
+void ModelRenderer::setUpDirection(Vector direction)
+{
+   upDirection_ = direction;
+
+   emit renderChanged();
+}
+
 
 /**
  ******************************************************************************
@@ -169,7 +226,8 @@ void ModelRenderer::setupProjectionMode()
 
       case Parallel:
       {
-         glOrtho(-50.0f, 50.0f, -50.0f, 50.0f, 0.1f, 5000.0f);
+         double aspect = width_ / height_;
+         glOrtho(-50.0f * aspect, 50.0f * aspect, -50.0f, 50.0f, 0.1f, 5000.0f);
          break;
       }
    }
@@ -180,15 +238,9 @@ void ModelRenderer::setupEyePosition()
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
 
-   Vector center = modelManager_.overallCenter();
-   Vector size = modelManager_.overallSize();
-
-   double maxSize = size.largestElement();
-   double distanceRequiredToViewEntireModel = maxSize * 1.5;
-
-   gluLookAt(distanceRequiredToViewEntireModel, 0, 0, 
-             center.x, center.y, center.z,
-             0, 0, 1);
+   gluLookAt(eyePosition_.x, eyePosition_.y, eyePosition_.z, 
+             lookAtPosition_.x, lookAtPosition_.y, lookAtPosition_.z,
+             upDirection_.x, upDirection_.y, upDirection_.z);
 }
 
 void ModelRenderer::setupTransformation()

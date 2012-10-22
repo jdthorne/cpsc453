@@ -40,6 +40,8 @@ public:
 
 public: // I_RenderOptions
    virtual Euler rotation();
+   virtual Vector eyePosition();
+   virtual Vector lookAtPosition();
 
    virtual void setRenderMode(RenderMode mode);
    virtual void setTranslation(Vector translation);
@@ -48,9 +50,19 @@ public: // I_RenderOptions
    virtual void setDisplayNormals(bool displayNormals);
    virtual void setProjectionMode(ProjectionMode mode);
 
+   virtual void setEyePosition(Vector position);
+   virtual void setLookAtPosition(Vector position);
+   virtual void setUpDirection(Vector position);
+
 signals:
    void rotationChanged();
+   void eyePositionChanged();
+   void lookAtPositionChanged();
+
    void renderChanged();
+
+private slots:
+   void handleModelsChanged();
 
 private: // helpers
    void setupRenderMode();
@@ -67,6 +79,10 @@ private: // settings
    RenderMode renderMode_;
    bool displayNormals_;
    ProjectionMode projectionMode_;
+
+   Vector eyePosition_;
+   Vector lookAtPosition_;
+   Vector upDirection_;
 
    double width_;
    double height_;

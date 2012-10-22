@@ -18,8 +18,8 @@ public:
    virtual QList<QString> availableModelSets() = 0;
    virtual void loadDefaultModelSet() = 0;
    virtual void loadModelSet(QString set) = 0;
-
-
+   virtual void loadCustomModel(QString fromPath) = 0;
+   
 };
 
 #endif

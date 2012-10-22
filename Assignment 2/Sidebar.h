@@ -38,11 +38,16 @@ protected slots: // Sidebar Interface Changes
    void handleShowNormalsChanged();
    void handleProjectionChanged();
 
+   void handleEyePositionChanged();
+   void handleLookAtPositionChanged();
+   void handleUpDirectionChanged();
+
    void handleModelSelected();
 
 protected slots: // Render Option Changes
    void handleRotationChangedByRenderOptions();
-
+   void handleEyePositionChangedByRenderOptions();
+   void handleLookAtPositionChangedByRenderOptions();
 
 private: // helpers
    void setupInput(QAbstractSlider* slider, QSpinBox* spin, const char* slotToCallOnChange);

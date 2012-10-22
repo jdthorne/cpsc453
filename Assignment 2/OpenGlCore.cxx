@@ -49,7 +49,7 @@ void OpenGlCore::initializeGL()
    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
    glEnable(GL_COLOR_MATERIAL);
 
-   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+   glClearColor(0.4f, 0.4f, 0.4f, 0.0f);
    glClearDepth(1.0);
 
    glEnable(GL_DEPTH_TEST);
@@ -86,8 +86,6 @@ void OpenGlCore::handleRenderChanged()
 void OpenGlCore::paintGL()
 {
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-   glColor3f(1, 0, 0);
 
    renderer_.render();
 
@@ -139,3 +137,16 @@ void OpenGlCore::mouseMoveEvent(QMouseEvent* event)
    yInitialMouse_ = event->y();
 }
 
+void OpenGlCore::wheelEvent(QWheelEvent* event)
+{
+   Vector fromEyeToLookAt = (renderer_.lookAtPosition() - renderer_.eyePosition()).normalized();
+   Vector eyeMovement = (fromEyeToLookAt * event->delta());
+   Vector newEyePosition = renderer_.eyePosition() + eyeMovement;
+
+   if (newEyePosition.magnitude() > 1000 || newEyePosition.magnitude() < (2 * event->delta()) || newEyePosition.magnitude() < 20)
+   {
+      return;
+   }
+
+   renderer_.setEyePosition(newEyePosition);
+}

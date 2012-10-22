@@ -40,10 +40,9 @@ public:
    // Accessors
    virtual Euler rotation() = 0;
 
-/*   virtual Vector eyePosition() = 0;
+   virtual Vector eyePosition() = 0;
    virtual Vector lookAtPosition() = 0;
-   virtual Vector upDirection() = 0;
-*/
+
    // Setters
    virtual void setRenderMode(RenderMode mode) = 0;
    virtual void setTranslation(Vector translation) = 0;
@@ -52,17 +51,15 @@ public:
    virtual void setDisplayNormals(bool displayNormals) = 0;
    virtual void setProjectionMode(ProjectionMode mode) = 0;
 
-/*   virtual void setEyePosition(Vector position) = 0;
+   virtual void setEyePosition(Vector position) = 0;
    virtual void setLookAtPosition(Vector position) = 0;
    virtual void setUpDirection(Vector direction) = 0;
-*/
+
 public: // signals
    virtual void rotationChanged() = 0;
 
-/*   virtual void eyePositionChanged() = 0;
+   virtual void eyePositionChanged() = 0;
    virtual void lookAtPositionChanged() = 0;
-   virtual void upDirectionChanged() = 0;
-*/
 };
 
 #endif

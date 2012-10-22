@@ -40,6 +40,8 @@ protected:
    void mousePressEvent(QMouseEvent* event);
    void mouseMoveEvent(QMouseEvent* event);
 
+   void wheelEvent(QWheelEvent* event);
+
 private slots:
    void handleRenderChanged();
 

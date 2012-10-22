@@ -32,6 +32,7 @@ public:
    virtual QList<QString> availableModelSets();
    virtual void loadDefaultModelSet();
    virtual void loadModelSet(QString set);
+   virtual void loadCustomModel(QString path);
 
    Vector overallCenter();
    Vector overallSize();
@@ -43,6 +44,7 @@ signals:
 
 private: // helpers
    void removeAllModels();
+   QString findSkinForModel(QString path);
 
 private: // members
    QList<Model*> models_;

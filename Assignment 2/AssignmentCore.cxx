@@ -13,7 +13,7 @@
 AssignmentCore::AssignmentCore()
 {
    this->setWindowTitle("CPSC453 Assignment 2 - MD2 Model Viewer - James Thorne");
-   this->setMinimumSize(1280, 720);
+   this->resize(1280, 720);
 
    QWidget* centralWidget = new QWidget(this);
 

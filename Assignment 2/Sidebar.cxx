@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <QRadioButton>
 #include <QGroupBox>
+#include <QFileDialog>
 
 // UIC
 #include <SidebarUi.ui.h>
@@ -54,10 +55,25 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
       ui_->selectModel->addItem(modelSet);
    }
    ui_->selectModel->setCurrentIndex(modelSelector_.availableModelSets().count() - 1);
+   ui_->selectModel->addItem("Browse...");
    connect(ui_->selectModel, SIGNAL(currentIndexChanged(int)), this, SLOT(handleModelSelected()));
+
+   setupInput(ui_->xView, ui_->xViewSpin, SLOT(handleEyePositionChanged()));
+   setupInput(ui_->yView, ui_->yViewSpin, SLOT(handleEyePositionChanged()));
+   setupInput(ui_->zView, ui_->zViewSpin, SLOT(handleEyePositionChanged()));
+
+   setupInput(ui_->xLookAt, ui_->xLookAtSpin, SLOT(handleLookAtPositionChanged()));
+   setupInput(ui_->yLookAt, ui_->yLookAtSpin, SLOT(handleLookAtPositionChanged()));
+   setupInput(ui_->zLookAt, ui_->zLookAtSpin, SLOT(handleLookAtPositionChanged()));
+
+   setupInput(ui_->xUp, ui_->xUpSpin, SLOT(handleUpDirectionChanged()));
+   setupInput(ui_->yUp, ui_->yUpSpin, SLOT(handleUpDirectionChanged()));
+   setupInput(ui_->zUp, ui_->zUpSpin, SLOT(handleUpDirectionChanged()));
 
    // Render Options
    connect(&options_, SIGNAL(rotationChanged()), this, SLOT(handleRotationChangedByRenderOptions()));
+   connect(&options_, SIGNAL(eyePositionChanged()), this, SLOT(handleEyePositionChangedByRenderOptions()));
+   connect(&options_, SIGNAL(lookAtPositionChanged()), this, SLOT(handleLookAtPositionChangedByRenderOptions()));
 }
 
 void Sidebar::setupInput(QAbstractSlider* slider, QSpinBox* spin, const char* slotToCallOnChange)
@@ -129,6 +145,20 @@ void Sidebar::handleShowNormalsChanged()
 
 void Sidebar::handleModelSelected()
 {
+   if (ui_->selectModel->currentText() == QString("Browse..."))
+   {
+      QString path = QFileDialog::getOpenFileName(this, 
+                                                  "Select Model...",
+                                                  ".",
+                                                  "MD2 Models (*.md2)");
+
+      if (path != "")
+      {
+         modelSelector_.loadCustomModel(path);
+      }
+
+      return;
+   }
    modelSelector_.loadModelSet(ui_->selectModel->currentText());
 }
 
@@ -139,6 +169,34 @@ void Sidebar::handleProjectionChanged()
 
    options_.setProjectionMode(mode);
 }
+
+void Sidebar::handleEyePositionChanged()
+{
+   Vector position = Vector(ui_->xView->value(),
+                            ui_->yView->value(),
+                            ui_->zView->value());
+
+   options_.setEyePosition(position);
+}
+
+void Sidebar::handleLookAtPositionChanged()
+{
+   Vector position = Vector(ui_->xLookAt->value(),
+                            ui_->yLookAt->value(),
+                            ui_->zLookAt->value());
+
+   options_.setLookAtPosition(position);
+}
+
+void Sidebar::handleUpDirectionChanged()
+{
+   Vector direction = Vector(ui_->xUp->value(),
+                             ui_->yUp->value(),
+                             ui_->zUp->value());
+
+   options_.setUpDirection(direction);
+}
+
 
 /**
  ******************************************************************************
@@ -159,5 +217,31 @@ void Sidebar::handleRotationChangedByRenderOptions()
    ui_->rRotationSpin->setValue(toDeg(rotation.roll));
    ui_->pRotationSpin->setValue(toDeg(rotation.pitch));
    ui_->yRotationSpin->setValue(toDeg(rotation.yaw));
+}
+
+void Sidebar::handleEyePositionChangedByRenderOptions()
+{
+   Vector position = options_.eyePosition();
+
+   ui_->xView->setValue(position.x);
+   ui_->yView->setValue(position.y);
+   ui_->zView->setValue(position.z);
+
+   ui_->xViewSpin->setValue(position.x);
+   ui_->yViewSpin->setValue(position.y);
+   ui_->zViewSpin->setValue(position.z);
+}
+
+void Sidebar::handleLookAtPositionChangedByRenderOptions()
+{
+   Vector position = options_.lookAtPosition();
+
+   ui_->xLookAt->setValue(position.x);
+   ui_->yLookAt->setValue(position.y);
+   ui_->zLookAt->setValue(position.z);
+
+   ui_->xLookAtSpin->setValue(position.x);
+   ui_->yLookAtSpin->setValue(position.y);
+   ui_->zLookAtSpin->setValue(position.z);
 }
 
