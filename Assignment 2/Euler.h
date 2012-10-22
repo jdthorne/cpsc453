@@ -4,6 +4,7 @@
 // System
 
 // Project
+#include <AffineMatrix.h>
 
 /**
  ******************************************************************************
@@ -19,6 +20,9 @@ public:
    Euler();
    Euler(double roll, double pitch, double yaw);
    virtual ~Euler();
+
+public:
+   static Euler fromAffineMatrix(AffineMatrix matrix);
 
 public:
    double roll;

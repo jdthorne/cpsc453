@@ -11,6 +11,7 @@
 // Assignment
 #include <Euler.h>
 #include <Vector.h>
+#include <AffineMatrix.h>
 
 namespace RenderHelpers
 {
@@ -19,6 +20,8 @@ namespace RenderHelpers
    double toRad(double deg);
 
    void glRotatee(const Euler rotation);
+   void glRotateaa(double angle, Vector axis);
+
    void glTranslatev(const Vector translation);
    void glScalev(const Vector scale);
    void glVertexv(const Vector vertex);
@@ -27,6 +30,10 @@ namespace RenderHelpers
    void glSphere(const Vector position, double scale);
 
    void glBillboard();
+
+   AffineMatrix glGetMatrix(GLenum matrixMode);
+   void glLoadMatrixa(AffineMatrix matrix);
+   void glMultMatrixa(AffineMatrix matrix);
 }
 
 #endif

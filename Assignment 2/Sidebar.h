@@ -5,6 +5,7 @@
 #include <QWidget>
 
 // Project
+#include <SliderSpinboxController.h>
 
 class QSpinBox;
 class QAbstractSlider;
@@ -57,6 +58,33 @@ private: // members
 
    I_RenderOptions& options_;
    I_ModelSelector& modelSelector_;
+
+private: // controllers
+   SliderSpinboxController* xTranslation_;
+   SliderSpinboxController* yTranslation_;
+   SliderSpinboxController* zTranslation_;
+
+   SliderSpinboxController* xScale_;
+   SliderSpinboxController* yScale_;
+   SliderSpinboxController* zScale_;
+   SliderSpinboxController* uScale_;
+
+   SliderSpinboxController* rRotation_;
+   SliderSpinboxController* pRotation_;
+   SliderSpinboxController* yRotation_;
+
+   SliderSpinboxController* xView_;
+   SliderSpinboxController* yView_;
+   SliderSpinboxController* zView_;
+
+   SliderSpinboxController* xLookAt_;
+   SliderSpinboxController* yLookAt_;
+   SliderSpinboxController* zLookAt_;
+
+   SliderSpinboxController* xUp_;
+   SliderSpinboxController* yUp_;
+   SliderSpinboxController* zUp_;
+
 };
 
 #endif

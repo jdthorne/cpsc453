@@ -17,7 +17,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <property name="geometry">
@@ -174,13 +174,13 @@
            </widget>
           </item>
           <item row="0" column="2">
-           <widget class="QSpinBox" name="xTranslationSpin"/>
+           <widget class="QDoubleSpinBox" name="xTranslationSpin"/>
           </item>
           <item row="1" column="2">
-           <widget class="QSpinBox" name="yTranslationSpin"/>
+           <widget class="QDoubleSpinBox" name="yTranslationSpin"/>
           </item>
           <item row="2" column="2">
-           <widget class="QSpinBox" name="zTranslationSpin"/>
+           <widget class="QDoubleSpinBox" name="zTranslationSpin"/>
           </item>
          </layout>
         </widget>
@@ -197,18 +197,12 @@
           <property name="verticalSpacing">
            <number>2</number>
           </property>
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="yRotationSpin"/>
-          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
              <string>Pitch</string>
             </property>
            </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QSpinBox" name="rRotationSpin"/>
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
@@ -223,9 +217,6 @@
              <string>Yaw</string>
             </property>
            </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QSpinBox" name="pRotationSpin"/>
           </item>
           <item row="0" column="1">
            <widget class="QSlider" name="rRotation">
@@ -266,6 +257,15 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="2">
+           <widget class="QDoubleSpinBox" name="rRotationSpin"/>
+          </item>
+          <item row="1" column="2">
+           <widget class="QDoubleSpinBox" name="pRotationSpin"/>
+          </item>
+          <item row="2" column="2">
+           <widget class="QDoubleSpinBox" name="yRotationSpin"/>
+          </item>
          </layout>
         </widget>
        </item>
@@ -300,9 +300,6 @@
              <string>Y</string>
             </property>
            </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QSpinBox" name="uScaleSpin"/>
           </item>
           <item row="2" column="1">
            <widget class="QSlider" name="yScale">
@@ -357,9 +354,6 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="2">
-           <widget class="QSpinBox" name="zScaleSpin"/>
-          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_7">
             <property name="text">
@@ -367,11 +361,17 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="yScaleSpin"/>
+          <item row="0" column="2">
+           <widget class="QDoubleSpinBox" name="uScaleSpin"/>
           </item>
           <item row="1" column="2">
-           <widget class="QSpinBox" name="xScaleSpin"/>
+           <widget class="QDoubleSpinBox" name="xScaleSpin"/>
+          </item>
+          <item row="2" column="2">
+           <widget class="QDoubleSpinBox" name="yScaleSpin"/>
+          </item>
+          <item row="3" column="2">
+           <widget class="QDoubleSpinBox" name="zScaleSpin"/>
           </item>
          </layout>
         </widget>
@@ -482,14 +482,14 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
-           <widget class="QSpinBox" name="xViewSpin"/>
+          <item row="2" column="2">
+           <widget class="QDoubleSpinBox" name="zViewSpin"/>
           </item>
           <item row="1" column="2">
-           <widget class="QSpinBox" name="yViewSpin"/>
+           <widget class="QDoubleSpinBox" name="yViewSpin"/>
           </item>
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="zViewSpin"/>
+          <item row="0" column="2">
+           <widget class="QDoubleSpinBox" name="xViewSpin"/>
           </item>
          </layout>
         </widget>
@@ -509,9 +509,6 @@
              <string>Y</string>
             </property>
            </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QSpinBox" name="zLookAtSpin"/>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_17">
@@ -533,9 +530,6 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
-           <widget class="QSpinBox" name="xLookAtSpin"/>
-          </item>
           <item row="1" column="1">
            <widget class="QSlider" name="yLookAt">
             <property name="minimum">
@@ -548,9 +542,6 @@
              <enum>Qt::Horizontal</enum>
             </property>
            </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QSpinBox" name="yLookAtSpin"/>
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_16">
@@ -571,6 +562,15 @@
              <enum>Qt::Horizontal</enum>
             </property>
            </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QDoubleSpinBox" name="zLookAtSpin"/>
+          </item>
+          <item row="1" column="2">
+           <widget class="QDoubleSpinBox" name="yLookAtSpin"/>
+          </item>
+          <item row="0" column="2">
+           <widget class="QDoubleSpinBox" name="xLookAtSpin"/>
           </item>
          </layout>
         </widget>
@@ -604,9 +604,6 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
-           <widget class="QSpinBox" name="xUpSpin"/>
-          </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_21">
             <property name="text">
@@ -626,9 +623,6 @@
              <enum>Qt::Horizontal</enum>
             </property>
            </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QSpinBox" name="yUpSpin"/>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_20">
@@ -654,11 +648,13 @@
            </widget>
           </item>
           <item row="2" column="2">
-           <widget class="QSpinBox" name="zUpSpin">
-            <property name="value">
-             <number>1</number>
-            </property>
-           </widget>
+           <widget class="QDoubleSpinBox" name="zUpSpin"/>
+          </item>
+          <item row="1" column="2">
+           <widget class="QDoubleSpinBox" name="yUpSpin"/>
+          </item>
+          <item row="0" column="2">
+           <widget class="QDoubleSpinBox" name="xUpSpin"/>
           </item>
          </layout>
         </widget>

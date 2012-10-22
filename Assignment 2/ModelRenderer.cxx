@@ -20,6 +20,7 @@ using namespace RenderHelpers;
 
 ModelRenderer::ModelRenderer()
    : translation_(0, 0, 0)
+   , rotation_(AffineMatrix::identity())
    , scale_(1, 1, 1)
    , renderMode_(SmoothShading)
    , displayNormals_(false)
@@ -88,7 +89,7 @@ void ModelRenderer::handleModelsChanged()
  *
  ******************************************************************************
  */
-Euler ModelRenderer::rotation()
+AffineMatrix ModelRenderer::rotation()
 {
    return rotation_;
 }
@@ -115,7 +116,7 @@ void ModelRenderer::setTranslation(Vector translation)
    emit renderChanged();
 }
 
-void ModelRenderer::setRotation(Euler rotation)
+void ModelRenderer::setRotation(AffineMatrix rotation)
 {
    rotation_ = rotation;
 
@@ -246,7 +247,8 @@ void ModelRenderer::setupEyePosition()
 void ModelRenderer::setupTransformation()
 {
    glTranslatev(translation_);
-   glRotatee(rotation_);
+   glMultMatrixa(rotation_);
+
    glScalev(scale_);
 }
 

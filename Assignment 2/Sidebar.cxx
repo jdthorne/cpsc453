@@ -14,6 +14,7 @@
 #include <Vector.h>
 #include <Sidebar.h>
 #include <RenderHelpers.h>
+#include <SliderSpinboxController.h>
 #include <I_RenderOptions.h>
 #include <I_ModelSelector.h>
 
@@ -25,21 +26,32 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
 {
    ui_ = new Ui_SidebarUi();
    ui_->setupUi(this);
-   setMinimumWidth(260);
+   setMinimumWidth(290);
 
-   // Input Controls
-   setupInput(ui_->xTranslation, ui_->xTranslationSpin, SLOT(handleTranslationChanged()));
-   setupInput(ui_->yTranslation, ui_->yTranslationSpin, SLOT(handleTranslationChanged()));
-   setupInput(ui_->zTranslation, ui_->zTranslationSpin, SLOT(handleTranslationChanged()));
+   xTranslation_ = new SliderSpinboxController(ui_->xTranslation, ui_->xTranslationSpin, this, SLOT(handleTranslationChanged()));
+   yTranslation_ = new SliderSpinboxController(ui_->yTranslation, ui_->yTranslationSpin, this, SLOT(handleTranslationChanged()));
+   zTranslation_ = new SliderSpinboxController(ui_->zTranslation, ui_->zTranslationSpin, this, SLOT(handleTranslationChanged()));
 
-   setupInput(ui_->xScale, ui_->xScaleSpin, SLOT(handleScaleChanged()));
-   setupInput(ui_->yScale, ui_->yScaleSpin, SLOT(handleScaleChanged()));
-   setupInput(ui_->zScale, ui_->zScaleSpin, SLOT(handleScaleChanged()));
-   setupInput(ui_->uScale, ui_->uScaleSpin, SLOT(handleScaleChanged()));
+   xScale_ = new SliderSpinboxController(ui_->xScale, ui_->xScaleSpin, this, SLOT(handleScaleChanged()));
+   yScale_ = new SliderSpinboxController(ui_->yScale, ui_->yScaleSpin, this, SLOT(handleScaleChanged()));
+   zScale_ = new SliderSpinboxController(ui_->zScale, ui_->zScaleSpin, this, SLOT(handleScaleChanged()));
+   uScale_ = new SliderSpinboxController(ui_->uScale, ui_->uScaleSpin, this, SLOT(handleScaleChanged()));
 
-   setupInput(ui_->rRotation, ui_->rRotationSpin, SLOT(handleRotationChanged()));
-   setupInput(ui_->pRotation, ui_->pRotationSpin, SLOT(handleRotationChanged()));
-   setupInput(ui_->yRotation, ui_->yRotationSpin, SLOT(handleRotationChanged()));
+   rRotation_ = new SliderSpinboxController(ui_->rRotation, ui_->rRotationSpin, this, SLOT(handleRotationChanged()));
+   pRotation_ = new SliderSpinboxController(ui_->pRotation, ui_->pRotationSpin, this, SLOT(handleRotationChanged()));
+   yRotation_ = new SliderSpinboxController(ui_->yRotation, ui_->yRotationSpin, this, SLOT(handleRotationChanged()));
+
+   xView_ = new SliderSpinboxController(ui_->xView, ui_->xViewSpin, this, SLOT(handleEyePositionChanged()));
+   yView_ = new SliderSpinboxController(ui_->yView, ui_->yViewSpin, this, SLOT(handleEyePositionChanged()));
+   zView_ = new SliderSpinboxController(ui_->zView, ui_->zViewSpin, this, SLOT(handleEyePositionChanged()));
+
+   xLookAt_ = new SliderSpinboxController(ui_->xLookAt, ui_->xLookAtSpin, this, SLOT(handleLookAtPositionChanged()));
+   yLookAt_ = new SliderSpinboxController(ui_->yLookAt, ui_->yLookAtSpin, this, SLOT(handleLookAtPositionChanged()));
+   zLookAt_ = new SliderSpinboxController(ui_->zLookAt, ui_->zLookAtSpin, this, SLOT(handleLookAtPositionChanged()));
+
+   xUp_ = new SliderSpinboxController(ui_->xUp, ui_->xUpSpin, this, SLOT(handleUpDirectionChanged()));
+   yUp_ = new SliderSpinboxController(ui_->yUp, ui_->yUpSpin, this, SLOT(handleUpDirectionChanged()));
+   zUp_ = new SliderSpinboxController(ui_->zUp, ui_->zUpSpin, this, SLOT(handleUpDirectionChanged()));
 
    connect(ui_->showNormals, SIGNAL(toggled(bool)), this, SLOT(handleShowNormalsChanged()));
 
@@ -58,35 +70,10 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
    ui_->selectModel->addItem("Browse...");
    connect(ui_->selectModel, SIGNAL(currentIndexChanged(int)), this, SLOT(handleModelSelected()));
 
-   setupInput(ui_->xView, ui_->xViewSpin, SLOT(handleEyePositionChanged()));
-   setupInput(ui_->yView, ui_->yViewSpin, SLOT(handleEyePositionChanged()));
-   setupInput(ui_->zView, ui_->zViewSpin, SLOT(handleEyePositionChanged()));
-
-   setupInput(ui_->xLookAt, ui_->xLookAtSpin, SLOT(handleLookAtPositionChanged()));
-   setupInput(ui_->yLookAt, ui_->yLookAtSpin, SLOT(handleLookAtPositionChanged()));
-   setupInput(ui_->zLookAt, ui_->zLookAtSpin, SLOT(handleLookAtPositionChanged()));
-
-   setupInput(ui_->xUp, ui_->xUpSpin, SLOT(handleUpDirectionChanged()));
-   setupInput(ui_->yUp, ui_->yUpSpin, SLOT(handleUpDirectionChanged()));
-   setupInput(ui_->zUp, ui_->zUpSpin, SLOT(handleUpDirectionChanged()));
-
    // Render Options
    connect(&options_, SIGNAL(rotationChanged()), this, SLOT(handleRotationChangedByRenderOptions()));
    connect(&options_, SIGNAL(eyePositionChanged()), this, SLOT(handleEyePositionChangedByRenderOptions()));
    connect(&options_, SIGNAL(lookAtPositionChanged()), this, SLOT(handleLookAtPositionChangedByRenderOptions()));
-}
-
-void Sidebar::setupInput(QAbstractSlider* slider, QSpinBox* spin, const char* slotToCallOnChange)
-{
-   spin->setMaximum(slider->maximum());
-   spin->setMinimum(slider->minimum());
-   spin->setValue(slider->value());
-
-   connect(slider, SIGNAL(valueChanged(int)), spin, SLOT(setValue(int)));
-   connect(spin, SIGNAL(valueChanged(int)), slider, SLOT(setValue(int)));
-
-   connect(slider, SIGNAL(valueChanged(int)), this, slotToCallOnChange);
-   connect(spin, SIGNAL(valueChanged(int)), this, slotToCallOnChange);
 }
 
 Sidebar::~Sidebar()
@@ -111,31 +98,31 @@ void Sidebar::handleRenderModeChanged()
 
 void Sidebar::handleTranslationChanged()
 {
-   Vector translation = Vector(ui_->xTranslation->value(),
-                               ui_->yTranslation->value(),
-                               ui_->zTranslation->value());
+   Vector translation = Vector(xTranslation_->value(),
+                               yTranslation_->value(),
+                               zTranslation_->value());
 
    options_.setTranslation(translation);
 }
 
 void Sidebar::handleScaleChanged()
 {
-   Vector scale = Vector(ui_->xScale->value(),
-                         ui_->yScale->value(),
-                         ui_->zScale->value());
+   Vector scale = Vector(xScale_->value(),
+                         yScale_->value(),
+                         zScale_->value());
 
-   scale = scale * ui_->uScale->value();
+   scale = scale * uScale_->value();
 
    options_.setScale(scale);
 }
 
 void Sidebar::handleRotationChanged()
 {
-   Euler rotation = Euler(toRad(ui_->rRotation->value()), 
-                          toRad(ui_->pRotation->value()),
-                          toRad(ui_->yRotation->value()));
+   Euler rotation = Euler(toRad(rRotation_->value()), 
+                          toRad(pRotation_->value()),
+                          toRad(yRotation_->value()));
 
-   options_.setRotation(rotation);
+   options_.setRotation(AffineMatrix::fromEuler(rotation));
 }
 
 void Sidebar::handleShowNormalsChanged()
@@ -172,27 +159,27 @@ void Sidebar::handleProjectionChanged()
 
 void Sidebar::handleEyePositionChanged()
 {
-   Vector position = Vector(ui_->xView->value(),
-                            ui_->yView->value(),
-                            ui_->zView->value());
+   Vector position = Vector(xView_->value(),
+                            yView_->value(),
+                            zView_->value());
 
    options_.setEyePosition(position);
 }
 
 void Sidebar::handleLookAtPositionChanged()
 {
-   Vector position = Vector(ui_->xLookAt->value(),
-                            ui_->yLookAt->value(),
-                            ui_->zLookAt->value());
+   Vector position = Vector(xLookAt_->value(),
+                            yLookAt_->value(),
+                            zLookAt_->value());
 
    options_.setLookAtPosition(position);
 }
 
 void Sidebar::handleUpDirectionChanged()
 {
-   Vector direction = Vector(ui_->xUp->value(),
-                             ui_->yUp->value(),
-                             ui_->zUp->value());
+   Vector direction = Vector(xUp_->value(),
+                             yUp_->value(),
+                             zUp_->value());
 
    options_.setUpDirection(direction);
 }
@@ -208,40 +195,28 @@ void Sidebar::handleUpDirectionChanged()
  */
 void Sidebar::handleRotationChangedByRenderOptions()
 {
-   Euler rotation = options_.rotation();
+   Euler rotation = Euler::fromAffineMatrix(options_.rotation());
 
-   ui_->rRotation->setValue(toDeg(rotation.roll));
-   ui_->pRotation->setValue(toDeg(rotation.pitch));
-   ui_->yRotation->setValue(toDeg(rotation.yaw));
-
-   ui_->rRotationSpin->setValue(toDeg(rotation.roll));
-   ui_->pRotationSpin->setValue(toDeg(rotation.pitch));
-   ui_->yRotationSpin->setValue(toDeg(rotation.yaw));
+   rRotation_->setValue(toDeg(rotation.roll));
+   pRotation_->setValue(toDeg(rotation.pitch));
+   yRotation_->setValue(toDeg(rotation.yaw));
 }
 
 void Sidebar::handleEyePositionChangedByRenderOptions()
 {
    Vector position = options_.eyePosition();
 
-   ui_->xView->setValue(position.x);
-   ui_->yView->setValue(position.y);
-   ui_->zView->setValue(position.z);
-
-   ui_->xViewSpin->setValue(position.x);
-   ui_->yViewSpin->setValue(position.y);
-   ui_->zViewSpin->setValue(position.z);
+   xView_->setValue(position.x);
+   yView_->setValue(position.y);
+   zView_->setValue(position.z);
 }
 
 void Sidebar::handleLookAtPositionChangedByRenderOptions()
 {
    Vector position = options_.lookAtPosition();
 
-   ui_->xLookAt->setValue(position.x);
-   ui_->yLookAt->setValue(position.y);
-   ui_->zLookAt->setValue(position.z);
-
-   ui_->xLookAtSpin->setValue(position.x);
-   ui_->yLookAtSpin->setValue(position.y);
-   ui_->zLookAtSpin->setValue(position.z);
+   xLookAt_->setValue(position.x);
+   yLookAt_->setValue(position.y);
+   zLookAt_->setValue(position.z);
 }
 

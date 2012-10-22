@@ -7,6 +7,7 @@
 #include <QGLWidget>
 
 // Project
+#include <VirtualTrackball.h>
 #include <ModelRenderer.h>
 #include <I_RenderOptions.h>
 #include <I_ModelSelector.h>
@@ -48,8 +49,7 @@ private slots:
 private: // helpers
 
 private: // members
-   double xInitialMouse_;
-   double yInitialMouse_;
+   VirtualTrackball trackball_;
 
    ModelRenderer renderer_;
 };

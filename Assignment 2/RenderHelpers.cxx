@@ -50,9 +50,13 @@ double RenderHelpers::toRad(double deg)
  */
 void RenderHelpers::glRotatee(const Euler rotation)
 {
-   glRotatef(toDeg(rotation.roll), 0, 0, 1);
-   glRotatef(toDeg(rotation.pitch), 1, 0, 0);
-   glRotatef(toDeg(rotation.yaw), 0, 1, 0);
+   AffineMatrix matrix = AffineMatrix::fromEuler(rotation);
+   
+   glMultMatrixa(matrix);
+}
+void RenderHelpers::glRotateaa(double angle, Vector axis)
+{
+   glMultMatrixa(AffineMatrix::fromAxisAngle(axis, angle));
 }
 
 void RenderHelpers::glVertexv(const Vector vertex)
@@ -73,6 +77,56 @@ void RenderHelpers::glNormalv(const Vector vertex)
 void RenderHelpers::glScalev(const Vector scale)
 {
    glScalef(scale.x, scale.y, scale.z);
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Matrix Helpers
+ *
+ ******************************************************************************
+ */
+AffineMatrix RenderHelpers::glGetMatrix(GLenum matrixMode)
+{
+   AffineMatrix result;
+
+   GLfloat values[16];
+   glGetFloatv(matrixMode, values);
+
+   for (int i = 0; i < 4; i++)
+   {
+      for (int j = 0; j < 4; j++)
+      {
+         int cell = (i * 4) + j;
+         result.element[i][j] = values[cell];
+      }
+   }
+
+   return result;
+}
+
+void RenderHelpers::glLoadMatrixa(AffineMatrix matrix)
+{
+   GLfloat values[16];
+
+   for (int i = 0; i < 4; i++)
+   {
+      for (int j = 0; j < 4; j++)
+      {
+         int cell = (i * 4) + j;
+         values[cell] = matrix.element[i][j];
+      }
+   }
+
+   glLoadMatrixf(values);   
+}
+
+void RenderHelpers::glMultMatrixa(AffineMatrix multMatrix)
+{
+   AffineMatrix currentMatrix = glGetMatrix(GL_MODELVIEW_MATRIX);
+   AffineMatrix newMatrix = currentMatrix * multMatrix;
+
+   glLoadMatrixa(newMatrix);
 }
 
 /**

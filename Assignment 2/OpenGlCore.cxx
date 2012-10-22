@@ -69,6 +69,7 @@ void OpenGlCore::resizeGL(int width, int height)
 {
    glViewport(0, 0, width, height);
    renderer_.setFrameSize(width, height);
+   trackball_.handleScreenResize(width, height);
 }
 
 /**
@@ -119,32 +120,28 @@ I_ModelSelector& OpenGlCore::modelSelector()
  */
 void OpenGlCore::mousePressEvent(QMouseEvent* event)
 {
-   xInitialMouse_ = event->x();
-   yInitialMouse_ = event->y();
+   trackball_.handleClick(event->x(), event->y());
 }
 
 void OpenGlCore::mouseMoveEvent(QMouseEvent* event)
 {
-   double xDelta = (event->x() - xInitialMouse_);
-   double yDelta = (event->y() - yInitialMouse_);
+   AffineMatrix rotation = renderer_.rotation();
+   AffineMatrix newRotation = trackball_.rotationAfterDragTo(rotation, event->x(), event->y());
 
-   Euler rotation = renderer_.rotation();
-   rotation.roll = wrap(-M_PI, rotation.roll + toRad(xDelta), M_PI);
-   rotation.yaw = wrap(-M_PI, rotation.yaw + toRad(yDelta), M_PI);
-   renderer_.setRotation(rotation);
-
-   xInitialMouse_ = event->x();
-   yInitialMouse_ = event->y();
+   renderer_.setRotation(newRotation);
 }
 
 void OpenGlCore::wheelEvent(QWheelEvent* event)
 {
+   double distance = qBound(-40, event->delta(), 40) * 0.5;
+
    Vector fromEyeToLookAt = (renderer_.lookAtPosition() - renderer_.eyePosition()).normalized();
-   Vector eyeMovement = (fromEyeToLookAt * event->delta());
+   Vector eyeMovement = (fromEyeToLookAt * distance);
    Vector newEyePosition = renderer_.eyePosition() + eyeMovement;
 
-   if (newEyePosition.magnitude() > 1000 || newEyePosition.magnitude() < (2 * event->delta()) || newEyePosition.magnitude() < 20)
+   if ((newEyePosition - renderer_.lookAtPosition()).magnitude() < 50)
    {
+      renderer_.setEyePosition(renderer_.lookAtPosition() + (fromEyeToLookAt * -50));
       return;
    }
 

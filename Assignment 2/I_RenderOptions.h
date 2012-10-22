@@ -8,7 +8,7 @@
 
 // Project
 #include <Vector.h>
-#include <Euler.h>
+#include <AffineMatrix.h>
 
 enum RenderMode
 {
@@ -38,7 +38,7 @@ public:
 
 public:
    // Accessors
-   virtual Euler rotation() = 0;
+   virtual AffineMatrix rotation() = 0;
 
    virtual Vector eyePosition() = 0;
    virtual Vector lookAtPosition() = 0;
@@ -46,7 +46,7 @@ public:
    // Setters
    virtual void setRenderMode(RenderMode mode) = 0;
    virtual void setTranslation(Vector translation) = 0;
-   virtual void setRotation(Euler rotation) = 0;
+   virtual void setRotation(AffineMatrix rotation) = 0;
    virtual void setScale(Vector scale) = 0;
    virtual void setDisplayNormals(bool displayNormals) = 0;
    virtual void setProjectionMode(ProjectionMode mode) = 0;

@@ -39,13 +39,13 @@ public:
    I_ModelSelector& modelSelector();
 
 public: // I_RenderOptions
-   virtual Euler rotation();
+   virtual AffineMatrix rotation();
    virtual Vector eyePosition();
    virtual Vector lookAtPosition();
 
    virtual void setRenderMode(RenderMode mode);
    virtual void setTranslation(Vector translation);
-   virtual void setRotation(Euler rotation);
+   virtual void setRotation(AffineMatrix rotation);
    virtual void setScale(Vector scale);
    virtual void setDisplayNormals(bool displayNormals);
    virtual void setProjectionMode(ProjectionMode mode);
@@ -74,7 +74,7 @@ private: // helpers
 
 private: // settings
    Vector translation_;
-   Euler rotation_;
+   AffineMatrix rotation_;
    Vector scale_;
    RenderMode renderMode_;
    bool displayNormals_;

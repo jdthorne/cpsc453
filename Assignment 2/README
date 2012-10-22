@@ -2,9 +2,12 @@
 Stuff to do:
    - Virtual trackball
    - Decide about animation
-   - Wire up zooming
    - Ensure all view transformations work
 
    - Write this readme
    - Clean up code/comments
    - Make it work in computer lab
+
+
+Stuff that's Done:
+   - Wire up zooming
