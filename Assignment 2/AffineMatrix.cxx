@@ -3,7 +3,6 @@
 #include <cmath>
 
 // Project
-#include <Euler.h>
 #include <AffineMatrix.h>
 
 AffineMatrix::AffineMatrix()
@@ -67,15 +66,6 @@ AffineMatrix AffineMatrix::fromAxisAngle(Vector axis, double angle)
    result.element[3][3] = 1.0;
 
    return result;
-}
-
-AffineMatrix AffineMatrix::fromEuler(Euler euler)
-{
-   AffineMatrix yaw = AffineMatrix::fromAxisAngle(Vector(0, 0, 1), euler.yaw);
-   AffineMatrix pitch = AffineMatrix::fromAxisAngle(Vector(1, 0, 0), euler.pitch);
-   AffineMatrix roll = AffineMatrix::fromAxisAngle(Vector(0, 1, 0), euler.roll);
-
-   return yaw * pitch * roll;
 }
 
 AffineMatrix operator*(const AffineMatrix& matrix, double scalar)

@@ -39,7 +39,6 @@ public:
 public:
    // Accessors
    virtual AffineMatrix rotation() = 0;
-
    virtual Vector eyePosition() = 0;
    virtual Vector lookAtPosition() = 0;
 

@@ -17,19 +17,19 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>230</width>
-        <height>429</height>
+        <width>231</width>
+        <height>414</height>
        </rect>
       </property>
       <attribute name="label">
-       <string>Model and Animation</string>
+       <string>Model Selection</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <property name="leftMargin">
@@ -44,25 +44,16 @@
           <string>Model Selection</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_6" columnstretch="0,0">
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_15">
-            <property name="text">
-             <string>Skin</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QComboBox" name="selectSkin">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0" colspan="2">
            <widget class="QComboBox" name="selectModel"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Weapon and Skin will be auto-
+detected.</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -87,8 +78,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>215</width>
-        <height>438</height>
+        <width>230</width>
+        <height>429</height>
        </rect>
       </property>
       <attribute name="label">
@@ -197,74 +188,15 @@
           <property name="verticalSpacing">
            <number>2</number>
           </property>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>Pitch</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Roll</string>
+             <string>Click + Drag on the model</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_6">
-            <property name="text">
-             <string>Yaw</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSlider" name="rRotation">
-            <property name="minimum">
-             <number>-360</number>
-            </property>
-            <property name="maximum">
-             <number>360</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSlider" name="pRotation">
-            <property name="minimum">
-             <number>-360</number>
-            </property>
-            <property name="maximum">
-             <number>360</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QSlider" name="yRotation">
-            <property name="minimum">
-             <number>-360</number>
-            </property>
-            <property name="maximum">
-             <number>360</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QDoubleSpinBox" name="rRotationSpin"/>
-          </item>
-          <item row="1" column="2">
-           <widget class="QDoubleSpinBox" name="pRotationSpin"/>
-          </item>
-          <item row="2" column="2">
-           <widget class="QDoubleSpinBox" name="yRotationSpin"/>
           </item>
          </layout>
         </widget>
@@ -825,19 +757,12 @@
  </widget>
  <tabstops>
   <tabstop>showNormals</tabstop>
-  <tabstop>selectSkin</tabstop>
   <tabstop>xTranslation</tabstop>
   <tabstop>xTranslationSpin</tabstop>
   <tabstop>yTranslation</tabstop>
   <tabstop>yTranslationSpin</tabstop>
   <tabstop>zTranslation</tabstop>
   <tabstop>zTranslationSpin</tabstop>
-  <tabstop>rRotation</tabstop>
-  <tabstop>rRotationSpin</tabstop>
-  <tabstop>pRotation</tabstop>
-  <tabstop>pRotationSpin</tabstop>
-  <tabstop>yRotation</tabstop>
-  <tabstop>yRotationSpin</tabstop>
   <tabstop>uScale</tabstop>
   <tabstop>uScaleSpin</tabstop>
   <tabstop>xScale</tabstop>

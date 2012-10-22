@@ -9,7 +9,6 @@
 #include <QString>
 
 // Assignment
-#include <Euler.h>
 #include <Vector.h>
 #include <AffineMatrix.h>
 
@@ -19,7 +18,6 @@ namespace RenderHelpers
    double toDeg(double rad);
    double toRad(double deg);
 
-   void glRotatee(const Euler rotation);
    void glRotateaa(double angle, Vector axis);
 
    void glTranslatev(const Vector translation);

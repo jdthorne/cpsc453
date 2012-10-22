@@ -37,10 +37,6 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
    zScale_ = new SliderSpinboxController(ui_->zScale, ui_->zScaleSpin, this, SLOT(handleScaleChanged()));
    uScale_ = new SliderSpinboxController(ui_->uScale, ui_->uScaleSpin, this, SLOT(handleScaleChanged()));
 
-   rRotation_ = new SliderSpinboxController(ui_->rRotation, ui_->rRotationSpin, this, SLOT(handleRotationChanged()));
-   pRotation_ = new SliderSpinboxController(ui_->pRotation, ui_->pRotationSpin, this, SLOT(handleRotationChanged()));
-   yRotation_ = new SliderSpinboxController(ui_->yRotation, ui_->yRotationSpin, this, SLOT(handleRotationChanged()));
-
    xView_ = new SliderSpinboxController(ui_->xView, ui_->xViewSpin, this, SLOT(handleEyePositionChanged()));
    yView_ = new SliderSpinboxController(ui_->yView, ui_->yViewSpin, this, SLOT(handleEyePositionChanged()));
    zView_ = new SliderSpinboxController(ui_->zView, ui_->zViewSpin, this, SLOT(handleEyePositionChanged()));
@@ -71,7 +67,6 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
    connect(ui_->selectModel, SIGNAL(currentIndexChanged(int)), this, SLOT(handleModelSelected()));
 
    // Render Options
-   connect(&options_, SIGNAL(rotationChanged()), this, SLOT(handleRotationChangedByRenderOptions()));
    connect(&options_, SIGNAL(eyePositionChanged()), this, SLOT(handleEyePositionChangedByRenderOptions()));
    connect(&options_, SIGNAL(lookAtPositionChanged()), this, SLOT(handleLookAtPositionChangedByRenderOptions()));
 }
@@ -114,15 +109,6 @@ void Sidebar::handleScaleChanged()
    scale = scale * uScale_->value();
 
    options_.setScale(scale);
-}
-
-void Sidebar::handleRotationChanged()
-{
-   Euler rotation = Euler(toRad(rRotation_->value()), 
-                          toRad(pRotation_->value()),
-                          toRad(yRotation_->value()));
-
-   options_.setRotation(AffineMatrix::fromEuler(rotation));
 }
 
 void Sidebar::handleShowNormalsChanged()
@@ -193,15 +179,6 @@ void Sidebar::handleUpDirectionChanged()
  *
  ******************************************************************************
  */
-void Sidebar::handleRotationChangedByRenderOptions()
-{
-   Euler rotation = Euler::fromAffineMatrix(options_.rotation());
-
-   rRotation_->setValue(toDeg(rotation.roll));
-   pRotation_->setValue(toDeg(rotation.pitch));
-   yRotation_->setValue(toDeg(rotation.yaw));
-}
-
 void Sidebar::handleEyePositionChangedByRenderOptions()
 {
    Vector position = options_.eyePosition();

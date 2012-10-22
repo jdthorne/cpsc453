@@ -35,7 +35,6 @@ protected slots: // Sidebar Interface Changes
    void handleRenderModeChanged();
    void handleTranslationChanged();
    void handleScaleChanged();
-   void handleRotationChanged();
    void handleShowNormalsChanged();
    void handleProjectionChanged();
 
@@ -46,7 +45,6 @@ protected slots: // Sidebar Interface Changes
    void handleModelSelected();
 
 protected slots: // Render Option Changes
-   void handleRotationChangedByRenderOptions();
    void handleEyePositionChangedByRenderOptions();
    void handleLookAtPositionChangedByRenderOptions();
 
@@ -68,10 +66,6 @@ private: // controllers
    SliderSpinboxController* yScale_;
    SliderSpinboxController* zScale_;
    SliderSpinboxController* uScale_;
-
-   SliderSpinboxController* rRotation_;
-   SliderSpinboxController* pRotation_;
-   SliderSpinboxController* yRotation_;
 
    SliderSpinboxController* xView_;
    SliderSpinboxController* yView_;

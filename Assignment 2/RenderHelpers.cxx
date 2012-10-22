@@ -44,16 +44,10 @@ double RenderHelpers::toRad(double deg)
 /**
  ******************************************************************************
  *
- *                   Vector- and Euler- versions of standard functions
+ *                   Vector- and Matrix- versions of standard functions
  *
  ******************************************************************************
  */
-void RenderHelpers::glRotatee(const Euler rotation)
-{
-   AffineMatrix matrix = AffineMatrix::fromEuler(rotation);
-   
-   glMultMatrixa(matrix);
-}
 void RenderHelpers::glRotateaa(double angle, Vector axis)
 {
    glMultMatrixa(AffineMatrix::fromAxisAngle(axis, angle));

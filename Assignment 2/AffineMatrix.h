@@ -6,8 +6,6 @@
 // Project
 #include <Vector.h>
 
-class Euler;
-
 /**
  ******************************************************************************
  *
@@ -27,7 +25,6 @@ public:
 public:
    static AffineMatrix identity();
    static AffineMatrix fromAxisAngle(Vector axis, double angle);
-   static AffineMatrix fromEuler(Euler euler);
 
    void loadToOpenGl();
 
