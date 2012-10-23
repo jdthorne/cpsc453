@@ -8,6 +8,15 @@
 
 // Project
 
+/**
+ ******************************************************************************
+ *
+ *                   I_ModelSelector
+ *
+ *  This interface allows you to load modelsets (i.e. model + skin + weapon)
+ *
+ ******************************************************************************
+ */
 class I_ModelSelector
 {
 

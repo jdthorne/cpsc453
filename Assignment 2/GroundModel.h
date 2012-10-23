@@ -12,6 +12,9 @@
  *
  *                   GroundModel
  *
+ *  This class is a subclass of "Model" that represents the ground plate
+ *  (i.e. the big gear thing).
+ *
  ******************************************************************************
  */
 class GroundModel : public Model

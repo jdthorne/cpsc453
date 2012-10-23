@@ -20,6 +20,9 @@ class GroundModel;
  *
  *                   ModelRenderer
  *
+ *  This class renders models to the screen, and allows you to control the
+ *  various options through I_RenderOptions.
+ *
  ******************************************************************************
  */
 class ModelRenderer : public I_RenderOptions

@@ -4,6 +4,16 @@
 
 #include <QString>
 
+/**
+ ******************************************************************************
+ *
+ *                   Vector
+ *
+ *  This class represents a 3-Vector.  It encapsulates the x, y, z positions,
+ *  and contains tons of useful helpers.
+ *
+ ******************************************************************************
+ */
 class Vector
 {
 
@@ -35,9 +45,6 @@ public: // Operators
 
    double magnitude() const;
    double distanceTo(const Vector rhs) const;
-
-   static const Vector intersectionBetweenLineAndSphere(Vector lineStart, Vector direction,
-                                                        Vector sphereCenter, double sphereRadius);
 
    static const Vector interpolate(Vector v1, Vector v2, double t);
 

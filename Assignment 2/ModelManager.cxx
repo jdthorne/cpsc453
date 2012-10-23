@@ -18,32 +18,69 @@ ModelManager::~ModelManager()
    removeAllModels();
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Gets the list of available models
+ *
+ ******************************************************************************
+ */
 QList<QString> ModelManager::availableModelSets()
 {
    QStringList results;
+
+   // Loop through the subfolders of "./models"
    foreach(QString modelSet, QDir("./models").entryList())
    {
-      if (!modelSet.startsWith("."))
+      // Ignore dotfiles
+      if (modelSet.startsWith("."))
       {
-         results.append(modelSet);
+         continue;
       }
+
+      // Add the model to results
+      results.append(modelSet);
    }
 
    return results;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Load the default models (happens on startup)
+ *
+ ******************************************************************************
+ */
 void ModelManager::loadDefaultModelSet()
 {
+   // Load the "infantry" model
    models_.append(new Md2Model("models/infantry/tris.md2", "models/infantry/infantry.pcx"));
    models_.append(new Md2Model("models/infantry/weapon.md2", "models/infantry/weapon.pcx"));   
 
    emit modelsChanged();
 }
+
+/**
+ ******************************************************************************
+ *
+ *                   Load a model set from availableModelSets()
+ *
+ ******************************************************************************
+ */
 void ModelManager::loadModelSet(QString set)
 {
+   // Load the set from the "models" folder
    loadCustomModel("models/" + set + "/tris.md2");
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Load a model at an arbitrary path
+ *
+ ******************************************************************************
+ */
 void ModelManager::loadCustomModel(QString path)
 {
    removeAllModels();
@@ -51,28 +88,43 @@ void ModelManager::loadCustomModel(QString path)
    // Load the model
    models_.append(new Md2Model(path, findSkinForModel(path)));
 
-   // Load the weapon
+   // Find the weapon
    QString folder = QFileInfo(path).absoluteDir().absolutePath();
    QString weaponModel = folder + "/weapon.md2";
    QString weaponSkin = folder + "/weapon.pcx";
-   models_.append(new Md2Model(weaponModel, weaponSkin));
 
+   // Load the weapon if it exists
+   if (QFile::exists(weaponModel) && QFile::exists(weaponSkin))
+   {
+      models_.append(new Md2Model(weaponModel, weaponSkin));
+   }
+
+   // Notify that the models have changed
    emit modelsChanged();
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Helper to search for the skin for a given model
+ *
+ ******************************************************************************
+ */
 QString ModelManager::findSkinForModel(QString modelPath)
 {
    QDir folder = QFileInfo(modelPath).absoluteDir();
    QString folderPath = folder.absolutePath();
 
-   // First, try the same filename
-   QString skinWithSameFilename = modelPath.replace(".md2", ".pcx");
+   // Try looking for the same filename, but with .pcx instead of .md2
+   // e.g. ./models/infantry/tris.pcx
+   QString skinWithSameFilename = modelPath.replace(".md2", ".pcx").replace(".MD2", ".PCX");
    if (QFile::exists(skinWithSameFilename))
    {
       return skinWithSameFilename;
    }
 
-   // Then try the folder name
+   // Next, try a skin with the same name as the folder
+   // e.g. ./models/infantry/infantry.pcx
    QString sameAsFolderName = folderPath + "/" + folder.dirName() + ".pcx";
    if (QFile::exists(sameAsFolderName))
    {
@@ -80,13 +132,14 @@ QString ModelManager::findSkinForModel(QString modelPath)
    }
 
    // Next, try "skin.pcx"
+   // e.g. ./models/infantry/skin.pcx
    QString skinPcx = folderPath + "/skin.pcx";
    if (QFile::exists(skinPcx))
    {
       return skinPcx;
    }
 
-   // Finally, try the first PCX file in the folder 
+   // Finally, just grab the first image file in the folder
    foreach(QString skinFile, QDir(folder).entryList())
    {
       if (skinFile.endsWith(".pcx") || skinFile.endsWith(".bmp"))
@@ -95,25 +148,54 @@ QString ModelManager::findSkinForModel(QString modelPath)
       }
    }
 
+   // If that doesn't work, give up
    qDebug("[findSkinForModel] Couldn't find skin for %s", qPrintable(modelPath));
    return QString();
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Return the list of models
+ *
+ ******************************************************************************
+ */
 QList<Model*>& ModelManager::models()
 {
    return models_;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Return the overall center of the models
+ *
+ ******************************************************************************
+ */
 Vector ModelManager::overallCenter()
 {
    return models_[0]->center();
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Return the overall size of the models
+ *
+ ******************************************************************************
+ */
 Vector ModelManager::overallSize()
 {
    return models_[0]->size();
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Remove all of the currently loaded models.
+ *
+ ******************************************************************************
+ */
 void ModelManager::removeAllModels()
 {
    foreach(Model* model, models_)

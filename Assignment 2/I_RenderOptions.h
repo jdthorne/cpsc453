@@ -28,6 +28,9 @@ enum ProjectionMode
  *
  *                   I_RenderOptions
  *
+ *  This class allows you to control the render options, including affine
+ *  transformations and view coordinates.
+ *
  ******************************************************************************
  */
 class I_RenderOptions : public QObject

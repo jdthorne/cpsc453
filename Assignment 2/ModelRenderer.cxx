@@ -48,10 +48,16 @@ ModelRenderer::~ModelRenderer()
 void ModelRenderer::initialize()
 {
    groundModel_ = new GroundModel();
-
    modelManager_.loadDefaultModelSet();
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Save the frame size, so we have it for the GL perspective
+ *
+ ******************************************************************************
+ */
 void ModelRenderer::setFrameSize(double width, double height)
 {
    width_ = width;
@@ -67,25 +73,30 @@ void ModelRenderer::setFrameSize(double width, double height)
  */
 void ModelRenderer::handleModelsChanged()
 {
+   // Place the ground under the model's feet
    groundModel_->setZPosition(modelManager_.overallCenter().z - (modelManager_.overallSize().z / 2.0));
 
+   // Find the center and size of the model
    Vector center = modelManager_.overallCenter();
    Vector size = modelManager_.overallSize();
 
+   // Figure out how far away the camera needs to be
    double maxSize = size.largestElement();
    double distanceRequiredToViewEntireModel = maxSize * 1.5;
 
+   // Place the camera and look-at positions accordingly
    setEyePosition(Vector(distanceRequiredToViewEntireModel, 0, 0));
    setLookAtPosition(Vector(center.x, center.y, center.z));
    setUpDirection(Vector(0, 0, 1));
    
+   // Notify that the render has changed
    emit renderChanged();
 }
 
 /**
  ******************************************************************************
  *
- *                   Settings
+ *                   Settings Accessors & Setters
  *
  ******************************************************************************
  */
@@ -169,42 +180,57 @@ void ModelRenderer::setUpDirection(Vector direction)
 /**
  ******************************************************************************
  *
- *                   Rendering
+ *                   Core rendering function
  *
  ******************************************************************************
  */
 void ModelRenderer::render()
 {
+   // Setup
    setupProjectionMode();
-
    setupRenderMode();
    setupEyePosition();
+
+   // Place the groundsheet
    renderModel(*groundModel_);
 
+   // Apply affine transformations
    setupTransformation();
+
+   // Render the actual models
    foreach(Model* model, modelManager_.models())
    {
       renderModel(*model);
    }
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Render mode setup - wireframe, flat, or shaded
+ *
+ ******************************************************************************
+ */
 void ModelRenderer::setupRenderMode()
 {
    switch (renderMode_)
    {
       case Wireframe:
       {
+         // Wireframe just needs "GL_LINE"
          glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
          break;
       }
       case FlatShading:
       {
+         // Make it not wireframe, and also flat
          glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
          glShadeModel(GL_FLAT);
          break;
       }
       case SmoothShading:
       {
+         // Make it not wireframe, and also smooth
          glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
          glShadeModel(GL_SMOOTH);
          break;
@@ -212,11 +238,20 @@ void ModelRenderer::setupRenderMode()
    }
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Set up the perspective / ortho settings
+ *
+ ******************************************************************************
+ */
 void ModelRenderer::setupProjectionMode()
 {
+   // Configure the projection matrix
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
 
+   // Call gluPerspective or glOrtho, depending on the setting
    switch (projectionMode_)
    {
       case Perspective:
@@ -234,24 +269,46 @@ void ModelRenderer::setupProjectionMode()
    }
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Setup the eye position
+ *
+ ******************************************************************************
+ */
 void ModelRenderer::setupEyePosition()
 {
+   // Configure the modelview matrix
    glMatrixMode(GL_MODELVIEW);
    glLoadIdentity();
 
+   // Call gluLookAt, so we don't have to reimplement everything
    gluLookAt(eyePosition_.x, eyePosition_.y, eyePosition_.z, 
              lookAtPosition_.x, lookAtPosition_.y, lookAtPosition_.z,
              upDirection_.x, upDirection_.y, upDirection_.z);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Setup the affine transformations (translate, rotate, scale)
+ *
+ ******************************************************************************
+ */
 void ModelRenderer::setupTransformation()
 {
-   glTranslatev(translation_);
-   glMultMatrixa(rotation_);
-
-   glScalev(scale_);
+   scratchTranslatev(translation_);
+   scratchRotatea(rotation_);
+   scratchScalev(scale_);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Render the actual models
+ *
+ ******************************************************************************
+ */
 void ModelRenderer::renderModel(Model& model)
 {
    model.renderMesh();
@@ -262,6 +319,13 @@ void ModelRenderer::renderModel(Model& model)
    }
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Accessor for the model selector (used by Sidebar)
+ *
+ ******************************************************************************
+ */
 I_ModelSelector& ModelRenderer::modelSelector()
 {
    return modelManager_;

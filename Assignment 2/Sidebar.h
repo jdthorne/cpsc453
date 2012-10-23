@@ -19,6 +19,9 @@ class Ui_SidebarUi;
  *
  *                   Sidebar
  *
+ *  This class owns all of the widgets in the sidebar, and wires then up to
+ *  I_RenderOptions and I_ModelManager.
+ *
  ******************************************************************************
  */
 class Sidebar : public QWidget

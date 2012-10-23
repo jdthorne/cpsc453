@@ -4,6 +4,7 @@
 
 // Qt
 #include <QGLWidget>
+#include <QStack>
 
 // Assignment
 #include <RenderHelpers.h>
@@ -11,7 +12,17 @@
 /**
  ******************************************************************************
  *
- *                   Misc Helpers
+ *                   Custom Matrix Stack
+ *
+ ******************************************************************************
+ */
+AffineMatrix currentMatrix;
+QStack<AffineMatrix> matrixStack;
+
+/**
+ ******************************************************************************
+ *
+ *                   Wrap a value to fit within bounds
  *
  ******************************************************************************
  */
@@ -30,12 +41,17 @@ double RenderHelpers::wrap(double min, double value, double max)
    return value;
 }
 
-
+/**
+ ******************************************************************************
+ *
+ *                   Convert between degrees and radians
+ *
+ ******************************************************************************
+ */
 double RenderHelpers::toDeg(double rad)
 {
    return (rad * 180) / 3.1415926535;
 }
-
 double RenderHelpers::toRad(double deg)
 {
    return (deg / 180) * 3.1415926535;
@@ -44,121 +60,124 @@ double RenderHelpers::toRad(double deg)
 /**
  ******************************************************************************
  *
- *                   Vector- and Matrix- versions of standard functions
+ *                   Perform an OpenGL rotation with hand-written matricies
  *
  ******************************************************************************
  */
-void RenderHelpers::glRotateaa(double angle, Vector axis)
+void RenderHelpers::jdRotateaa(double angle, Vector axis)
 {
-   glMultMatrixa(AffineMatrix::fromAxisAngle(axis, angle));
+   jdMultMatrixa(AffineMatrix::fromAxisAngle(axis, angle));
+}
+void RenderHelpers::jdRotatea(const AffineMatrix rotation)
+{
+   jdMultMatrixa(rotation);
 }
 
-void RenderHelpers::glVertexv(const Vector vertex)
+/**
+ ******************************************************************************
+ *
+ *                   Perform an OpenGL translation with hand-written matricies
+ *
+ ******************************************************************************
+ */
+void RenderHelpers::jdTranslatev(const Vector vector)
+{
+   jdMultMatrixa(AffineMatrix::fromTranslationVector(vector));
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Perform an OpenGL scale with hand-written matricies
+ *
+ ******************************************************************************
+ */
+void RenderHelpers::jdScalev(const Vector scale)
+{
+   jdMultMatrixa(AffineMatrix::fromScaleVector(scale));
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Perform a hand-written multiply with the current Gl matrix
+ *
+ ******************************************************************************
+ */
+void RenderHelpers::jdMultMatrixa(AffineMatrix multMatrix)
+{
+   // Multiply it by the paramter
+   AffineMatrix newMatrix = currentMatrix * multMatrix;
+
+   // Stuff it back into OpenGL
+   jdLoadMatrixa(newMatrix);
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Helper to call glVertex with a Vector
+ *
+ ******************************************************************************
+ */
+void RenderHelpers::jdVertexv(const Vector vertex)
 {
    glVertex3f(vertex.x, vertex.y, vertex.z);
 }
 
-void RenderHelpers::glTranslatev(const Vector vertex)
-{
-   glTranslatef(vertex.x, vertex.y, vertex.z);
-}
-
-void RenderHelpers::glNormalv(const Vector vertex)
+/**
+ ******************************************************************************
+ *
+ *                   Helper to call glNormal with a Vector
+ *
+ ******************************************************************************
+ */
+void RenderHelpers::jdNormalv(const Vector vertex)
 {
    glNormal3f(vertex.x, vertex.y, vertex.z);
 }
 
-void RenderHelpers::glScalev(const Vector scale)
-{
-   glScalef(scale.x, scale.y, scale.z);
-}
-
 /**
  ******************************************************************************
  *
- *                   Matrix Helpers
+ *                   Load an AffineMatrix into OpenGL
  *
  ******************************************************************************
  */
-AffineMatrix RenderHelpers::glGetMatrix(GLenum matrixMode)
+void RenderHelpers::jdLoadMatrixa(AffineMatrix matrix)
 {
-   AffineMatrix result;
-
+   // Create an array of values from the matrix
    GLfloat values[16];
-   glGetFloatv(matrixMode, values);
 
+   // Fill the values[] array with the matrix body
    for (int i = 0; i < 4; i++)
    {
       for (int j = 0; j < 4; j++)
       {
-         int cell = (i * 4) + j;
-         result.element[i][j] = values[cell];
+         // Matrix element [i][j] ends up at index (i * 4) + j
+         int index = (i * 4) + j;
+         values[index] = matrix.element[i][j];
       }
    }
 
-   return result;
-}
-
-void RenderHelpers::glLoadMatrixa(AffineMatrix matrix)
-{
-   GLfloat values[16];
-
-   for (int i = 0; i < 4; i++)
-   {
-      for (int j = 0; j < 4; j++)
-      {
-         int cell = (i * 4) + j;
-         values[cell] = matrix.element[i][j];
-      }
-   }
-
+   // Load the matrix into OpenGL
    glLoadMatrixf(values);   
 }
 
-void RenderHelpers::glMultMatrixa(AffineMatrix multMatrix)
-{
-   AffineMatrix currentMatrix = glGetMatrix(GL_MODELVIEW_MATRIX);
-   AffineMatrix newMatrix = currentMatrix * multMatrix;
-
-   glLoadMatrixa(newMatrix);
-}
-
 /**
  ******************************************************************************
  *
- *                   Fancy Helpers
+ *                   Custom matrix stack
  *
  ******************************************************************************
  */
-void RenderHelpers::glBillboard()
+void RenderHelpers::jdPushMatrix()
 {
-   float modelView[16];
-   glGetFloatv(GL_MODELVIEW_MATRIX, modelView);
-
-   for (int i = 0; i < 3; i++) for (int j = 0; j < 3; j++)
-   {
-      modelView[i*4 + j] = (i == j ? 1.0 : 0.0);
-   }
-   glLoadMatrixf(modelView);
+   matrixStack.push(currentMatrix);
 }
 
-void RenderHelpers::glSphere(const Vector position, double scale)
+void RenderHelpers::jdPopMatrix()
 {
-   glPushMatrix();
-
-   glTranslatev(position);
-
-   glBillboard();
-
-   glScalef(scale, scale, scale);
-   glBegin(GL_QUADS);
-
-   glTexCoord2d(0.0, 0.0); glVertex2d(-1.0, -1.0);
-   glTexCoord2d(1.0, 0.0); glVertex2d(1.0, -1.0);
-   glTexCoord2d(1.0, 1.0); glVertex2d(1.0, 1.0);
-   glTexCoord2d(0.0, 1.0); glVertex2d(-1.0, 1.0);
-
-   glEnd();
-   glPopMatrix();
+   currentMatrix = matrixStack.pop();
 }
 

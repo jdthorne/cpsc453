@@ -11,6 +11,12 @@
  *
  *                   AffineMatrix
  *
+ *  This class represents an affine transformation matrix; i.e. a 4-dimensional
+ *  matrix containing translation, rotation, and scale.
+ *
+ *  To use the matrix, you can either access the elements directly (via
+ *  matrix.element[col][row]), or use the various helper functions.
+ *
  ******************************************************************************
  */
 class AffineMatrix
@@ -25,6 +31,8 @@ public:
 public:
    static AffineMatrix identity();
    static AffineMatrix fromAxisAngle(Vector axis, double angle);
+   static AffineMatrix fromTranslationVector(Vector translation);
+   static AffineMatrix fromScaleVector(Vector scale);
 
    void loadToOpenGl();
 

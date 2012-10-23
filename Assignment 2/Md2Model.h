@@ -15,6 +15,9 @@
  *
  *                   Md2Model
  *
+ *  This class is a wrapper around the MD2 model, as well as its associated
+ *  texture.
+ *
  ******************************************************************************
  */
 class Md2Model : public Model

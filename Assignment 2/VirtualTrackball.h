@@ -12,6 +12,9 @@
  *
  *                   VirtualTrackball
  *
+ *  This class implements the Virtual Trackball algorithm, adapted from
+ *  http://pages.cpsc.ucalgary.ca/~eharris/cpsc453/tut09/
+ *
  ******************************************************************************
  */
 typedef Vector TrackballPoint;

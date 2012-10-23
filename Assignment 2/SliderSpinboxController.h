@@ -15,6 +15,9 @@
  *
  *                   SliderSpinboxController
  *
+ *  This class glues a slider and spinbox together, keeping them in sync,
+ *  and allowing you to enter fractional values in a Qt slider.
+ *
  ******************************************************************************
  */
 class SliderSpinboxController : public QObject

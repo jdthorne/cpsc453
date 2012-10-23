@@ -13,6 +13,9 @@ class Sidebar;
  *
  *                   OpenGlDisplay
  *
+ *  This class is the "main window" of Assignment 2.  It constructs the
+ *  OpenGlCore and the Sidebar, and delegates the actual work to them.
+ *
  ******************************************************************************
  */
 class AssignmentCore : private QMainWindow

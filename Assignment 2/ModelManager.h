@@ -18,6 +18,8 @@ class Model;
  *
  *                   ModelManager
  *
+ *  This class is responsible for loading models from disk.
+ *
  ******************************************************************************
  */
 class ModelManager : public QObject, public I_ModelSelector

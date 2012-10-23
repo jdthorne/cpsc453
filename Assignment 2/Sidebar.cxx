@@ -24,10 +24,21 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
    : options_(options)
    , modelSelector_(modelSelector)
 {
+   // Setup the Qt UI file
    ui_ = new Ui_SidebarUi();
    ui_->setupUi(this);
    setMinimumWidth(290);
 
+   // Add the model choices to the list
+   foreach(QString modelSet, modelSelector_.availableModelSets())
+   {
+      ui_->selectModel->addItem(modelSet);
+   }
+   ui_->selectModel->setCurrentIndex(modelSelector_.availableModelSets().count() - 1);
+   ui_->selectModel->addItem("Browse...");
+   connect(ui_->selectModel, SIGNAL(currentIndexChanged(int)), this, SLOT(handleModelSelected()));
+
+   // Create controllers for the Affine Transformations tab
    xTranslation_ = new SliderSpinboxController(ui_->xTranslation, ui_->xTranslationSpin, this, SLOT(handleTranslationChanged()));
    yTranslation_ = new SliderSpinboxController(ui_->yTranslation, ui_->yTranslationSpin, this, SLOT(handleTranslationChanged()));
    zTranslation_ = new SliderSpinboxController(ui_->zTranslation, ui_->zTranslationSpin, this, SLOT(handleTranslationChanged()));
@@ -37,6 +48,7 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
    zScale_ = new SliderSpinboxController(ui_->zScale, ui_->zScaleSpin, this, SLOT(handleScaleChanged()));
    uScale_ = new SliderSpinboxController(ui_->uScale, ui_->uScaleSpin, this, SLOT(handleScaleChanged()));
 
+   // Create controllers for the View Transformations tab
    xView_ = new SliderSpinboxController(ui_->xView, ui_->xViewSpin, this, SLOT(handleEyePositionChanged()));
    yView_ = new SliderSpinboxController(ui_->yView, ui_->yViewSpin, this, SLOT(handleEyePositionChanged()));
    zView_ = new SliderSpinboxController(ui_->zView, ui_->zViewSpin, this, SLOT(handleEyePositionChanged()));
@@ -49,6 +61,7 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
    yUp_ = new SliderSpinboxController(ui_->yUp, ui_->yUpSpin, this, SLOT(handleUpDirectionChanged()));
    zUp_ = new SliderSpinboxController(ui_->zUp, ui_->zUpSpin, this, SLOT(handleUpDirectionChanged()));
 
+   // Connect the Render Options tab
    connect(ui_->showNormals, SIGNAL(toggled(bool)), this, SLOT(handleShowNormalsChanged()));
 
    connect(ui_->wireframe, SIGNAL(toggled(bool)), this, SLOT(handleRenderModeChanged()));
@@ -58,15 +71,7 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
    connect(ui_->perspective, SIGNAL(toggled(bool)), this, SLOT(handleProjectionChanged()));
    connect(ui_->parallel, SIGNAL(toggled(bool)), this, SLOT(handleProjectionChanged()));
 
-   foreach(QString modelSet, modelSelector_.availableModelSets())
-   {
-      ui_->selectModel->addItem(modelSet);
-   }
-   ui_->selectModel->setCurrentIndex(modelSelector_.availableModelSets().count() - 1);
-   ui_->selectModel->addItem("Browse...");
-   connect(ui_->selectModel, SIGNAL(currentIndexChanged(int)), this, SLOT(handleModelSelected()));
-
-   // Render Options
+   // If renderOptions changes (e.g. when auto-centering a model), make sure we update too
    connect(&options_, SIGNAL(eyePositionChanged()), this, SLOT(handleEyePositionChangedByRenderOptions()));
    connect(&options_, SIGNAL(lookAtPositionChanged()), this, SLOT(handleLookAtPositionChangedByRenderOptions()));
 }
@@ -75,6 +80,13 @@ Sidebar::~Sidebar()
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Set the Render Mode (Wireframe, Flat, Smooth)
+ *
+ ******************************************************************************
+ */
 void Sidebar::handleRenderModeChanged()
 {
    if (ui_->wireframe->isChecked())
@@ -91,6 +103,13 @@ void Sidebar::handleRenderModeChanged()
    }
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Affine Translation
+ *
+ ******************************************************************************
+ */
 void Sidebar::handleTranslationChanged()
 {
    Vector translation = Vector(xTranslation_->value(),
@@ -100,6 +119,13 @@ void Sidebar::handleTranslationChanged()
    options_.setTranslation(translation);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Affine Scale
+ *
+ ******************************************************************************
+ */
 void Sidebar::handleScaleChanged()
 {
    Vector scale = Vector(xScale_->value(),
@@ -111,20 +137,37 @@ void Sidebar::handleScaleChanged()
    options_.setScale(scale);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Show Normals
+ *
+ ******************************************************************************
+ */
 void Sidebar::handleShowNormalsChanged()
 {
    options_.setDisplayNormals(ui_->showNormals->isChecked());
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Select Model
+ *
+ ******************************************************************************
+ */
 void Sidebar::handleModelSelected()
 {
+   // Browse if that's selected
    if (ui_->selectModel->currentText() == QString("Browse..."))
    {
+      // Show the open file dialog
       QString path = QFileDialog::getOpenFileName(this, 
                                                   "Select Model...",
                                                   ".",
                                                   "MD2 Models (*.md2)");
 
+      // Load model if something was selected
       if (path != "")
       {
          modelSelector_.loadCustomModel(path);
@@ -132,9 +175,18 @@ void Sidebar::handleModelSelected()
 
       return;
    }
+
+   // Otherwise, load a preset model set
    modelSelector_.loadModelSet(ui_->selectModel->currentText());
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Projection Mode
+ *
+ ******************************************************************************
+ */
 void Sidebar::handleProjectionChanged()
 {
    ProjectionMode mode = (ui_->perspective->isChecked() ? Perspective
@@ -143,6 +195,13 @@ void Sidebar::handleProjectionChanged()
    options_.setProjectionMode(mode);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Eye Position
+ *
+ ******************************************************************************
+ */
 void Sidebar::handleEyePositionChanged()
 {
    Vector position = Vector(xView_->value(),
@@ -152,6 +211,13 @@ void Sidebar::handleEyePositionChanged()
    options_.setEyePosition(position);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Look-At Position
+ *
+ ******************************************************************************
+ */
 void Sidebar::handleLookAtPositionChanged()
 {
    Vector position = Vector(xLookAt_->value(),
@@ -161,6 +227,13 @@ void Sidebar::handleLookAtPositionChanged()
    options_.setLookAtPosition(position);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Up Direction
+ *
+ ******************************************************************************
+ */
 void Sidebar::handleUpDirectionChanged()
 {
    Vector direction = Vector(xUp_->value(),
@@ -175,7 +248,7 @@ void Sidebar::handleUpDirectionChanged()
  ******************************************************************************
  *
  *                   Handle RenderOptions changing from external source
- *                   (e.g. mouse)
+ *                   (e.g. mouse or auto-centering)
  *
  ******************************************************************************
  */

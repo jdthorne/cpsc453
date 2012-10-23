@@ -1,12 +1,172 @@
 
+                           ======================
+                                  README
+                           ======================
+
+========================================================================================
+Welcome to CPSC453 Assignment 2!
+
+
+Student Name: James Donald Thorne
+Student ID:   10018506
+
+
+Target Platform:
+   This assignment has been tested to run on the computers in MS239.
+
+
+Compiling and Running:
+   To compile and run this assignment, go to the assignment folder and type:
+
+   $ make
+   $ ./assignment2
+
+
+Brief User Manual:
+   To use this assignment, simply run the binary (./assignment2).  The various things
+   you can play with are presented in the right-hand sidebar:
+
+   Model Selection
+      Here you can select your model.  You can choose a pre-packaged model from the list,
+      or click "Browse" to load any model on the filesystem.
+
+      The associated texture and weapon will be loaded automatically, through a basic
+      sniffing algorithm.
+
+   Affine Transformations
+      From this tab, you can customize the translation, rotation and scale of the model.
+
+      For Translation and Scale, you can either click+drag the sliders, or enter a value
+      manually in the spinbox beside them.
+
+      For Rotation, click and drag on the 3D model to use the "virtual trackball".  This
+      gesture is available in any tab, but is listed here for completeness.
+
+   View Transformations
+      This tab allows you to set up the camera.  Use the sliders to enter a camera location,
+      look-at point and up direction.
+
+      The widgets in this tab will be non-zero by default, as the assignment automatically
+      looks-at the center of the model, and backs the camera far enough away that the entire 
+      model is visible.
+
+      You can also use the mouse wheel on the 3D model to "zoom" in and out.  This
+      gesture is available in any tab, but is listed here for completeness.
+
+   Render Options
+      From this tab, you can control the following options:
+
+      Projection Mode (Perspective/Parallel) - controls whether the model is rendered
+         using a perspective or parallel (orthographic) projection.
+
+      Shading Mode (Smooth/Flat/Wire) - controls the shading model used to render the
+         model.
+
+      Additional Display Options
+         Show Normals: Draws normal vectors as lines.  Vertex normals appear in blue,
+                       face normals in green.
+
+         Use Hand-Written Math: Toggle use of hand-written view and transformation math,
+                                implementing bonus requirements B3 and B4.
+
+                                To prove the assignment is working correctly, this checkbox
+                                should appear to do nothing.  If it screws things up instead,
+                                then my math is broken.
+
+
+Data-Structures Used
+   - AffineMatrix and Vector 
+   - OpenGlTexture
+   - Matrix stack?
+
+
+Implemented Requirements:
+   I have implemented all of the required functional requirements listed in the assignment 
+   description, as well as several bonus ones.
+
+   The requirements I have implemented are listed below:
+
+   Rendering
+   - Normal Vectors - Choose Show Normals on the Render Options tab
+   - Object Display - Choose Wireframe, Flat or Smooth on the Render Options tab.
+   - Viewport       - The model is automatically centered.  Exact coordinates are visible
+                      from the "View Transformations" tab.
+   - Ground Pattern - A gear logo appears under the model's feet.  Changes on the Affine
+                      Transformations tab do not affect the ground pattern.
+   - Weapon Model   - The weapon is automatically loaded with the model.  A good example is
+                      the "harry" model, available from the Model Selection tab.
+   - Skin Textures  - The model (and associated weapon) have skins.
+
+   Affine Transformations
+   - Translation    - Available from the "Affine Transformations" tab
+   - Scaling        - Available from the "Affine Transformations" tab (both Uniform and per-axis)
+   - Rotation       - Click+Drag on the 3D model to use the Virtual Trackball
+
+   View Changes
+   - View location  - Available from the "View Transformations" tab
+   - View direction - Available from the "View Transformations" tab
+   - Up Direction   - Available from the "View Transformations" tab
+   - Projection     - Available from the "Render Options" tab
+
+   File Opening
+   - User Interface - Available from the "Model Selection" tab
+
+
+   I have also implemented several bonus requirements:
+
+   - B3 - Transformation from Scratch - Click "Use Hand-Written Math" on the "Render Options" tab
+   - B4 - Viewing from Scratch        - Click "Use Hand-Written Math" on the "Render Options" tab
+
+
+*********************************************************************************
+*********************************************************************************
+Reused Code:
+   This assignment is entirely my own work, except for the following items:
+
+   - RgbImage.h / RgbImage.cpp, created by Samuel R. Buss, used as a requirement of this assignment.
+     
+     Original copyright notice is intact, an can be found at the top of RgbImage.h.
+     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/
+
+   - All of the pictures in the images/ folder, obtained from the course website, used as a requirement
+     of this assignment.
+     
+     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Stuff to do:
    - Write this readme
-   - Clean up code/comments
+   - Toggle between regular and custom implementations
+   - Custom view functions (ortho, perspective, lookat, viewport)
+   - Custom matrix stack
    - Make it work in computer lab
 
-
 Stuff that's Done:
+   - Clean up the actual code
    - Wire up zooming
    - Virtual trackball
    - Decide about animation
    - Ensure all view transformations work
+
+
+
+
+References:
+   - Wikipedia (in AffineMatrix)
+   - The TA (http://pages.cpsc.ucalgary.ca/~eharris/cpsc453/tut09/)
+   - md2 and pcx

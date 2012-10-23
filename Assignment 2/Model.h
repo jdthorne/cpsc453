@@ -14,6 +14,12 @@
  *
  *                   Model
  *
+ *  This is an abstract base class for models, which can be rendered and
+ *  have bounds.
+ *
+ *  The two specializations are GroundModel, which is built on the fly, and
+ *  Md2Model, which is loaded from a file.
+ *
  ******************************************************************************
  */
 class Model

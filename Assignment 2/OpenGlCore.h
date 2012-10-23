@@ -19,6 +19,9 @@ class QMouseEvent;
  *
  *                   OpenGlCore
  *
+ *  This class is the core QGLWidget, which is responsible for delegating
+ *  input handling and rendering.
+ *
  ******************************************************************************
  */
 class OpenGlCore : public QGLWidget

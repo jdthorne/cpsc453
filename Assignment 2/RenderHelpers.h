@@ -12,26 +12,36 @@
 #include <Vector.h>
 #include <AffineMatrix.h>
 
+/**
+ ******************************************************************************
+ *
+ *                   RenderHelpers
+ *
+ *  This namespace contains additional OpenGL functions which work with 
+ *  Vector and AffineMatrix, instead of just doubles and floats.
+ *
+ ******************************************************************************
+ */
 namespace RenderHelpers
 {
    double wrap(double min, double value, double max);
    double toDeg(double rad);
    double toRad(double deg);
 
-   void glRotateaa(double angle, Vector axis);
+   // Hand-written affine translation functions
+   void jdRotateaa(double angle, Vector axis);
+   void jdRotatea(const AffineMatrix rotation);
+   void jdTranslatev(const Vector translation);
+   void jdScalev(const Vector scale);
+   void jdMultMatrixa(AffineMatrix matrix);
 
-   void glTranslatev(const Vector translation);
-   void glScalev(const Vector scale);
-   void glVertexv(const Vector vertex);
-   void glNormalv(const Vector normal);
+   void jdVertexv(const Vector vertex);
+   void jdNormalv(const Vector normal);
 
-   void glSphere(const Vector position, double scale);
+   void jdLoadMatrixa(AffineMatrix matrix);
 
-   void glBillboard();
-
-   AffineMatrix glGetMatrix(GLenum matrixMode);
-   void glLoadMatrixa(AffineMatrix matrix);
-   void glMultMatrixa(AffineMatrix matrix);
+   void jdPushMatrix();
+   void jdPopMatrix();
 }
 
 #endif

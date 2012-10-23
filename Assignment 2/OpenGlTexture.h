@@ -17,6 +17,9 @@ typedef GLuint GlTextureName;
  *
  *                   OpenGlTexture
  *
+ *  This class represents an OpenGL texture, and allows you to easily turn
+ *  a filename into an OpenGL texture "name".
+ *
  ******************************************************************************
  */
 class OpenGlTexture

@@ -44,36 +44,43 @@ void GroundModel::setZPosition(double z)
  */
 void GroundModel::renderMesh()
 {
+   // Setup the matrix
    glPushMatrix();
-   glTranslatev(Vector(0, 0, zPosition_));
+   jdTranslatev(Vector(0, 0, zPosition_));
 
+   // Setup the color
    glColor3f(1, 1, 1);
 
+   // Enable the texture
    glEnable(GL_TEXTURE_2D);
-
    texture_.bind();
 
+   // Draw the four quads
    glBegin(GL_QUADS);
 
-   glNormal3f(0, 0, 1);
+      glNormal3f(0, 0, 1);
 
-   glTexCoord2f(0, 0);
-   glVertex3f(-SIZE/2, -SIZE/2, 0);
+      glTexCoord2f(0, 0);
+      glVertex3f(-SIZE/2, -SIZE/2, 0);
 
-   glTexCoord2f(1, 0);
-   glVertex3f(+SIZE/2, -SIZE/2, 0);
+      glTexCoord2f(1, 0);
+      glVertex3f(+SIZE/2, -SIZE/2, 0);
 
-   glTexCoord2f(1, 1);
-   glVertex3f(+SIZE/2, +SIZE/2, 0);
+      glTexCoord2f(1, 1);
+      glVertex3f(+SIZE/2, +SIZE/2, 0);
 
-   glTexCoord2f(0, 1);
-   glVertex3f(-SIZE/2, +SIZE/2, 0);
+      glTexCoord2f(0, 1);
+      glVertex3f(-SIZE/2, +SIZE/2, 0);
 
    glEnd();
 
+   // Flush the coordinates
    glFlush();
+
+   // Disable the texture
    glDisable(GL_TEXTURE_2D);
 
+   // Pop our matrix changes
    glPopMatrix();
 }
 
@@ -85,7 +92,7 @@ void GroundModel::renderNormals()
 /**
  ******************************************************************************
  *
- *                   Accessors
+ *                   Get the model's center
  *
  ******************************************************************************
  */
@@ -94,6 +101,13 @@ Vector GroundModel::center()
    return Vector(0, 0, zPosition_);   
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Get the model's size
+ *
+ ******************************************************************************
+ */
 Vector GroundModel::size()
 {
    return Vector(SIZE, SIZE, 0);
