@@ -280,12 +280,10 @@ void ModelRenderer::setupEyePosition()
 {
    // Configure the modelview matrix
    glMatrixMode(GL_MODELVIEW);
-   glLoadIdentity();
+   jdLoadIdentity();
 
-   // Call gluLookAt, so we don't have to reimplement everything
-   gluLookAt(eyePosition_.x, eyePosition_.y, eyePosition_.z, 
-             lookAtPosition_.x, lookAtPosition_.y, lookAtPosition_.z,
-             upDirection_.x, upDirection_.y, upDirection_.z);
+   // Set up the eye position
+   jdLookAt(eyePosition_, lookAtPosition_, upDirection_);
 }
 
 /**
@@ -297,9 +295,10 @@ void ModelRenderer::setupEyePosition()
  */
 void ModelRenderer::setupTransformation()
 {
-   scratchTranslatev(translation_);
-   scratchRotatea(rotation_);
-   scratchScalev(scale_);
+   // Apply the transformations
+   jdTranslatev(translation_);
+   jdRotatea(rotation_);
+   jdScalev(scale_);
 }
 
 /**
@@ -311,8 +310,13 @@ void ModelRenderer::setupTransformation()
  */
 void ModelRenderer::renderModel(Model& model)
 {
+   // Commit the current matrix, so the transformations show up
+   jdCommitMatrix();
+
+   // Render the model
    model.renderMesh();
 
+   // Render the normals, if necessary
    if (displayNormals_)
    {
       model.renderNormals();
@@ -329,5 +333,18 @@ void ModelRenderer::renderModel(Model& model)
 I_ModelSelector& ModelRenderer::modelSelector()
 {
    return modelManager_;
+}
+
+
+/**
+ ******************************************************************************
+ *
+ *                   Force a redraw, in case anything else changes
+ *
+ ******************************************************************************
+ */
+void ModelRenderer::forceRedraw()
+{
+   emit renderChanged();
 }
 

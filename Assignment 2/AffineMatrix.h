@@ -47,4 +47,9 @@ public: // members
 AffineMatrix operator*(const AffineMatrix& matrix, double scalar);
 AffineMatrix operator*(const AffineMatrix& lhs, const AffineMatrix& rhs);
 
+#define AFFINE_TO_GL(m) { m.element[0][0], m.element[0][1], m.element[0][2], m.element[0][3], \
+                          m.element[1][0], m.element[1][1], m.element[1][2], m.element[1][3], \
+                          m.element[2][0], m.element[2][1], m.element[2][2], m.element[2][3], \
+                          m.element[3][0], m.element[3][1], m.element[3][2], m.element[3][3] }
+
 #endif

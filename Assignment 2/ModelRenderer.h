@@ -57,6 +57,8 @@ public: // I_RenderOptions
    virtual void setLookAtPosition(Vector position);
    virtual void setUpDirection(Vector position);
 
+   virtual void forceRedraw();
+
 signals:
    void rotationChanged();
    void eyePositionChanged();

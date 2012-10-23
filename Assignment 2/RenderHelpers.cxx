@@ -19,6 +19,8 @@
 AffineMatrix currentMatrix;
 QStack<AffineMatrix> matrixStack;
 
+bool useHandWrittenTransformations = false;
+
 /**
  ******************************************************************************
  *
@@ -66,11 +68,26 @@ double RenderHelpers::toRad(double deg)
  */
 void RenderHelpers::jdRotateaa(double angle, Vector axis)
 {
-   jdMultMatrixa(AffineMatrix::fromAxisAngle(axis, angle));
+   if (useHandWrittenTransformations)
+   {
+      jdMultMatrixa(AffineMatrix::fromAxisAngle(axis, angle));
+   }
+   else
+   {
+      glRotatef(toDeg(angle), axis.x, axis.y, axis.z);
+   }
 }
 void RenderHelpers::jdRotatea(const AffineMatrix rotation)
 {
-   jdMultMatrixa(rotation);
+   if (useHandWrittenTransformations)
+   {
+      jdMultMatrixa(rotation);
+   }
+   else
+   {
+      GLfloat values[16] = AFFINE_TO_GL(rotation);
+      glMultMatrixf(values);
+   }
 }
 
 /**
@@ -82,7 +99,14 @@ void RenderHelpers::jdRotatea(const AffineMatrix rotation)
  */
 void RenderHelpers::jdTranslatev(const Vector vector)
 {
-   jdMultMatrixa(AffineMatrix::fromTranslationVector(vector));
+   if (useHandWrittenTransformations)
+   {
+      jdMultMatrixa(AffineMatrix::fromTranslationVector(vector));
+   }
+   else
+   {
+      glTranslatef(vector.x, vector.y, vector.z);
+   }
 }
 
 /**
@@ -94,7 +118,14 @@ void RenderHelpers::jdTranslatev(const Vector vector)
  */
 void RenderHelpers::jdScalev(const Vector scale)
 {
-   jdMultMatrixa(AffineMatrix::fromScaleVector(scale));
+   if (useHandWrittenTransformations)
+   {
+      jdMultMatrixa(AffineMatrix::fromScaleVector(scale));
+   }
+   else
+   {
+      glScalef(scale.x, scale.y, scale.z);
+   }
 }
 
 /**
@@ -106,11 +137,15 @@ void RenderHelpers::jdScalev(const Vector scale)
  */
 void RenderHelpers::jdMultMatrixa(AffineMatrix multMatrix)
 {
-   // Multiply it by the paramter
-   AffineMatrix newMatrix = currentMatrix * multMatrix;
-
-   // Stuff it back into OpenGL
-   jdLoadMatrixa(newMatrix);
+   if (useHandWrittenTransformations)
+   {
+      currentMatrix = currentMatrix * multMatrix;
+   }
+   else
+   {
+      GLfloat values[16] = AFFINE_TO_GL(multMatrix);
+      glMultMatrixf(values);
+   }
 }
 
 /**
@@ -140,44 +175,121 @@ void RenderHelpers::jdNormalv(const Vector vertex)
 /**
  ******************************************************************************
  *
- *                   Load an AffineMatrix into OpenGL
+ *                   Custom matrix stack
  *
  ******************************************************************************
  */
-void RenderHelpers::jdLoadMatrixa(AffineMatrix matrix)
+void RenderHelpers::jdLoadIdentity()
 {
-   // Create an array of values from the matrix
-   GLfloat values[16];
-
-   // Fill the values[] array with the matrix body
-   for (int i = 0; i < 4; i++)
+   if (useHandWrittenTransformations)
    {
-      for (int j = 0; j < 4; j++)
-      {
-         // Matrix element [i][j] ends up at index (i * 4) + j
-         int index = (i * 4) + j;
-         values[index] = matrix.element[i][j];
-      }
+      currentMatrix = AffineMatrix::identity();
    }
+   else
+   {
+      glLoadIdentity();
+   }
+}
 
-   // Load the matrix into OpenGL
-   glLoadMatrixf(values);   
+void RenderHelpers::jdPushMatrix()
+{
+   if (useHandWrittenTransformations)
+   {
+      matrixStack.push(currentMatrix);
+   }
+   else 
+   {
+      glPushMatrix();
+   }
+}
+
+void RenderHelpers::jdPopMatrix()
+{
+   if (useHandWrittenTransformations)
+   {
+      currentMatrix = matrixStack.pop();
+   }
+   else
+   {
+      glPopMatrix();
+   }
 }
 
 /**
  ******************************************************************************
  *
- *                   Custom matrix stack
+ *                   Actually commit the matrix to OpenGL
  *
  ******************************************************************************
  */
-void RenderHelpers::jdPushMatrix()
+void RenderHelpers::jdCommitMatrix()
 {
-   matrixStack.push(currentMatrix);
+   if (useHandWrittenTransformations)
+   {
+      GLfloat values[16] = AFFINE_TO_GL(currentMatrix);
+      glLoadMatrixf(values);
+   }
+   else
+   {
+      // OpenGL already has the matrix, so don't screw it up :)
+   }
 }
 
-void RenderHelpers::jdPopMatrix()
+/**
+ ******************************************************************************
+ *
+ *                   Custom implementation of OpenGL look at function
+ *
+ ******************************************************************************
+ */
+void RenderHelpers::jdLookAt(Vector eyePosition, Vector lookAtPosition, Vector upDirection)
 {
-   currentMatrix = matrixStack.pop();
+   if (useHandWrittenTransformations)
+   {
+      // This math is based on the man page for gluLookAt
+      //    $ man gluLookAt
+
+      Vector f = (lookAtPosition - eyePosition).normalized();
+      Vector upPrime = upDirection.normalized();
+
+      Vector s = f.cross(upPrime);
+      Vector u = s.cross(f);
+
+      AffineMatrix m = AffineMatrix::identity();
+      m.element[0][0] = s.x;
+      m.element[1][0] = s.y;
+      m.element[2][0] = s.z;
+
+      m.element[0][1] = u.x;
+      m.element[1][1] = u.y;
+      m.element[2][1] = u.z;
+
+      m.element[0][2] = -f.x;
+      m.element[1][2] = -f.y;
+      m.element[2][2] = -f.z;
+
+      m.element[3][3] = 1.0;
+
+      jdMultMatrixa(m);
+      jdTranslatev(eyePosition * -1);
+   }
+   else 
+   {
+      gluLookAt(eyePosition.x, eyePosition.y, eyePosition.z,
+                lookAtPosition.x, lookAtPosition.y, lookAtPosition.z,
+                upDirection.x, upDirection.y, upDirection.z);
+   }
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Allow setting the calculation mode
+ *
+ ******************************************************************************
+ */
+void RenderHelpers::jdSetCalculationMode(bool useHandWritten)
+{
+   useHandWrittenTransformations = useHandWritten;
 }
 

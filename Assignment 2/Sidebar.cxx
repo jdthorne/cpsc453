@@ -63,6 +63,7 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
 
    // Connect the Render Options tab
    connect(ui_->showNormals, SIGNAL(toggled(bool)), this, SLOT(handleShowNormalsChanged()));
+   connect(ui_->handMath, SIGNAL(toggled(bool)), this, SLOT(handleUseHandWrittenChanged()));
 
    connect(ui_->wireframe, SIGNAL(toggled(bool)), this, SLOT(handleRenderModeChanged()));
    connect(ui_->flat, SIGNAL(toggled(bool)), this, SLOT(handleRenderModeChanged()));
@@ -268,5 +269,18 @@ void Sidebar::handleLookAtPositionChangedByRenderOptions()
    xLookAt_->setValue(position.x);
    yLookAt_->setValue(position.y);
    zLookAt_->setValue(position.z);
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Handle the "Use hand written calculations" box
+ *
+ ******************************************************************************
+ */
+void Sidebar::handleUseHandWrittenChanged()
+{
+   jdSetCalculationMode(ui_->handMath->isChecked());
+   options_.forceRedraw();
 }
 

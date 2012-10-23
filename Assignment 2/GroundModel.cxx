@@ -45,8 +45,9 @@ void GroundModel::setZPosition(double z)
 void GroundModel::renderMesh()
 {
    // Setup the matrix
-   glPushMatrix();
+   jdPushMatrix();
    jdTranslatev(Vector(0, 0, zPosition_));
+   jdCommitMatrix();
 
    // Setup the color
    glColor3f(1, 1, 1);
@@ -81,7 +82,7 @@ void GroundModel::renderMesh()
    glDisable(GL_TEXTURE_2D);
 
    // Pop our matrix changes
-   glPopMatrix();
+   jdPopMatrix();
 }
 
 void GroundModel::renderNormals()

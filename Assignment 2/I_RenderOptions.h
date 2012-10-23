@@ -57,6 +57,9 @@ public:
    virtual void setLookAtPosition(Vector position) = 0;
    virtual void setUpDirection(Vector direction) = 0;
 
+   // Other functions
+   virtual void forceRedraw() = 0;
+
 public: // signals
    virtual void rotationChanged() = 0;
 

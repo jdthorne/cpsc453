@@ -28,20 +28,26 @@ namespace RenderHelpers
    double toDeg(double rad);
    double toRad(double deg);
 
-   // Hand-written affine translation functions
+   // Hand-written transformation functions
    void jdRotateaa(double angle, Vector axis);
    void jdRotatea(const AffineMatrix rotation);
    void jdTranslatev(const Vector translation);
    void jdScalev(const Vector scale);
    void jdMultMatrixa(AffineMatrix matrix);
 
+   // Hand-written view functions
+   void jdLookAt(Vector eyePosition, Vector lookAtPosition, Vector upDirection);
+
+   void jdCommitMatrix();
+
    void jdVertexv(const Vector vertex);
    void jdNormalv(const Vector normal);
 
-   void jdLoadMatrixa(AffineMatrix matrix);
-
+   void jdLoadIdentity();
    void jdPushMatrix();
    void jdPopMatrix();
+
+   void jdSetCalculationMode(bool useHandWritten);
 }
 
 #endif

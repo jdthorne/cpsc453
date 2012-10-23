@@ -40,6 +40,7 @@ protected slots: // Sidebar Interface Changes
    void handleScaleChanged();
    void handleShowNormalsChanged();
    void handleProjectionChanged();
+   void handleUseHandWrittenChanged();
 
    void handleEyePositionChanged();
    void handleLookAtPositionChanged();
