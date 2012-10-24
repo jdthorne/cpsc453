@@ -249,24 +249,26 @@ void ModelRenderer::setupProjectionMode()
 {
    // Configure the projection matrix
    glMatrixMode(GL_PROJECTION);
-   glLoadIdentity();
+   jdLoadIdentity();
 
-   // Call gluPerspective or glOrtho, depending on the setting
+   // Call perspective or ortho, depending on the setting
    switch (projectionMode_)
    {
       case Perspective:
       {
-         gluPerspective(55.0f, (GLfloat)width_/(GLfloat)height_, 0.1f, 5000.0f);
+         jdPerspective(55.0f, (GLfloat)width_/(GLfloat)height_, 0.1f, 5000.0f);
          break;
       }
 
       case Parallel:
       {
          double aspect = width_ / height_;
-         glOrtho(-50.0f * aspect, 50.0f * aspect, -50.0f, 50.0f, 0.1f, 5000.0f);
+         jdOrtho(-50.0f * aspect, 50.0f * aspect, -50.0f, 50.0f, 0.1f, 5000.0f);
          break;
       }
    }
+
+   jdCommitMatrix();
 }
 
 /**
@@ -284,6 +286,7 @@ void ModelRenderer::setupEyePosition()
 
    // Set up the eye position
    jdLookAt(eyePosition_, lookAtPosition_, upDirection_);
+   jdCommitMatrix();
 }
 
 /**

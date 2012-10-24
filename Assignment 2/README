@@ -151,12 +151,13 @@ Reused Code:
 
 Stuff to do:
    - Write this readme
-   - Toggle between regular and custom implementations
-   - Custom view functions (ortho, perspective, lookat, viewport)
-   - Custom matrix stack
+   - Custom view functions (ortho, perspective, viewport)
    - Make it work in computer lab
 
 Stuff that's Done:
+   - Custom view functions (lookat)
+   - Toggle between regular and custom implementations
+   - Custom matrix stack
    - Clean up the actual code
    - Wire up zooming
    - Virtual trackball
@@ -170,4 +171,4 @@ References:
    - Wikipedia (in AffineMatrix)
    - The TA (http://pages.cpsc.ucalgary.ca/~eharris/cpsc453/tut09/)
    - md2 and pcx
-   - manpages for gluLookAt
+   - manpages for gluLookAt, gluPerspective, glOrtho and glViewport

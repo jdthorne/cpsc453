@@ -87,7 +87,7 @@ void OpenGlCore::initializeGL()
 void OpenGlCore::resizeGL(int width, int height)
 {
    // Set the GL viewport
-   glViewport(0, 0, width, height);
+   jdViewport(0, 0, width, height);
 
    // Notify children who care
    renderer_.setFrameSize(width, height);

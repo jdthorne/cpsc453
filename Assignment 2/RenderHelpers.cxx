@@ -1,5 +1,6 @@
 
 // System
+#include <cmath>
 #include <OpenGl.h>
 
 // Qt
@@ -19,7 +20,7 @@
 AffineMatrix currentMatrix;
 QStack<AffineMatrix> matrixStack;
 
-bool useHandWrittenTransformations = false;
+bool useHandWrittenMath = false;
 
 /**
  ******************************************************************************
@@ -68,25 +69,25 @@ double RenderHelpers::toRad(double deg)
  */
 void RenderHelpers::jdRotateaa(double angle, Vector axis)
 {
-   if (useHandWrittenTransformations)
+   if (useHandWrittenMath)
    {
       jdMultMatrixa(AffineMatrix::fromAxisAngle(axis, angle));
    }
    else
    {
-      glRotatef(toDeg(angle), axis.x, axis.y, axis.z);
+      glRotated(toDeg(angle), axis.x, axis.y, axis.z);
    }
 }
 void RenderHelpers::jdRotatea(const AffineMatrix rotation)
 {
-   if (useHandWrittenTransformations)
+   if (useHandWrittenMath)
    {
       jdMultMatrixa(rotation);
    }
    else
    {
-      GLfloat values[16] = AFFINE_TO_GL(rotation);
-      glMultMatrixf(values);
+      GLdouble values[16] = AFFINE_TO_GL(rotation);
+      glMultMatrixd(values);
    }
 }
 
@@ -99,13 +100,13 @@ void RenderHelpers::jdRotatea(const AffineMatrix rotation)
  */
 void RenderHelpers::jdTranslatev(const Vector vector)
 {
-   if (useHandWrittenTransformations)
+   if (useHandWrittenMath)
    {
       jdMultMatrixa(AffineMatrix::fromTranslationVector(vector));
    }
    else
    {
-      glTranslatef(vector.x, vector.y, vector.z);
+      glTranslated(vector.x, vector.y, vector.z);
    }
 }
 
@@ -118,13 +119,13 @@ void RenderHelpers::jdTranslatev(const Vector vector)
  */
 void RenderHelpers::jdScalev(const Vector scale)
 {
-   if (useHandWrittenTransformations)
+   if (useHandWrittenMath)
    {
       jdMultMatrixa(AffineMatrix::fromScaleVector(scale));
    }
    else
    {
-      glScalef(scale.x, scale.y, scale.z);
+      glScaled(scale.x, scale.y, scale.z);
    }
 }
 
@@ -137,14 +138,14 @@ void RenderHelpers::jdScalev(const Vector scale)
  */
 void RenderHelpers::jdMultMatrixa(AffineMatrix multMatrix)
 {
-   if (useHandWrittenTransformations)
+   if (useHandWrittenMath)
    {
       currentMatrix = currentMatrix * multMatrix;
    }
    else
    {
-      GLfloat values[16] = AFFINE_TO_GL(multMatrix);
-      glMultMatrixf(values);
+      GLdouble values[16] = AFFINE_TO_GL(multMatrix);
+      glMultMatrixd(values);
    }
 }
 
@@ -157,7 +158,7 @@ void RenderHelpers::jdMultMatrixa(AffineMatrix multMatrix)
  */
 void RenderHelpers::jdVertexv(const Vector vertex)
 {
-   glVertex3f(vertex.x, vertex.y, vertex.z);
+   glVertex3d(vertex.x, vertex.y, vertex.z);
 }
 
 /**
@@ -169,7 +170,7 @@ void RenderHelpers::jdVertexv(const Vector vertex)
  */
 void RenderHelpers::jdNormalv(const Vector vertex)
 {
-   glNormal3f(vertex.x, vertex.y, vertex.z);
+   glNormal3d(vertex.x, vertex.y, vertex.z);
 }
 
 /**
@@ -181,7 +182,7 @@ void RenderHelpers::jdNormalv(const Vector vertex)
  */
 void RenderHelpers::jdLoadIdentity()
 {
-   if (useHandWrittenTransformations)
+   if (useHandWrittenMath)
    {
       currentMatrix = AffineMatrix::identity();
    }
@@ -193,7 +194,7 @@ void RenderHelpers::jdLoadIdentity()
 
 void RenderHelpers::jdPushMatrix()
 {
-   if (useHandWrittenTransformations)
+   if (useHandWrittenMath)
    {
       matrixStack.push(currentMatrix);
    }
@@ -205,7 +206,7 @@ void RenderHelpers::jdPushMatrix()
 
 void RenderHelpers::jdPopMatrix()
 {
-   if (useHandWrittenTransformations)
+   if (useHandWrittenMath)
    {
       currentMatrix = matrixStack.pop();
    }
@@ -224,14 +225,23 @@ void RenderHelpers::jdPopMatrix()
  */
 void RenderHelpers::jdCommitMatrix()
 {
-   if (useHandWrittenTransformations)
+   if (useHandWrittenMath)
    {
-      GLfloat values[16] = AFFINE_TO_GL(currentMatrix);
-      glLoadMatrixf(values);
+      GLdouble values[16] = AFFINE_TO_GL(currentMatrix);
+      glLoadMatrixd(values);
+
+      QString valueString;
+      for (int i = 0; i < 16; i++) valueString += QString::number(values[i], 'f', 2) + " ";
    }
    else
    {
       // OpenGL already has the matrix, so don't screw it up :)
+
+      GLdouble values[16];
+      glGetDoublev(GL_MODELVIEW_MATRIX, values);
+
+      QString valueString;
+      for (int i = 0; i < 16; i++) valueString += QString::number(values[i], 'f', 2) + " ";
    }
 }
 
@@ -244,7 +254,7 @@ void RenderHelpers::jdCommitMatrix()
  */
 void RenderHelpers::jdLookAt(Vector eyePosition, Vector lookAtPosition, Vector upDirection)
 {
-   if (useHandWrittenTransformations)
+   if (useHandWrittenMath)
    {
       // This math is based on the man page for gluLookAt
       //    $ man gluLookAt
@@ -252,7 +262,7 @@ void RenderHelpers::jdLookAt(Vector eyePosition, Vector lookAtPosition, Vector u
       Vector f = (lookAtPosition - eyePosition).normalized();
       Vector upPrime = upDirection.normalized();
 
-      Vector s = f.cross(upPrime);
+      Vector s = f.cross(upPrime).normalized();
       Vector u = s.cross(f);
 
       AffineMatrix m = AffineMatrix::identity();
@@ -284,12 +294,103 @@ void RenderHelpers::jdLookAt(Vector eyePosition, Vector lookAtPosition, Vector u
 /**
  ******************************************************************************
  *
+ *                   Custom gluPerspective implementation
+ *
+ ******************************************************************************
+ */
+void RenderHelpers::jdPerspective(double fovy, double aspect, double zNear, double zFar)
+{
+   if (useHandWrittenMath)
+   {
+      // This math is based on the man page for gluPerspective
+      //    $ man gluPerspective
+
+      double f = 1.0 / tan(toRad(fovy) / 2.0);
+      AffineMatrix m = AffineMatrix::identity();
+      
+      m.element[0][0] = f / aspect;
+      m.element[1][1] = f;
+      m.element[2][2] = (zFar + zNear) / (zNear - zFar);
+      m.element[3][3] = 0.0;
+
+      m.element[3][2] = (2 * zFar * zNear) / (zNear - zFar);
+      m.element[2][3] = -1;
+
+      // Save the matrix on our custom stack
+      currentMatrix = m;
+   }
+   else
+   {
+      gluPerspective(fovy, aspect, zNear, zFar);
+   }
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Custom glOrtho implementation
+ *
+ ******************************************************************************
+ */
+void RenderHelpers::jdOrtho(double left, double right, double bottom, double top, double zNear, double zFar)
+{
+   if (useHandWrittenMath)
+   {
+      // This math is based on the man page for glOrtho
+      //    $ man glOrtho
+
+      AffineMatrix m = AffineMatrix::identity();
+      
+      m.element[0][0] = 2 / (right - left);
+      m.element[1][1] = 2 / (top - bottom);
+      m.element[2][2] = -2 / (zFar - zNear);
+      m.element[3][3] = 1.0;
+
+      m.element[3][0] = -(right + left) / (right - left);
+      m.element[3][1] = -(top + bottom) / (top - bottom);
+      m.element[3][2] = -(zFar + zNear) / (zFar - zNear);
+
+      // Save the matrix on our custom stack
+      currentMatrix = m;
+   }
+   else
+   {
+      glOrtho(left, right, bottom, top, zNear, zFar);
+   }
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Custom glViewport implementation
+ *
+ ******************************************************************************
+ */
+void RenderHelpers::jdViewport(int x, int y, int width, int height)
+{
+   if (useHandWrittenMath)
+   {
+      // This math is based on the man page for glViewport
+      //    $ man glViewport
+      double aspect = width / height;
+      
+   }
+   else
+   {
+      //glViewport(x, y, width, height);
+   }
+}
+
+
+/**
+ ******************************************************************************
+ *
  *                   Allow setting the calculation mode
  *
  ******************************************************************************
  */
-void RenderHelpers::jdSetCalculationMode(bool useHandWritten)
+void RenderHelpers::jdSetCalculationMode(bool handWritten)
 {
-   useHandWrittenTransformations = useHandWritten;
+   useHandWrittenMath = handWritten;
 }
 
