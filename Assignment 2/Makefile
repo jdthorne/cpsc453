@@ -10,21 +10,51 @@ CC = g++
 COMPILERFLAGS = -Wall -Werror
 CFLAGS = $(COMPILERFLAGS) 
 
+MOC = moc-qt4
+UIC = uic-qt4
+
 # Include headers in the local folder, as well as standard library locations
 INCLUDES += "-I."
 INCLUDES += "-I/usr/X11R6/include -I/usr/local/include"
+INCLUDES += "-I/usr/include/QtCore"
+INCLUDES += "-I/usr/include/QtGui"
+INCLUDES += "-I/usr/include/QtOpenGL"
 
 # Need OpenGL, GLU, glut, and other fun things
-LIBRARIES = -lGL -lGLU -lglut -lm -lstdc++ 
+LIBRARIES = -lGL -lGLU -lglut -lm -lstdc++ -lQtCore -lQtGui -lQtOpenGL
 
 # Actually compile the assignment
-assignment1: *.cxx *.cpp
-	$(CC) -o assignment2 *.cxx *.cpp $(COMPILERFLAGS) $(LIBRARIES) $(LIBPATH) $(INCLUDES)
+assignment2 : *.cxx *.cpp OpenGlCore.moc.cxx AssignmentCore.moc.cxx Sidebar.moc.cxx ModelRenderer.moc.cxx SidebarUi.ui.h ModelManager.moc.cxx SliderSpinboxController.moc.cxx RenderOptionManager.moc.cxx
+	$(CC) -o assignment2 *.cxx *.cpp $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
+
+# Run the QT Moc
+OpenGlCore.moc.cxx : OpenGlCore.h
+	$(MOC) OpenGlCore.h -oOpenGlCore.moc.cxx
+
+AssignmentCore.moc.cxx : AssignmentCore.h
+	$(MOC) AssignmentCore.h -oAssignmentCore.moc.cxx
+
+Sidebar.moc.cxx : Sidebar.h
+	$(MOC) Sidebar.h -o Sidebar.moc.cxx
+
+ModelRenderer.moc.cxx : ModelRenderer.h
+	$(MOC) ModelRenderer.h -o ModelRenderer.moc.cxx
+
+RenderOptionManager.moc.cxx : RenderOptionManager.h
+	$(MOC) RenderOptionManager.h -o RenderOptionManager.moc.cxx
+
+ModelManager.moc.cxx : ModelManager.h
+	$(MOC) ModelManager.h -o ModelManager.moc.cxx
+
+SliderSpinboxController.moc.cxx : SliderSpinboxController.h
+	$(MOC) SliderSpinboxController.h -o SliderSpinboxController.moc.cxx
+
+SidebarUi.ui.h : SidebarUi.ui
+	$(UIC) SidebarUi.ui -o SidebarUi.ui.h
 
 else
 
 # Mac is silly, and uses frameworks
-# Actually, wait, this is way easier than Linux's hard-coded paths
 FRAMEWORK += -framework QtCore
 FRAMEWORK += -framework QtGui
 FRAMEWORK += -framework QtOpenGL
@@ -50,7 +80,7 @@ INCLUDES += "-I/Library/Frameworks/QtOpenGL.framework/Versions/4/Headers/"
 INCLUDES += "-I."
 
 # Actually compile the assignment
-assignment1 : *.cxx *.cpp OpenGlCore.moc.cxx AssignmentCore.moc.cxx Sidebar.moc.cxx ModelRenderer.moc.cxx SidebarUi.ui.h ModelManager.moc.cxx SliderSpinboxController.moc.cxx RenderOptionManager.moc.cxx
+assignment2 : *.cxx *.cpp OpenGlCore.moc.cxx AssignmentCore.moc.cxx Sidebar.moc.cxx ModelRenderer.moc.cxx SidebarUi.ui.h ModelManager.moc.cxx SliderSpinboxController.moc.cxx RenderOptionManager.moc.cxx
 	$(CC) -o assignment2 *.cxx *.cpp $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
 
 # Run the QT Moc
