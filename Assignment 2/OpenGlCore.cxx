@@ -14,8 +14,23 @@
 using namespace RenderHelpers;
 
 OpenGlCore::OpenGlCore()
+   : modelManager_()
+   , mainRenderer_(modelManager_)
+   , frontRenderer_(modelManager_)
+   , sideRenderer_(modelManager_)
+   , topRenderer_(modelManager_)
+   , renderManager_(&mainRenderer_, QList<I_RenderOptions*>() << &frontRenderer_
+                                                              << &sideRenderer_
+                                                              << &topRenderer_)
 {
-   connect(&renderer_, SIGNAL(renderChanged()), this, SLOT(handleRenderChanged()));
+   // Ensure that we repaint if we need to
+   connect(&mainRenderer_, SIGNAL(renderChanged()), this, SLOT(handleRenderChanged()));
+   connect(&frontRenderer_, SIGNAL(renderChanged()), this, SLOT(handleRenderChanged()));
+   connect(&sideRenderer_, SIGNAL(renderChanged()), this, SLOT(handleRenderChanged()));
+   connect(&topRenderer_, SIGNAL(renderChanged()), this, SLOT(handleRenderChanged()));
+
+   // Make sure we setup our cameras as needed
+   connect(&modelManager_, SIGNAL(modelsChanged()), this, SLOT(handleModelsChanged()));
 }
 
 OpenGlCore::~OpenGlCore()
@@ -55,8 +70,8 @@ void OpenGlCore::initializeGL()
    // Default to smooth shading
    glShadeModel(GL_SMOOTH);
 
-   // Set the background to be gray
-   glClearColor(0.4f, 0.4f, 0.4f, 0.0f);
+   // Set the background color
+   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
    glClearDepth(1.0);
 
    // Turn on depth testing
@@ -70,8 +85,12 @@ void OpenGlCore::initializeGL()
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-   // Initialize the renderer
-   renderer_.initialize();
+   // Initialize the renderers
+   mainRenderer_.initialize();
+   frontRenderer_.initialize();
+   sideRenderer_.initialize();
+   topRenderer_.initialize();
+   modelManager_.loadDefaultModelSet();
 
    // Ensure the canvas is sized properly
    resizeGL(width(), height());
@@ -86,12 +105,17 @@ void OpenGlCore::initializeGL()
  */
 void OpenGlCore::resizeGL(int width, int height)
 {
-   // Set the GL viewport
-   jdViewport(0, 0, width, height);
-
-   // Notify children who care
-   renderer_.setFrameSize(width, height);
+   QGLWidget::resizeGL(width, height);
    trackball_.handleScreenResize(width, height);
+
+   // Configure the viewports 
+   int xDivision = (width / 4);
+   int yDivision = (height / 4);
+
+   topRenderer_.setViewport(0, 0, xDivision, yDivision);
+   frontRenderer_.setViewport(0, yDivision, xDivision, height - yDivision);
+   sideRenderer_.setViewport(xDivision, 0, width - xDivision, yDivision);
+   mainRenderer_.setViewport(xDivision, yDivision, width - xDivision, height - yDivision);
 }
 
 /**
@@ -111,7 +135,10 @@ void OpenGlCore::paintGL()
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
    // Render everything
-   renderer_.render();
+   topRenderer_.render();
+   frontRenderer_.render();
+   sideRenderer_.render();
+   mainRenderer_.render();
 
    // Flush GL
    glFlush();
@@ -127,12 +154,12 @@ void OpenGlCore::paintGL()
  */
 I_RenderOptions& OpenGlCore::renderOptions()
 {
-   return renderer_;
+   return renderManager_;
 }
 
 I_ModelSelector& OpenGlCore::modelSelector()
 {
-   return renderer_.modelSelector();
+   return modelManager_;
 }
 
 /**
@@ -151,10 +178,10 @@ void OpenGlCore::mousePressEvent(QMouseEvent* event)
 void OpenGlCore::mouseMoveEvent(QMouseEvent* event)
 {
    // Ask trackball to calculate the new rotation
-   AffineMatrix rotation = renderer_.rotation();
+   AffineMatrix rotation = renderManager_.rotation();
    AffineMatrix newRotation = trackball_.rotationAfterDragTo(rotation, event->x(), event->y());
 
-   renderer_.setRotation(newRotation);
+   renderManager_.setRotation(newRotation);
 }
 
 /**
@@ -170,19 +197,36 @@ void OpenGlCore::wheelEvent(QWheelEvent* event)
    double distance = qBound(-40, event->delta(), 40) * 0.5;
 
    // Figure out the vector from the eye, to the look-at point
-   Vector fromEyeToLookAt = (renderer_.lookAtPosition() - renderer_.eyePosition()).normalized();
+   Vector fromEyeToLookAt = (mainRenderer_.lookAtPosition() - mainRenderer_.eyePosition()).normalized();
 
    // Move the eye along that vector
    Vector eyeMovement = (fromEyeToLookAt * distance);
-   Vector newEyePosition = renderer_.eyePosition() + eyeMovement;
+   Vector newEyePosition = mainRenderer_.eyePosition() + eyeMovement;
 
    // If the new position is too close, put the eye at the boundary instead
-   if ((newEyePosition - renderer_.lookAtPosition()).magnitude() < 50)
+   if ((newEyePosition - mainRenderer_.lookAtPosition()).magnitude() < 50)
    {
-      renderer_.setEyePosition(renderer_.lookAtPosition() + (fromEyeToLookAt * -50));
+      mainRenderer_.setEyePosition(mainRenderer_.lookAtPosition() + (fromEyeToLookAt * -50));
       return;
    }
 
    // Set the new eye position
-   renderer_.setEyePosition(newEyePosition);
+   mainRenderer_.setEyePosition(newEyePosition);
 }
+
+/**
+ ******************************************************************************
+ *
+ *                   Handle changes in models by auto-configuring
+ *                   the four viewports
+ *
+ ******************************************************************************
+ */
+void OpenGlCore::handleModelsChanged()
+{
+   mainRenderer_.configureMainView();
+   frontRenderer_.configureFrontView();
+   topRenderer_.configureTopView();
+   sideRenderer_.configureSideView();
+}
+

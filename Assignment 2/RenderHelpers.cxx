@@ -256,7 +256,7 @@ void RenderHelpers::jdLookAt(Vector eyePosition, Vector lookAtPosition, Vector u
 {
    if (useHandWrittenMath)
    {
-      // This math is based on the man page for gluLookAt
+      // This math is adapted from the man page for gluLookAt
       //    $ man gluLookAt
 
       Vector f = (lookAtPosition - eyePosition).normalized();
@@ -302,7 +302,7 @@ void RenderHelpers::jdPerspective(double fovy, double aspect, double zNear, doub
 {
    if (useHandWrittenMath)
    {
-      // This math is based on the man page for gluPerspective
+      // This math is adapted from the man page for gluPerspective
       //    $ man gluPerspective
 
       double f = 1.0 / tan(toRad(fovy) / 2.0);
@@ -336,7 +336,7 @@ void RenderHelpers::jdOrtho(double left, double right, double bottom, double top
 {
    if (useHandWrittenMath)
    {
-      // This math is based on the man page for glOrtho
+      // This math is adapted from the man page for glOrtho
       //    $ man glOrtho
 
       AffineMatrix m = AffineMatrix::identity();
@@ -358,29 +358,6 @@ void RenderHelpers::jdOrtho(double left, double right, double bottom, double top
       glOrtho(left, right, bottom, top, zNear, zFar);
    }
 }
-
-/**
- ******************************************************************************
- *
- *                   Custom glViewport implementation
- *
- ******************************************************************************
- */
-void RenderHelpers::jdViewport(int x, int y, int width, int height)
-{
-   if (useHandWrittenMath)
-   {
-      // This math is based on the man page for glViewport
-      //    $ man glViewport
-      double aspect = width / height;
-      
-   }
-   else
-   {
-      //glViewport(x, y, width, height);
-   }
-}
-
 
 /**
  ******************************************************************************

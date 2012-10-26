@@ -75,9 +75,44 @@ Brief User Manual:
 
 
 Data-Structures Used
-   - AffineMatrix and Vector 
-   - OpenGlTexture
-   - Matrix stack?
+   AffineMatrix
+      This structure represents a four-dimensional Affine transformation matrix.  The structure
+      is implemented with a simple two-dimensional array of doubles, stored in column-major
+      order (e.g. element[x][y]).  This is to minimize confusion, as everything else in 
+      OpenGL is "x, then y, then z".
+
+   Vector
+      This structure represents a simple three-dimensional vector.  The vector is stored as
+      three discrete double values, 'x', 'y' and 'z'.
+
+   OpenGlTexture
+      This structure is a handle to an OpenGL texture, and primarily stores it's unique 
+      texture identifier (known as a 'name' in OpenGL).  It also stores the texture's
+      width and height, which are required to translate the MD2 texture coordinates
+      into OpenGL texture calls.
+
+   QList
+      Provided by Qt, QList<> is a templated data structure which stores elements in either
+      an array of pointers or an array of items, depending on the item's size.
+
+      More information is available in the Qt documentation:
+      http://doc.qt.digia.com/4.7/qlist.html
+
+   QStack
+      Provided by Qt, QStack<> is a templated data structure that stores elements in a
+      last-in first-out data structure.  This is used primarily to implement the hand-coded
+      OpenGL matrix stack, which is simply a QStack<AffineMatrix>
+
+      More information is available in the Qt documentation:
+      http://doc.qt.digia.com/4.7/qstack.html
+
+   QMap
+      Provided by Qt, QMap<> is a templated data structure that stores elements in a 
+      skip-list based dictionary.  It is used primarily to store calculated normals of
+      vertices and faces.
+
+      More information is available in the Qt documentation:
+      http://doc.qt.digia.com/4.7/qmap.html
 
 
 Implemented Requirements:
@@ -116,25 +151,45 @@ Implemented Requirements:
 
    - B3 - Transformation from Scratch - Click "Use Hand-Written Math" on the "Render Options" tab
    - B4 - Viewing from Scratch        - Click "Use Hand-Written Math" on the "Render Options" tab
+   - B5 - Multiple Viewports          - Top, Front, Side and Perspective viewports are always visible
 
 
-*********************************************************************************
-*********************************************************************************
+
 Reused Code:
    This assignment is entirely my own work, except for the following items:
 
-   - RgbImage.h / RgbImage.cpp, created by Samuel R. Buss, used as a requirement of this assignment.
+   - md2.h / md2.cpp, downloaded from the CPSC453 Course Website, used as a requirement of this assignment.
      
-     Original copyright notice is intact, an can be found at the top of RgbImage.h.
-     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/
+     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/grading/a2/index.htm
 
-   - All of the pictures in the images/ folder, obtained from the course website, used as a requirement
+   - pcx.h / pcx.cpp, downloaded from the CPSC453 Course Website, used as a requirement of this assignment.
+     
+     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/grading/a2/index.htm
+
+   - All of the models in the models/ folder, obtained from the course website, used as a requirement
      of this assignment.
      
-     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/
+     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/grading/a2/index.htm
 
 
 
+   In addition to the reused source code, several functions are adapted (but not copied) from 
+   mathematical derivations and source code samples:
+
+   - AffineMatrix::fromAxisAngle() is adapted from a mathematical derivation on Wikipedia
+
+     Original URL: http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
+
+   - VirtualTrackball is adapted from Erika Harrison's wonderful tutorial notes.
+
+     Original URL: http://pages.cpsc.ucalgary.ca/~eharris/cpsc453/tut09/
+
+   - The hand-written OpenGL transformation and viewing functions are adapted from the matrix
+     mathematics available at their respective man pages.  These include:
+
+       $ man gluLookAt
+       $ man gluPerspective 
+       $ man glOrtho 
 
 
 
@@ -150,11 +205,12 @@ Reused Code:
 
 
 Stuff to do:
-   - Write this readme
-   - Custom view functions (ortho, perspective, viewport)
    - Make it work in computer lab
+   - Ensure it doesn't crash with various models
+   - Double-check the commenting
 
 Stuff that's Done:
+   - Custom view functions (ortho, perspective, viewport)
    - Custom view functions (lookat)
    - Toggle between regular and custom implementations
    - Custom matrix stack
@@ -163,12 +219,3 @@ Stuff that's Done:
    - Virtual trackball
    - Decide about animation
    - Ensure all view transformations work
-
-
-
-
-References:
-   - Wikipedia (in AffineMatrix)
-   - The TA (http://pages.cpsc.ucalgary.ca/~eharris/cpsc453/tut09/)
-   - md2 and pcx
-   - manpages for gluLookAt, gluPerspective, glOrtho and glViewport

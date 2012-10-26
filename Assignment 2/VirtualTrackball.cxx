@@ -48,6 +48,9 @@ void VirtualTrackball::handleClick(double x, double y)
  */
 AffineMatrix VirtualTrackball::rotationAfterDragTo(AffineMatrix initialRotation, double x, double y)
 {
+   // Adapted from Erika Harrison's tutorial notes
+   // http://pages.cpsc.ucalgary.ca/~eharris/cpsc453/tut09/
+
    // Figure out the grab point
    TrackballPoint grabPoint = pointFromClick(width_ - x, y);
 

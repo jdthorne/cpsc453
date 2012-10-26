@@ -30,16 +30,19 @@ class ModelRenderer : public I_RenderOptions
    Q_OBJECT
 
 public:
-   ModelRenderer();
+   ModelRenderer(ModelManager& manager);
    virtual ~ModelRenderer();
 
 public:
    void initialize();
    void render();
 
-   void setFrameSize(double width, double height);
+   void setViewport(int x, int y, int width, int height);
 
-   I_ModelSelector& modelSelector();
+   void configureMainView();
+   void configureTopView();
+   void configureSideView();
+   void configureFrontView();
 
 public: // I_RenderOptions
    virtual AffineMatrix rotation();
@@ -77,6 +80,8 @@ private: // helpers
 
    void renderModel(Model& model);
 
+   double distanceRequiredToSeeEntireModel();
+
 private: // settings
    Vector translation_;
    AffineMatrix rotation_;
@@ -89,13 +94,15 @@ private: // settings
    Vector lookAtPosition_;
    Vector upDirection_;
 
-   double width_;
-   double height_;
+   int x_;
+   int y_;
+   int width_;
+   int height_;
 
 private: // members
    GroundModel* groundModel_;
    
-   ModelManager modelManager_;
+   ModelManager& modelManager_;
 
 };
 

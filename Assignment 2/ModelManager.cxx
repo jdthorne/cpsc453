@@ -123,6 +123,13 @@ QString ModelManager::findSkinForModel(QString modelPath)
       return skinWithSameFilename;
    }
 
+   // Try again, but with .bmp instead of .pcx
+   skinWithSameFilename = modelPath.replace(".md2", ".bmp").replace(".MD2", ".BMP");
+   if (QFile::exists(skinWithSameFilename))
+   {
+      return skinWithSameFilename;
+   }
+
    // Next, try a skin with the same name as the folder
    // e.g. ./models/infantry/infantry.pcx
    QString sameAsFolderName = folderPath + "/" + folder.dirName() + ".pcx";
@@ -144,12 +151,12 @@ QString ModelManager::findSkinForModel(QString modelPath)
    {
       if (skinFile.endsWith(".pcx") || skinFile.endsWith(".bmp"))
       {
-         return skinFile;
+         return folderPath + "/" + skinFile;
       }
    }
 
    // If that doesn't work, give up
-   qDebug("[findSkinForModel] Couldn't find skin for %s", qPrintable(modelPath));
+   qDebug("[findSkinForModel] Couldn't find skin for '%s'", qPrintable(modelPath));
    return QString();
 }
 

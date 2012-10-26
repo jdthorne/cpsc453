@@ -39,7 +39,6 @@ namespace RenderHelpers
    void jdLookAt(Vector eyePosition, Vector lookAtPosition, Vector upDirection);
    void jdPerspective(double fovy, double aspect, double zNear, double zFar);
    void jdOrtho(double left, double right, double bottom, double top, double zNear, double zFar);
-   void jdViewport(int x, int y, int width, int height);
 
    void jdCommitMatrix();
 

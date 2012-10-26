@@ -68,7 +68,7 @@ void OpenGlTexture::ensureOpenGlTexturesAreInitialized()
    }
 
    // Create the names
-   const int maxTextures = 16;
+   const int maxTextures = 32;
    GlTextureName names[maxTextures];
 
    // Gen the textures
@@ -118,7 +118,14 @@ void OpenGlTexture::loadFromPcx(QString file)
    unsigned char* pixels = NULL;
 
    // Use pcx.h to get binary data
-   LoadFilePCX(qPrintable(file), &pixels, &width, &height, true);   
+   int result = LoadFilePCX(qPrintable(file), &pixels, &width, &height, true);
+
+   // Ensure it loaded correctly
+   if (result == 0)
+   {
+      qDebug("[OpenGlTexture] Error loading '%s' - texture will not be available", qPrintable(file));
+      return;
+   }
 
    // Load the raw data into OpenGL
    loadFromBinary(pixels, width, height);
@@ -133,6 +140,8 @@ void OpenGlTexture::loadFromPcx(QString file)
  */
 void OpenGlTexture::loadFromQImage(QString filename)
 {  
+   qDebug("Loaded texture '%s'", qPrintable(filename));
+
    // Use Qt to get an image
    QImage image = QImage(filename);
 

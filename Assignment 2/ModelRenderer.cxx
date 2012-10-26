@@ -18,7 +18,7 @@
 
 using namespace RenderHelpers;
 
-ModelRenderer::ModelRenderer()
+ModelRenderer::ModelRenderer(ModelManager& manager)
    : translation_(0, 0, 0)
    , rotation_(AffineMatrix::identity())
    , scale_(1, 1, 1)
@@ -26,6 +26,7 @@ ModelRenderer::ModelRenderer()
    , displayNormals_(false)
    , projectionMode_(Perspective)
    , groundModel_(NULL)
+   , modelManager_(manager)
 {
    connect(&modelManager_, SIGNAL(modelsChanged()), this, SLOT(handleModelsChanged()));
 }
@@ -48,7 +49,6 @@ ModelRenderer::~ModelRenderer()
 void ModelRenderer::initialize()
 {
    groundModel_ = new GroundModel();
-   modelManager_.loadDefaultModelSet();
 }
 
 /**
@@ -58,8 +58,10 @@ void ModelRenderer::initialize()
  *
  ******************************************************************************
  */
-void ModelRenderer::setFrameSize(double width, double height)
+void ModelRenderer::setViewport(int x, int y, int width, int height)
 {
+   x_ = x;
+   y_ = y;
    width_ = width;
    height_ = height;
 }
@@ -75,22 +77,65 @@ void ModelRenderer::handleModelsChanged()
 {
    // Place the ground under the model's feet
    groundModel_->setZPosition(modelManager_.overallCenter().z - (modelManager_.overallSize().z / 2.0));
+}
 
-   // Find the center and size of the model
-   Vector center = modelManager_.overallCenter();
+/**
+ ******************************************************************************
+ *
+ *                   Automatically set up the camera
+ *
+ ******************************************************************************
+ */
+void ModelRenderer::configureMainView()
+{
+   // Place the camera and look-at positions to see the model nicely
+   setEyePosition(Vector(distanceRequiredToSeeEntireModel(), 0, 0));
+   setLookAtPosition(modelManager_.overallCenter());
+   setUpDirection(Vector(0, 0, 1));
+}
+
+void ModelRenderer::configureTopView()
+{
+   // Place the camera and look-at positions to see the model from the top
+   setEyePosition(Vector(0, 0, distanceRequiredToSeeEntireModel()));
+   setLookAtPosition(modelManager_.overallCenter());
+   setUpDirection(Vector(1, 0, 0));
+}
+
+void ModelRenderer::configureSideView()
+{
+   // Place the camera and look-at positions to see the model from the side
+   setEyePosition(Vector(0, distanceRequiredToSeeEntireModel(), 0));
+   setLookAtPosition(modelManager_.overallCenter());
+   setUpDirection(Vector(0, 0, 1));
+}
+
+void ModelRenderer::configureFrontView()
+{
+   // Place the camera and look-at positions to see the model from the front
+   setEyePosition(Vector(distanceRequiredToSeeEntireModel(), 0, 0));
+   setLookAtPosition(modelManager_.overallCenter());
+   setUpDirection(Vector(0, 0, 1));
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Helper to determine how far away the camera needs to be
+ *                   in order to see the whole model
+ *
+ ******************************************************************************
+ */
+double ModelRenderer::distanceRequiredToSeeEntireModel()
+{
+   // Find the size of the model
    Vector size = modelManager_.overallSize();
 
    // Figure out how far away the camera needs to be
    double maxSize = size.largestElement();
    double distanceRequiredToViewEntireModel = maxSize * 1.5;
 
-   // Place the camera and look-at positions accordingly
-   setEyePosition(Vector(distanceRequiredToViewEntireModel, 0, 0));
-   setLookAtPosition(Vector(center.x, center.y, center.z));
-   setUpDirection(Vector(0, 0, 1));
-   
-   // Notify that the render has changed
-   emit renderChanged();
+   return distanceRequiredToViewEntireModel;
 }
 
 /**
@@ -247,6 +292,8 @@ void ModelRenderer::setupRenderMode()
  */
 void ModelRenderer::setupProjectionMode()
 {
+   glViewport(x_, y_, width_, height_);
+
    // Configure the projection matrix
    glMatrixMode(GL_PROJECTION);
    jdLoadIdentity();
@@ -262,8 +309,18 @@ void ModelRenderer::setupProjectionMode()
 
       case Parallel:
       {
-         double aspect = width_ / height_;
-         jdOrtho(-50.0f * aspect, 50.0f * aspect, -50.0f, 50.0f, 0.1f, 5000.0f);
+         // Calculate aspect ratio for maximum viewability
+         double xAspect = 1.0;
+         double yAspect = (double)height_ / (double)width_;
+         if (yAspect < 1.0)
+         {
+            xAspect = 1.0 / yAspect;
+            yAspect = 1.0;
+         }
+
+         // Set up the orthographic viewport
+         double size = 50.0f;
+         jdOrtho(-size * xAspect, size * xAspect, -size * yAspect, size * yAspect, 0.1f, 5000.0f);
          break;
       }
    }
@@ -302,6 +359,9 @@ void ModelRenderer::setupTransformation()
    jdTranslatev(translation_);
    jdRotatea(rotation_);
    jdScalev(scale_);
+
+   // Commit the current matrix, so the transformations show up
+   jdCommitMatrix();
 }
 
 /**
@@ -313,9 +373,6 @@ void ModelRenderer::setupTransformation()
  */
 void ModelRenderer::renderModel(Model& model)
 {
-   // Commit the current matrix, so the transformations show up
-   jdCommitMatrix();
-
    // Render the model
    model.renderMesh();
 
@@ -325,19 +382,6 @@ void ModelRenderer::renderModel(Model& model)
       model.renderNormals();
    }
 }
-
-/**
- ******************************************************************************
- *
- *                   Accessor for the model selector (used by Sidebar)
- *
- ******************************************************************************
- */
-I_ModelSelector& ModelRenderer::modelSelector()
-{
-   return modelManager_;
-}
-
 
 /**
  ******************************************************************************

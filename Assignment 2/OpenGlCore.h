@@ -11,6 +11,7 @@
 #include <ModelRenderer.h>
 #include <I_RenderOptions.h>
 #include <I_ModelSelector.h>
+#include <RenderOptionManager.h>
 
 class QMouseEvent;
 
@@ -48,13 +49,20 @@ protected:
 
 private slots:
    void handleRenderChanged();
+   void handleModelsChanged();
 
 private: // helpers
 
 private: // members
    VirtualTrackball trackball_;
 
-   ModelRenderer renderer_;
+   ModelManager modelManager_;
+
+   ModelRenderer mainRenderer_;
+   ModelRenderer frontRenderer_;
+   ModelRenderer sideRenderer_;
+   ModelRenderer topRenderer_;
+   RenderOptionManager renderManager_;
 };
 
 #endif
