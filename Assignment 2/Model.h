@@ -34,6 +34,8 @@ public: // render functions
    virtual void renderMesh(AlternativeMode mode) = 0;
    virtual void renderNormals() = 0;
 
+   virtual void resetAnimation() = 0;
+
 public: // accessors
    virtual Vector center() = 0;
    virtual Vector size() = 0;

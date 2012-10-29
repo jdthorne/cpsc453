@@ -36,12 +36,15 @@ public: // render functions
    virtual void renderMesh(AlternativeMode mode);
    virtual void renderNormals();
 
+   virtual void resetAnimation();
+
 public: // accessors
    virtual Vector center();
    virtual Vector size();
 
 signals:
    void frameChanged();
+   void animationRestarted();
 
 private slots: // animation
    virtual void handleFrameTimeout();

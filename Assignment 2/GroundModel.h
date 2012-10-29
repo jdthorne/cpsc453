@@ -30,6 +30,8 @@ public:
 public: // render functions
    virtual void renderMesh(AlternativeMode mode);
    virtual void renderNormals();
+   
+   virtual void resetAnimation();
 
 public: // accessors
    virtual Vector center();

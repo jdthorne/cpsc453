@@ -325,14 +325,40 @@ void Md2Model::handleFrameTimeout()
       if (currentAnimation_ >= MAX_ANIMATIONS)
       {
          currentAnimation_ = 0;
+         emit animationRestarted();
       }
 
       // Go to the first frame of the chosen animation
       currentFrame_ = data_->animlist[currentAnimation_].first_frame;
-
-      // Set the correct framerate
-      animationTimer_.setInterval(1000.0 / data_->animlist[currentAnimation_].fps);
    }
+
+   // Ensure the frame is valid... some of these models have invalid frames, 
+   // which can cause a segfault if we try to render them.
+   if (currentFrame_ < 0 || currentFrame_ >= data_->num_frames)
+   {
+      currentFrame_ = 0;
+      currentAnimation_ = 0;
+      emit animationRestarted();
+   }
+
+   // Set the correct framerate
+   animationTimer_.setInterval(1000.0 / data_->animlist[currentAnimation_].fps);
 
    emit frameChanged();
 }
+
+/**
+ ******************************************************************************
+ *
+ *                   Reset the animation
+ *
+ ******************************************************************************
+ */
+void Md2Model::resetAnimation()
+{
+   currentFrame_ = 0;
+   currentAnimation_ = 0;
+
+   animationTimer_.setInterval(1000.0 / data_->animlist[currentAnimation_].fps);
+}
+

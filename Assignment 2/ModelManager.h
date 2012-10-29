@@ -50,6 +50,9 @@ signals:
    void modelsChanged();
    void frameChanged();
 
+private slots:
+   void handleAnimationRestarted();
+
 private: // helpers
    void removeAllModels();
    QString findMeshForModel(QString path);

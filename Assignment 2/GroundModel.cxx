@@ -11,7 +11,7 @@
 
 using namespace RenderHelpers;
 
-const int SIZE = 100;
+const int SIZE = 250;
 
 GroundModel::GroundModel()
    : texture_("ground.jpg")
@@ -116,3 +116,16 @@ Vector GroundModel::size()
 {
    return Vector(SIZE, SIZE, 0);
 }
+
+/**
+ ******************************************************************************
+ *
+ *                   The ground model isn't animated, so do nothing
+ *
+ ******************************************************************************
+ */
+void GroundModel::resetAnimation()
+{
+   // The ground model isn't animated, so do nothing
+}
+

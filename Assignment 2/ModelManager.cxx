@@ -298,6 +298,24 @@ void ModelManager::wireFrameChangedSignals()
    foreach(Model* model, models_)
    {
       connect(model, SIGNAL(frameChanged()), this, SIGNAL(frameChanged()));
+      connect(model, SIGNAL(animationRestarted()), this, SLOT(handleAnimationRestarted()));
+   }
+}
+
+
+/**
+ ******************************************************************************
+ *
+ *                   Restart the animations of all models
+ *
+ ******************************************************************************
+ */
+void ModelManager::handleAnimationRestarted()
+{
+   // Keep models in sync by restarting all of them
+   foreach(Model* model, models_)
+   {
+      model->resetAnimation();
    }
 }
 
