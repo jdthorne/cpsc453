@@ -42,8 +42,11 @@ void GroundModel::setZPosition(double z)
  *
  ******************************************************************************
  */
-void GroundModel::renderMesh()
+void GroundModel::renderMesh(AlternativeMode mode)
 {
+   // Ignore the alternative mode
+   Q_UNUSED(mode);
+
    // Setup the matrix
    jdPushMatrix();
    jdTranslatev(Vector(0, 0, zPosition_));

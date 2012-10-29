@@ -51,6 +51,11 @@ void RenderOptionManager::setRenderMode(RenderMode mode)
    CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setRenderMode, mode);
 }
 
+void RenderOptionManager::setAlternativeMode(AlternativeMode mode)
+{
+   CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setAlternativeMode, mode);
+}
+
 void RenderOptionManager::setTranslation(Vector translation)
 {
    CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setTranslation, translation);   

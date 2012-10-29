@@ -28,7 +28,7 @@ public:
    void setZPosition(double z);
 
 public: // render functions
-   virtual void renderMesh();
+   virtual void renderMesh(AlternativeMode mode);
    virtual void renderNormals();
 
 public: // accessors

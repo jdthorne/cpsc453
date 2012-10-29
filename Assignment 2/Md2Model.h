@@ -33,7 +33,7 @@ public:
    virtual ~Md2Model();
 
 public: // render functions
-   virtual void renderMesh();
+   virtual void renderMesh(AlternativeMode mode);
    virtual void renderNormals();
 
 public: // accessors

@@ -50,6 +50,7 @@ public: // I_RenderOptions
    virtual Vector lookAtPosition();
 
    virtual void setRenderMode(RenderMode mode);
+   virtual void setAlternativeMode(AlternativeMode mode);
    virtual void setTranslation(Vector translation);
    virtual void setRotation(AffineMatrix rotation);
    virtual void setScale(Vector scale);
@@ -87,6 +88,7 @@ private: // settings
    AffineMatrix rotation_;
    Vector scale_;
    RenderMode renderMode_;
+   AlternativeMode alternativeMode_;
    bool displayNormals_;
    ProjectionMode projectionMode_;
 

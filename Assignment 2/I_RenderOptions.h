@@ -23,6 +23,12 @@ enum ProjectionMode
    Parallel
 };
 
+enum AlternativeMode
+{
+   NormalRender,
+   AlternativeRender
+};
+
 /**
  ******************************************************************************
  *
@@ -47,6 +53,7 @@ public:
 
    // Setters
    virtual void setRenderMode(RenderMode mode) = 0;
+   virtual void setAlternativeMode(AlternativeMode mode) = 0;
    virtual void setTranslation(Vector translation) = 0;
    virtual void setRotation(AffineMatrix rotation) = 0;
    virtual void setScale(Vector scale) = 0;

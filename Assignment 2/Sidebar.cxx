@@ -75,6 +75,8 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
    connect(ui_->flat, SIGNAL(toggled(bool)), this, SLOT(handleRenderModeChanged()));
    connect(ui_->smooth, SIGNAL(toggled(bool)), this, SLOT(handleRenderModeChanged()));
 
+   connect(ui_->alternativeMode, SIGNAL(toggled(bool)), this, SLOT(handleAlternativeModeChanged()));
+
    connect(ui_->perspective, SIGNAL(toggled(bool)), this, SLOT(handleProjectionChanged()));
    connect(ui_->parallel, SIGNAL(toggled(bool)), this, SLOT(handleProjectionChanged()));
 
@@ -109,6 +111,20 @@ void Sidebar::handleRenderModeChanged()
       options_.setRenderMode(SmoothShading);
    }
 }
+
+/**
+ ******************************************************************************
+ *
+ *                   Set the Alternative Rendering Style mode
+ *
+ ******************************************************************************
+ */
+void Sidebar::handleAlternativeModeChanged()
+{
+   options_.setAlternativeMode( ui_->alternativeMode->isChecked() ? AlternativeRender
+                                                                  : NormalRender );
+}
+
 
 /**
  ******************************************************************************

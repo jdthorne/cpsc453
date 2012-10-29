@@ -78,6 +78,12 @@ Brief User Manual:
                                 should appear to do nothing.  If it screws things up instead,
                                 then my math is broken.
 
+         Alternative Rendering Mode: In the spirit of Halloween, you can render the model as
+                                     a spooky ghost!
+
+                                     Turning this on enables my alternate rendering mode, which
+                                     is my implementation of bonus requirement B7.
+
 
 Data-Structures Used:
    AffineMatrix
@@ -166,7 +172,9 @@ Implemented Requirements:
    - B1 - Animation                   - Animations are constantly looping
    - B3 - Transformation from Scratch - Click "Use Hand-Written Math" on the "Render Options" tab
    - B4 - Viewing from Scratch        - Click "Use Hand-Written Math" on the "Render Options" tab
-   - B5 - Multiple Viewports          - Top, Front, Side and Perspective viewports are always visible
+
+   - B6 - Multiple Viewports          - Top, Front, Side and Perspective viewports are always visible
+   - B7 - Alternative Rendering       - Click "Alternative Rendering Mode" on the "Render Options" tab
 
 
 

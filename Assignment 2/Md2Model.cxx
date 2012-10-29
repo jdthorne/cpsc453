@@ -44,7 +44,7 @@ Md2Model::~Md2Model()
  *
  ******************************************************************************
  */
-void Md2Model::renderMesh()
+void Md2Model::renderMesh(AlternativeMode mode)
 {
    // Enable lighting
    glEnable(GL_LIGHTING);
@@ -53,8 +53,28 @@ void Md2Model::renderMesh()
    glEnable(GL_TEXTURE_2D);
    texture_.bind();
 
+   // Set up the normal rendering mode
+   if (mode == NormalRender)
+   {
+      // Set the color to "white", so only the texture is used
+      glColor3f(1, 1, 1);
+   }
+
+   // Otherwise, set up the alternate mode
+   else if (mode == AlternativeRender)
+   {
+      // Use additive alpha blending
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_ONE, GL_ONE);
+
+      // Make the ghost blueish
+      glColor3f(0.6, 0.7, 1.0);
+
+      // Ensure all faces draw
+      glDisable(GL_DEPTH_TEST);
+   }
+
    // Start drawing triangles...
-   glColor3f(1, 1, 1);
    glBegin(GL_TRIANGLES);
    for (int i = 0; i < data_->num_tris; i++)
    {
@@ -90,7 +110,9 @@ void Md2Model::renderMesh()
 
    // Disable the stuff we used
    glDisable(GL_TEXTURE_2D);
+   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
    glDisable(GL_LIGHTING);
+   glEnable(GL_DEPTH_TEST);
 }
 
 /**

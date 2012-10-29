@@ -37,6 +37,7 @@ public: // I_RenderOptions
 
    // Setters
    virtual void setRenderMode(RenderMode mode);
+   virtual void setAlternativeMode(AlternativeMode mode);
    virtual void setTranslation(Vector translation);
    virtual void setRotation(AffineMatrix rotation);
    virtual void setScale(Vector scale);

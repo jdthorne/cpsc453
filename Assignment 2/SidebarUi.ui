@@ -17,7 +17,7 @@
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="page">
       <property name="geometry">
@@ -626,10 +626,10 @@ manually by selecting 'custom'.</string>
           <item row="0" column="1">
            <widget class="QSlider" name="xUp">
             <property name="minimum">
-             <number>-2</number>
+             <number>-100</number>
             </property>
             <property name="maximum">
-             <number>2</number>
+             <number>100</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -646,10 +646,10 @@ manually by selecting 'custom'.</string>
           <item row="1" column="1">
            <widget class="QSlider" name="yUp">
             <property name="minimum">
-             <number>-2</number>
+             <number>-100</number>
             </property>
             <property name="maximum">
-             <number>2</number>
+             <number>100</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -666,10 +666,10 @@ manually by selecting 'custom'.</string>
           <item row="2" column="1">
            <widget class="QSlider" name="zUp">
             <property name="minimum">
-             <number>-2</number>
+             <number>-100</number>
             </property>
             <property name="maximum">
-             <number>2</number>
+             <number>100</number>
             </property>
             <property name="value">
              <number>1</number>
@@ -850,6 +850,13 @@ manually by selecting 'custom'.</string>
            <widget class="QCheckBox" name="handMath">
             <property name="text">
              <string>Use Hand-Written Math</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="alternativeMode">
+            <property name="text">
+             <string>Alternative Rendering Mode</string>
             </property>
            </widget>
           </item>

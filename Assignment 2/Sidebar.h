@@ -37,6 +37,7 @@ public:
 
 protected slots: // Sidebar Interface Changes
    void handleRenderModeChanged();
+   void handleAlternativeModeChanged();
    void handleTranslationChanged();
    void handleScaleChanged();
    void handleShowNormalsChanged();

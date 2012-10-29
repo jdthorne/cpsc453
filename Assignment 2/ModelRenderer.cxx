@@ -24,6 +24,7 @@ ModelRenderer::ModelRenderer(ModelManager& manager)
    , rotation_(AffineMatrix::identity())
    , scale_(1, 1, 1)
    , renderMode_(SmoothShading)
+   , alternativeMode_(NormalRender)
    , displayNormals_(false)
    , projectionMode_(Perspective)
 
@@ -168,6 +169,12 @@ Vector ModelRenderer::lookAtPosition()
 void ModelRenderer::setRenderMode(RenderMode mode)
 {
    renderMode_ = mode;
+   emit renderChanged();
+}
+
+void ModelRenderer::setAlternativeMode(AlternativeMode mode)
+{
+   alternativeMode_ = mode;
    emit renderChanged();
 }
 
@@ -380,7 +387,7 @@ void ModelRenderer::setupTransformation()
 void ModelRenderer::renderModel(Model& model)
 {
    // Render the model
-   model.renderMesh();
+   model.renderMesh(alternativeMode_);
 
    // Render the normals, if necessary
    if (displayNormals_)
