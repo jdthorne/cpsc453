@@ -3,6 +3,7 @@
 
 // Qt
 #include <QMap>
+#include <QObject>
 
 // System
 
@@ -22,7 +23,7 @@
  *
  ******************************************************************************
  */
-class Model
+class Model : public QObject
 {
 public:
    Model();
@@ -35,6 +36,10 @@ public: // render functions
 public: // accessors
    virtual Vector center() = 0;
    virtual Vector size() = 0;
+
+public: // signals
+   virtual void frameChanged() = 0;
+
 };
 
 #endif

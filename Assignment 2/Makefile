@@ -24,7 +24,7 @@ INCLUDES += "-I/usr/include/QtOpenGL"
 LIBRARIES = -lGL -lGLU -lglut -lm -lstdc++ -lQtCore -lQtGui -lQtOpenGL
 
 # Actually compile the assignment
-assignment2 : *.cxx *.cpp OpenGlCore.moc.cxx AssignmentCore.moc.cxx Sidebar.moc.cxx ModelRenderer.moc.cxx SidebarUi.ui.h ModelManager.moc.cxx SliderSpinboxController.moc.cxx RenderOptionManager.moc.cxx
+assignment2 : *.cxx *.cpp OpenGlCore.moc.cxx AssignmentCore.moc.cxx Sidebar.moc.cxx ModelRenderer.moc.cxx SidebarUi.ui.h ModelManager.moc.cxx SliderSpinboxController.moc.cxx RenderOptionManager.moc.cxx Md2Model.moc.cxx GroundModel.moc.cxx
 	$(CC) -o assignment2 *.cxx *.cpp $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
 
 # Run the QT Moc
@@ -48,6 +48,12 @@ ModelManager.moc.cxx : ModelManager.h
 
 SliderSpinboxController.moc.cxx : SliderSpinboxController.h
 	$(MOC) SliderSpinboxController.h -o SliderSpinboxController.moc.cxx
+
+Md2Model.moc.cxx : Md2Model.h
+	$(MOC) Md2Model.h -o Md2Model.moc.cxx
+
+GroundModel.moc.cxx : GroundModel.h
+	$(MOC) GroundModel.h -o GroundModel.moc.cxx
 
 SidebarUi.ui.h : SidebarUi.ui
 	$(UIC) SidebarUi.ui -o SidebarUi.ui.h
@@ -80,7 +86,7 @@ INCLUDES += "-I/Library/Frameworks/QtOpenGL.framework/Versions/4/Headers/"
 INCLUDES += "-I."
 
 # Actually compile the assignment
-assignment2 : *.cxx *.cpp OpenGlCore.moc.cxx AssignmentCore.moc.cxx Sidebar.moc.cxx ModelRenderer.moc.cxx SidebarUi.ui.h ModelManager.moc.cxx SliderSpinboxController.moc.cxx RenderOptionManager.moc.cxx
+assignment2 : *.cxx *.cpp OpenGlCore.moc.cxx AssignmentCore.moc.cxx Sidebar.moc.cxx ModelRenderer.moc.cxx SidebarUi.ui.h ModelManager.moc.cxx SliderSpinboxController.moc.cxx RenderOptionManager.moc.cxx Md2Model.moc.cxx GroundModel.moc.cxx
 	$(CC) -o assignment2 *.cxx *.cpp $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
 
 # Run the QT Moc
@@ -104,6 +110,12 @@ ModelManager.moc.cxx : ModelManager.h
 
 SliderSpinboxController.moc.cxx : SliderSpinboxController.h
 	moc SliderSpinboxController.h -o SliderSpinboxController.moc.cxx
+
+Md2Model.moc.cxx : Md2Model.h
+	moc Md2Model.h -o Md2Model.moc.cxx
+
+GroundModel.moc.cxx : GroundModel.h
+	moc GroundModel.h -o GroundModel.moc.cxx
 
 SidebarUi.ui.h : SidebarUi.ui
 	uic SidebarUi.ui -o SidebarUi.ui.h

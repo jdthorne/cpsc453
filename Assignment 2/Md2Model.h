@@ -6,6 +6,10 @@
 
 // System
 
+// Qt
+#include <QTimer>
+#include <QObject>
+
 // Project
 #include <Model.h>
 #include <OpenGlTexture.h>
@@ -22,6 +26,7 @@
  */
 class Md2Model : public Model
 {
+   Q_OBJECT
 
 public:
    Md2Model(QString modelDataFilename, QString skinTextureFilename);
@@ -35,6 +40,12 @@ public: // accessors
    virtual Vector center();
    virtual Vector size();
 
+signals:
+   void frameChanged();
+
+private slots: // animation
+   virtual void handleFrameTimeout();
+
 private: // helpers
    void calculateBounds();
    void calculateFaceNormals();
@@ -45,13 +56,15 @@ private: // members
    
    OpenGlTexture texture_;
 
-   QMap<int, Vector> faceCenters_;
    QMap<int, Vector> faceNormals_;
    QMap<int, Vector> vertexNormals_;
 
    Vector center_;
    Vector size_;
 
+   QTimer animationTimer_;
+   int currentAnimation_;
+   int currentFrame_;
 };
 
 #endif

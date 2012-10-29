@@ -10,7 +10,6 @@
 
 ModelManager::ModelManager()
 {
-
 }
 
 ModelManager::~ModelManager()
@@ -58,6 +57,8 @@ void ModelManager::loadDefaultModelSet()
    models_.append(new Md2Model("models/infantry/tris.md2", "models/infantry/infantry.pcx"));
    models_.append(new Md2Model("models/infantry/weapon.md2", "models/infantry/weapon.pcx"));   
 
+   wireFrameChangedSignals();
+
    emit modelsChanged();
 }
 
@@ -89,6 +90,8 @@ void ModelManager::loadModelSet(QString set)
       models_.append(new Md2Model(weaponModel, weaponSkin));
    }
 
+   wireFrameChangedSignals();
+
    // Notify that the models have changed
    emit modelsChanged();
 }
@@ -117,6 +120,8 @@ void ModelManager::loadCustomModel(QString modelPath, QString modelSkinPath,
    {
       models_.append(new Md2Model(weaponPath, weaponSkinPath));
    }
+
+   wireFrameChangedSignals();
 
    // Notify that the models have changed
    emit modelsChanged();
@@ -278,6 +283,21 @@ void ModelManager::removeAllModels()
    {
       models_.removeAll(model);
       delete model;
+   }
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Frame Changed signals
+ *
+ ******************************************************************************
+ */
+void ModelManager::wireFrameChangedSignals()
+{
+   foreach(Model* model, models_)
+   {
+      connect(model, SIGNAL(frameChanged()), this, SIGNAL(frameChanged()));
    }
 }
 

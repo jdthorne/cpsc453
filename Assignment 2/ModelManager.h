@@ -44,11 +44,14 @@ public:
 
 signals:
    void modelsChanged();
+   void frameChanged();
 
 private: // helpers
    void removeAllModels();
    QString findMeshForModel(QString path);
    QString findSkinForModel(QString path);
+
+   void wireFrameChangedSignals();
 
 private: // members
    QList<Model*> models_;

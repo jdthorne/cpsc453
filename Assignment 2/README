@@ -163,6 +163,7 @@ Implemented Requirements:
 
    I have also implemented several bonus requirements:
 
+   - B1 - Animation                   - Animations are constantly looping
    - B3 - Transformation from Scratch - Click "Use Hand-Written Math" on the "Render Options" tab
    - B4 - Viewing from Scratch        - Click "Use Hand-Written Math" on the "Render Options" tab
    - B5 - Multiple Viewports          - Top, Front, Side and Perspective viewports are always visible

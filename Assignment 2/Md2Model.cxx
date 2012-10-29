@@ -12,15 +12,24 @@ using namespace RenderHelpers;
 
 Md2Model::Md2Model(QString modelDataFilename, QString skinTextureFilename)
    : texture_(skinTextureFilename)
+   , currentAnimation_(0)
+   , currentFrame_(0)
 {
    // Load the MD2 model
    data_ = new MD2();
-   data_->LoadModel(qPrintable(modelDataFilename));
+   bool ok = data_->LoadModel(qPrintable(modelDataFilename));
 
-   // Precalculate expensive things
-   calculateBounds();
-   calculateFaceNormals();
-   calculateVertexNormals();
+   if (ok)
+   {
+      // Precalculate expensive things
+      calculateBounds();
+      calculateFaceNormals();
+      calculateVertexNormals();
+
+      // Start animating
+      connect(&animationTimer_, SIGNAL(timeout()), this, SLOT(handleFrameTimeout()));
+      animationTimer_.start(1000.0 / data_->animlist[currentAnimation_].fps); 
+   }
 }
 
 Md2Model::~Md2Model()
@@ -58,6 +67,9 @@ void Md2Model::renderMesh()
          // Grab the IDs
          int vertexId = triangle.index_xyz[v];
          int texId = triangle.index_st[v];
+
+         // Apply animation
+         vertexId += (data_->num_xyz * currentFrame_);
 
          // Tell OpenGL the normal
          Vector normal = vertexNormals_[vertexId];
@@ -97,8 +109,21 @@ void Md2Model::renderNormals()
    glColor3f(0, 1, 0);
    for (int i = 0; i < data_->num_tris; i++)
    {
+      // Find the center of the face
+      Vector centerOfFace;
+      for (int v = 0; v < 3; v++)
+      {
+         // Find Vertex Index
+         int vertexId = data_->tris[i].index_xyz[v];
+
+         // Apply animation
+         vertexId += (data_->num_xyz * currentFrame_);
+
+         // Add the vertex position to the center
+         centerOfFace += Vector(data_->m_vertices[vertexId]) * (1.0 / 3.0);
+      }
+
       // Find the center of the face and the normal
-      Vector centerOfFace = faceCenters_[i];
       Vector normal = faceNormals_[i] * 3;
 
       // Draw a line from (center) to (center + normal)
@@ -110,8 +135,11 @@ void Md2Model::renderNormals()
    glColor3f(0, 0, 1);
    for (int i = 0; i < data_->num_xyz; i++)
    {
+      // Find the animation offset
+      int frameOffset = (data_->num_xyz * currentFrame_);
+
       // Find the vertex and its normal
-      Vector vertex = Vector(data_->m_vertices[i]);
+      Vector vertex = Vector(data_->m_vertices[i + frameOffset]);
       Vector normal = vertexNormals_[i] * 3;
 
       // Draw a line from (vertex) to (vertex + normal)
@@ -189,9 +217,6 @@ void Md2Model::calculateFaceNormals()
 
       // Save the calculated normal
       faceNormals_[i] = normal;
-
-      // While we're here, save the face center too (used for displaying normals)
-      faceCenters_[i] = (vertex0 + vertex1 + vertex2) * (1.0/3.0);
    }   
 }
 
@@ -249,3 +274,43 @@ Vector Md2Model::size()
    return size_;
 }
 
+
+/**
+ ******************************************************************************
+ *
+ *                   Advance to the next frame
+ *
+ ******************************************************************************
+ */
+void Md2Model::handleFrameTimeout()
+{
+   // Some models don't have animation data - don't try animating them!
+   if (data_->num_frames == 1)
+   {
+      return;
+   }
+
+   // Advance to the next frame
+   currentFrame_++;
+
+   // Loop to the next animation if necessary
+   if (currentFrame_ > data_->animlist[currentAnimation_].last_frame)
+   {
+      // Advance the animation
+      currentAnimation_++;
+
+      // Loop the animations if we're at the end
+      if (currentAnimation_ >= MAX_ANIMATIONS)
+      {
+         currentAnimation_ = 0;
+      }
+
+      // Go to the first frame of the chosen animation
+      currentFrame_ = data_->animlist[currentAnimation_].first_frame;
+
+      // Set the correct framerate
+      animationTimer_.setInterval(1000.0 / data_->animlist[currentAnimation_].fps);
+   }
+
+   emit frameChanged();
+}

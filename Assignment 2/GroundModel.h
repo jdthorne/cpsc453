@@ -19,6 +19,7 @@
  */
 class GroundModel : public Model
 {
+   Q_OBJECT
 
 public:
    GroundModel();
@@ -33,6 +34,9 @@ public: // render functions
 public: // accessors
    virtual Vector center();
    virtual Vector size();
+
+signals:
+   void frameChanged();
 
 private: // members
    OpenGlTexture texture_;

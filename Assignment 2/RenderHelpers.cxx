@@ -274,8 +274,8 @@ void RenderHelpers::jdLookAt(Vector eyePosition, Vector lookAtPosition, Vector u
       // Calculate forward, side and up vectors
       Vector forward = (lookAtPosition - eyePosition).normalized();
 
-      Vector side = f.cross(upDirection).normalized();
-      Vector up = s.cross(f);
+      Vector side = forward.cross(upDirection).normalized();
+      Vector up = side.cross(forward);
    
       // Stuff them into an AffineMatrix
       AffineMatrix m = AffineMatrix::identity();

@@ -28,6 +28,7 @@ OpenGlCore::OpenGlCore()
    connect(&frontRenderer_, SIGNAL(renderChanged()), this, SLOT(handleRenderChanged()));
    connect(&sideRenderer_, SIGNAL(renderChanged()), this, SLOT(handleRenderChanged()));
    connect(&topRenderer_, SIGNAL(renderChanged()), this, SLOT(handleRenderChanged()));
+   connect(&modelManager_, SIGNAL(frameChanged()), this, SLOT(handleRenderChanged()));
 
    // Make sure we setup our cameras as needed
    connect(&modelManager_, SIGNAL(modelsChanged()), this, SLOT(handleModelsChanged()));
