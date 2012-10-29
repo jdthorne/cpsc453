@@ -227,6 +227,8 @@ void RenderHelpers::jdCommitMatrix()
 {
    if (useHandWrittenMath)
    {
+      qDebug("[RenderHelpers] Committing Hand-Written Math to OpenGL");
+
       GLdouble values[16] = AFFINE_TO_GL(currentMatrix);
       glLoadMatrixd(values);
    }
