@@ -83,7 +83,7 @@ void ModelManager::loadModelSet(QString set)
    QString weaponModel = folder + "/weapon.md2";
    QString weaponSkin = findSkinForModel(weaponModel);
 
-   // Load the weapon if it exists
+   // Load the weapon (if it exists)
    if (QFile::exists(weaponModel) && QFile::exists(weaponSkin))
    {
       models_.append(new Md2Model(weaponModel, weaponSkin));
@@ -238,6 +238,7 @@ QList<Model*>& ModelManager::models()
  */
 Vector ModelManager::overallCenter()
 {
+   // Return a reasonable center if no models are loaded
    if (models_.count() == 0)
    {
       return Vector(0, 0, 0);
@@ -255,6 +256,7 @@ Vector ModelManager::overallCenter()
  */
 Vector ModelManager::overallSize()
 {
+   // Return a reasonable size if no models are loaded
    if (models_.count() == 0)
    {
       return Vector(50, 50, 50);

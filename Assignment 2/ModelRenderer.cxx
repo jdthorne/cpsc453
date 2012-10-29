@@ -19,15 +19,19 @@
 using namespace RenderHelpers;
 
 ModelRenderer::ModelRenderer(ModelManager& manager)
+   // Initialize settings to sane defaults
    : translation_(0, 0, 0)
    , rotation_(AffineMatrix::identity())
    , scale_(1, 1, 1)
    , renderMode_(SmoothShading)
    , displayNormals_(false)
    , projectionMode_(Perspective)
+
+   // Initialize members
    , groundModel_(NULL)
    , modelManager_(manager)
 {
+   // Ensure we know about model changes (so we can trigger a redraw)
    connect(&modelManager_, SIGNAL(modelsChanged()), this, SLOT(handleModelsChanged()));
 }
 
@@ -42,7 +46,7 @@ ModelRenderer::~ModelRenderer()
  *                   Setup
  *
  *    Setup can't Happen until OpenGL is ready, so we need a separate function
- *    for it.
+ *    for it, instead of doing it in the constructor.
  *
  ******************************************************************************
  */
@@ -54,7 +58,8 @@ void ModelRenderer::initialize()
 /**
  ******************************************************************************
  *
- *                   Save the frame size, so we have it for the GL perspective
+ *                   Save the viewport, so we have it for glViewport and
+ *                   glPerspective
  *
  ******************************************************************************
  */
@@ -133,7 +138,7 @@ double ModelRenderer::distanceRequiredToSeeEntireModel()
 
    // Figure out how far away the camera needs to be
    double maxSize = size.largestElement();
-   double distanceRequiredToViewEntireModel = maxSize * 1.5;
+   double distanceRequiredToViewEntireModel = maxSize * 1.75;
 
    return distanceRequiredToViewEntireModel;
 }
@@ -292,6 +297,7 @@ void ModelRenderer::setupRenderMode()
  */
 void ModelRenderer::setupProjectionMode()
 {
+   // Configure the viewport
    glViewport(x_, y_, width_, height_);
 
    // Configure the projection matrix

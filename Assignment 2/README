@@ -197,11 +197,3 @@ Reused Code:
 
      Original URL: http://pages.cpsc.ucalgary.ca/~eharris/cpsc453/tut09/
 
-   - The hand-written OpenGL transformation and viewing functions are adapted from the matrix
-     mathematics available at their respective man pages.  These include:
-
-       $ man gluLookAt
-       $ man gluPerspective 
-       $ man glOrtho 
-
-

@@ -60,7 +60,7 @@ void Md2Model::renderMesh()
          int texId = triangle.index_st[v];
 
          // Tell OpenGL the normal
-         Vector normal = vertexNormals_[vertexId] * -1;
+         Vector normal = vertexNormals_[vertexId];
          jdNormalv(normal);
 
          // Tell OpenGL the texture coordinate (with a flipped y-coordinate)
@@ -101,8 +101,8 @@ void Md2Model::renderNormals()
       Vector centerOfFace = faceCenters_[i];
       Vector normal = faceNormals_[i] * 3;
 
-      // Draw a line from (center - normal) to (center + normal)
-      jdVertexv(centerOfFace - normal);
+      // Draw a line from (center) to (center + normal)
+      jdVertexv(centerOfFace);
       jdVertexv(centerOfFace + normal);
    }
 
@@ -114,8 +114,8 @@ void Md2Model::renderNormals()
       Vector vertex = Vector(data_->m_vertices[i]);
       Vector normal = vertexNormals_[i] * 3;
 
-      // Draw a line from (vertex - normal) to (vertex + normal)
-      jdVertexv(vertex - normal);
+      // Draw a line from (vertex) to (vertex + normal)
+      jdVertexv(vertex);
       jdVertexv(vertex + normal);
    }
 
@@ -131,13 +131,17 @@ void Md2Model::renderNormals()
  */
 void Md2Model::calculateBounds()
 {
+   // Our goal is to find the max/min values
    double xMin = 0, yMin = 0, zMin = 0;
    double xMax = 0, yMax = 0, zMax = 0;
-
+   
+   // Loop through the vertices
    for (int i = 0; i < data_->num_xyz; i++)
    {
+      // Grab the vertex
       Vector vertex = Vector(data_->m_vertices[i]);
       
+      // Save the min/max values
       xMin = qMin(xMin, vertex.x);
       yMin = qMin(yMin, vertex.y);
       zMin = qMin(zMin, vertex.z);
@@ -147,9 +151,11 @@ void Md2Model::calculateBounds()
       zMax = qMax(zMax, vertex.z);
    }
 
+   // Find the actual min and max
    Vector minimum = Vector(xMin, yMin, zMin);
    Vector maximum = Vector(xMax, yMax, zMax);
 
+   // Center = average of min+max, size = max - min
    center_ = (minimum + maximum) / 2.0;
    size_ = maximum - minimum;
 }
@@ -163,6 +169,7 @@ void Md2Model::calculateBounds()
  */
 void Md2Model::calculateFaceNormals()
 {
+   // Loop through the verts...
    for (int i = 0; i < data_->num_tris; i++)
    {
       // Find the triangle
@@ -178,12 +185,12 @@ void Md2Model::calculateFaceNormals()
       Vector line02 = vertex2 - vertex0;
 
       // Cross product the lines
-      Vector normal = line01.cross(line02).normalized(); 
+      Vector normal = line02.cross(line01).normalized(); 
 
       // Save the calculated normal
       faceNormals_[i] = normal;
 
-      // While we're here, save the face center
+      // While we're here, save the face center too (used for displaying normals)
       faceCenters_[i] = (vertex0 + vertex1 + vertex2) * (1.0/3.0);
    }   
 }
@@ -217,11 +224,11 @@ void Md2Model::calculateVertexNormals()
       Vector averageNormal = Vector(0, 0, 0);
       foreach (int triangleId, triangles)
       {
-         averageNormal += (faceNormals_[triangleId] / triangles.count());
+         averageNormal += faceNormals_[triangleId];
       }
 
       // Save the resulting normal
-      vertexNormals_[vertexId] = averageNormal;
+      vertexNormals_[vertexId] = averageNormal.normalized();
    }
 }
 

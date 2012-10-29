@@ -105,6 +105,7 @@ void OpenGlCore::initializeGL()
  */
 void OpenGlCore::resizeGL(int width, int height)
 {
+   // Notify children about size changes
    QGLWidget::resizeGL(width, height);
    trackball_.handleScreenResize(width, height);
 
