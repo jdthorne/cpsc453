@@ -81,7 +81,7 @@ void ModelManager::loadModelSet(QString set)
    // Find the weapon
    QString folder = QFileInfo(path).absoluteDir().absolutePath();
    QString weaponModel = folder + "/weapon.md2";
-   QString weaponSkin = folder + "/weapon.pcx";
+   QString weaponSkin = findSkinForModel(weaponModel);
 
    // Load the weapon if it exists
    if (QFile::exists(weaponModel) && QFile::exists(weaponSkin))
@@ -165,21 +165,23 @@ QString ModelManager::findMeshForModel(QString folderPath)
  *
  ******************************************************************************
  */
-QString ModelManager::findSkinForModel(QString modelPath)
+QString ModelManager::findSkinForModel(const QString modelPath)
 {
    QDir folder = QFileInfo(modelPath).absoluteDir();
    QString folderPath = folder.absolutePath();
 
    // Try looking for the same filename, but with .pcx instead of .md2
    // e.g. ./models/infantry/tris.pcx
-   QString skinWithSameFilename = modelPath.replace(".md2", ".pcx").replace(".MD2", ".PCX");
+   QString skinWithSameFilename = modelPath;
+   skinWithSameFilename = skinWithSameFilename.replace(".md2", ".pcx").replace(".MD2", ".PCX");
    if (QFile::exists(skinWithSameFilename))
    {
       return skinWithSameFilename;
    }
 
    // Try again, but with .bmp instead of .pcx
-   skinWithSameFilename = modelPath.replace(".md2", ".bmp").replace(".MD2", ".BMP");
+   skinWithSameFilename = modelPath;
+   skinWithSameFilename = skinWithSameFilename.replace(".md2", ".bmp").replace(".MD2", ".BMP");
    if (QFile::exists(skinWithSameFilename))
    {
       return skinWithSameFilename;
