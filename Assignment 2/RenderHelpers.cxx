@@ -229,19 +229,10 @@ void RenderHelpers::jdCommitMatrix()
    {
       GLdouble values[16] = AFFINE_TO_GL(currentMatrix);
       glLoadMatrixd(values);
-
-      QString valueString;
-      for (int i = 0; i < 16; i++) valueString += QString::number(values[i], 'f', 2) + " ";
    }
    else
    {
       // OpenGL already has the matrix, so don't screw it up :)
-
-      GLdouble values[16];
-      glGetDoublev(GL_MODELVIEW_MATRIX, values);
-
-      QString valueString;
-      for (int i = 0; i < 16; i++) valueString += QString::number(values[i], 'f', 2) + " ";
    }
 }
 
