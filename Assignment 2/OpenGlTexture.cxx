@@ -118,7 +118,7 @@ void OpenGlTexture::loadFromPcx(QString file)
    unsigned char* pixels = NULL;
 
    // Use pcx.h to get binary data
-   int result = LoadFilePCX(qPrintable(file), &pixels, &width, &height, true);
+   int result = LoadFilePCX(qPrintable(file), &pixels, &width, &height, false);
 
    // Ensure it loaded correctly
    if (result == 0)
@@ -140,8 +140,6 @@ void OpenGlTexture::loadFromPcx(QString file)
  */
 void OpenGlTexture::loadFromQImage(QString filename)
 {  
-   qDebug("Loaded texture '%s'", qPrintable(filename));
-
    // Use Qt to get an image
    QImage image = QImage(filename);
 

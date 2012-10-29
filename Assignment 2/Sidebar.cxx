@@ -35,8 +35,14 @@ Sidebar::Sidebar(I_RenderOptions& options, I_ModelSelector& modelSelector)
       ui_->selectModel->addItem(modelSet);
    }
    ui_->selectModel->setCurrentIndex(modelSelector_.availableModelSets().count() - 1);
-   ui_->selectModel->addItem("Browse...");
+   ui_->selectModel->addItem("custom...");
    connect(ui_->selectModel, SIGNAL(currentIndexChanged(int)), this, SLOT(handleModelSelected()));
+
+   // Connect the "browse" buttons
+   connect(ui_->modelBrowse, SIGNAL(released()), this, SLOT(handleBrowseForModel()));
+   connect(ui_->modelSkinBrowse, SIGNAL(released()), this, SLOT(handleBrowseForModelSkin()));
+   connect(ui_->weaponBrowse, SIGNAL(released()), this, SLOT(handleBrowseForWeapon()));
+   connect(ui_->weaponSkinBrowse, SIGNAL(released()), this, SLOT(handleBrowseForWeaponSkin()));
 
    // Create controllers for the Affine Transformations tab
    xTranslation_ = new SliderSpinboxController(ui_->xTranslation, ui_->xTranslationSpin, this, SLOT(handleTranslationChanged()));
@@ -159,25 +165,16 @@ void Sidebar::handleShowNormalsChanged()
  */
 void Sidebar::handleModelSelected()
 {
-   // Browse if that's selected
-   if (ui_->selectModel->currentText() == QString("Browse..."))
+   // Is the "custom" option selected?
+   if (ui_->selectModel->currentText() == QString("custom..."))
    {
-      // Show the open file dialog
-      QString path = QFileDialog::getOpenFileName(this, 
-                                                  "Select Model...",
-                                                  ".",
-                                                  "MD2 Models (*.md2)");
-
-      // Load model if something was selected
-      if (path != "")
-      {
-         modelSelector_.loadCustomModel(path);
-      }
-
+      ui_->customModel->setEnabled(true);
+      loadCustomModel();
       return;
    }
 
    // Otherwise, load a preset model set
+   ui_->customModel->setEnabled(false);
    modelSelector_.loadModelSet(ui_->selectModel->currentText());
 }
 
@@ -282,5 +279,89 @@ void Sidebar::handleUseHandWrittenChanged()
 {
    jdSetCalculationMode(ui_->handMath->isChecked());
    options_.forceRedraw();
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Handle the "Browse" buttons
+ *
+ ******************************************************************************
+ */
+void Sidebar::handleBrowseForModel()
+{
+   // Browse for the file
+   QString filename = QFileDialog::getOpenFileName(this, "Select Model", "./models", "Models (*.md2 *.MD2)");
+   
+   // If it's not empty, save it
+   if (filename != QString(""))
+   {
+      setTextWithEllipsis(ui_->modelPath, filename);
+      modelPath_ = filename;
+      loadCustomModel();
+   }
+}
+
+void Sidebar::handleBrowseForModelSkin()
+{
+   // Browse for the file
+   QString filename = QFileDialog::getOpenFileName(this, "Select Model Skin", "./models", "Skins (*.bmp *.BMP *.pcx *.PCX)");
+   
+   // If it's not empty, save it
+   if (filename != QString(""))
+   {
+      setTextWithEllipsis(ui_->modelSkinPath, filename);
+      modelSkinPath_ = filename;
+      loadCustomModel();
+   }
+}
+
+void Sidebar::handleBrowseForWeapon()
+{
+   // Browse for the file
+   QString filename = QFileDialog::getOpenFileName(this, "Select Weapon", "./models", "Models (*.md2 *.MD2)");
+   
+   // If it's not empty, save it
+   if (filename != QString(""))
+   {
+      setTextWithEllipsis(ui_->weaponPath, filename);
+      weaponPath_ = filename;
+      loadCustomModel();
+   }
+}
+
+void Sidebar::handleBrowseForWeaponSkin()
+{
+   // Browse for the file
+   QString filename = QFileDialog::getOpenFileName(this, "Select Weapon Skin", "./models", "Skins (*.bmp *.BMP *.pcx *.PCX)");
+   
+   // If it's not empty, save it
+   if (filename != QString(""))
+   {
+      setTextWithEllipsis(ui_->weaponSkinPath, filename);
+      weaponSkinPath_ = filename;
+      loadCustomModel();
+   }
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Helper to load the currently selected custom model
+ *
+ ******************************************************************************
+ */
+void Sidebar::loadCustomModel()
+{
+   modelSelector_.loadCustomModel(modelPath_, modelSkinPath_,
+                                  weaponPath_, weaponSkinPath_);
+}
+
+void Sidebar::setTextWithEllipsis(QLabel* label, QString text)
+{
+   QFontMetrics metrics(label->font());
+   QString elidedText = metrics.elidedText(text, Qt::ElideLeft, label->width());
+   
+   label->setText(elidedText);
 }
 

@@ -34,7 +34,8 @@ public:
    virtual QList<QString> availableModelSets();
    virtual void loadDefaultModelSet();
    virtual void loadModelSet(QString set);
-   virtual void loadCustomModel(QString path);
+   virtual void loadCustomModel(QString modelPath, QString modelSkinPath, 
+                                QString weaponPath, QString weaponSkinPath);
 
    Vector overallCenter();
    Vector overallSize();

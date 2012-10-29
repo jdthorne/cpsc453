@@ -9,6 +9,7 @@
 
 class QSpinBox;
 class QAbstractSlider;
+class QLabel;
 
 class I_RenderOptions;
 class I_ModelSelector;
@@ -48,12 +49,20 @@ protected slots: // Sidebar Interface Changes
 
    void handleModelSelected();
 
+   void handleBrowseForModel();
+   void handleBrowseForModelSkin();
+   void handleBrowseForWeapon();
+   void handleBrowseForWeaponSkin();
+
 protected slots: // Render Option Changes
    void handleEyePositionChangedByRenderOptions();
    void handleLookAtPositionChangedByRenderOptions();
 
 private: // helpers
    void setupInput(QAbstractSlider* slider, QSpinBox* spin, const char* slotToCallOnChange);
+
+   void loadCustomModel();
+   void setTextWithEllipsis(QLabel* label, QString text);
 
 private: // members
    Ui_SidebarUi* ui_;
@@ -82,6 +91,11 @@ private: // controllers
    SliderSpinboxController* xUp_;
    SliderSpinboxController* yUp_;
    SliderSpinboxController* zUp_;
+
+   QString modelPath_;
+   QString modelSkinPath_;
+   QString weaponPath_;
+   QString weaponSkinPath_;
 
 };
 

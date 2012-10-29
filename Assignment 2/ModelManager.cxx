@@ -70,19 +70,9 @@ void ModelManager::loadDefaultModelSet()
  */
 void ModelManager::loadModelSet(QString set)
 {
-   // Load the set from the "models" folder
-   loadCustomModel("models/" + set + "/tris.md2");
-}
+   QString path = "./models/" + set + "/tris.md2";
 
-/**
- ******************************************************************************
- *
- *                   Load a model at an arbitrary path
- *
- ******************************************************************************
- */
-void ModelManager::loadCustomModel(QString path)
-{
+   // Clear any existing models
    removeAllModels();
 
    // Load the model
@@ -97,6 +87,35 @@ void ModelManager::loadCustomModel(QString path)
    if (QFile::exists(weaponModel) && QFile::exists(weaponSkin))
    {
       models_.append(new Md2Model(weaponModel, weaponSkin));
+   }
+
+   // Notify that the models have changed
+   emit modelsChanged();
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Load a model at an arbitrary path
+ *
+ ******************************************************************************
+ */
+void ModelManager::loadCustomModel(QString modelPath, QString modelSkinPath, 
+                                   QString weaponPath, QString weaponSkinPath)
+{
+   // Clear any existing models
+   removeAllModels();
+
+   // Load the model, if it exists
+   if (QFile::exists(modelPath))
+   {
+      models_.append(new Md2Model(modelPath, modelSkinPath));
+   }
+
+   // Load the weapon, if it exists
+   if (QFile::exists(weaponPath))
+   {
+      models_.append(new Md2Model(weaponPath, weaponSkinPath));
    }
 
    // Notify that the models have changed
@@ -181,6 +200,11 @@ QList<Model*>& ModelManager::models()
  */
 Vector ModelManager::overallCenter()
 {
+   if (models_.count() == 0)
+   {
+      return Vector(0, 0, 0);
+   }
+
    return models_[0]->center();
 }
 
@@ -193,6 +217,11 @@ Vector ModelManager::overallCenter()
  */
 Vector ModelManager::overallSize()
 {
+   if (models_.count() == 0)
+   {
+      return Vector(50, 50, 50);
+   }
+
    return models_[0]->size();
 }
 

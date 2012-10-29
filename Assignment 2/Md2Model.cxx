@@ -63,9 +63,11 @@ void Md2Model::renderMesh()
          Vector normal = vertexNormals_[vertexId] * -1;
          jdNormalv(normal);
 
-         // Tell OpenGL the texture coordinate
+         // Tell OpenGL the texture coordinate (with a flipped y-coordinate)
          tex_coord& tex = data_->texs[texId];
-         glTexCoord2f((float)tex.u / data_->skin_width, (float)tex.v / data_->skin_height);
+         float uCoord = (float)tex.u / data_->skin_width;
+         float vCoord = (data_->skin_height) - ((float)tex.v / data_->skin_height);
+         glTexCoord2f(uCoord, vCoord);
 
          // Tell OpenGL the actual vertex
          Vector vertex = Vector(data_->m_vertices[vertexId]);
