@@ -369,15 +369,27 @@ void Sidebar::handleBrowseForWeaponSkin()
  */
 void Sidebar::loadCustomModel()
 {
+   // Load the last selected values
    modelSelector_.loadCustomModel(modelPath_, modelSkinPath_,
                                   weaponPath_, weaponSkinPath_);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Helper to automatically elide label text
+ *
+ ******************************************************************************
+ */
 void Sidebar::setTextWithEllipsis(QLabel* label, QString text)
 {
+   // Figure out the font
    QFontMetrics metrics(label->font());
+
+   // Elide the text (e.g. "/foo/bar/baz" becomes "...ar/baz"
    QString elidedText = metrics.elidedText(text, Qt::ElideLeft, label->width());
    
+   // Set it on the label
    label->setText(elidedText);
 }
 

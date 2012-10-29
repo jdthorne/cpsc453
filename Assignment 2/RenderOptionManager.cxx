@@ -23,13 +23,13 @@ RenderOptionManager::~RenderOptionManager()
 {
 }
 
-#define CALL_ON_ALL_MANAGED_RENDER_OPTIONS(function, parameter) \
-   foreach(I_RenderOptions* options, allRenderOptions_) \
-   { \
-      options->function(parameter); \
-   }
-
-// Accessors
+/**
+ ******************************************************************************
+ *
+ *                   Accessors (from primary render options)
+ *
+ ******************************************************************************
+ */
 AffineMatrix RenderOptionManager::rotation()
 {
    return primaryOptions_->rotation();
@@ -45,43 +45,37 @@ Vector RenderOptionManager::lookAtPosition()
    return primaryOptions_->lookAtPosition();
 }
 
-// Setters
-void RenderOptionManager::setRenderMode(RenderMode mode)
-{
-   CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setRenderMode, mode);
-}
+/**
+ ******************************************************************************
+ *
+ *                   Simple wiring functions
+ *
+ ******************************************************************************
+ */
+#define CALL_ON_ALL_MANAGED_RENDER_OPTIONS(function, parameterType, parameterName) \
+   void RenderOptionManager::function(parameterType parameterName) \
+   { \
+      foreach(I_RenderOptions* options, allRenderOptions_) \
+      { \
+         options->function(parameterName); \
+      } \
+   }
 
-void RenderOptionManager::setAlternativeMode(AlternativeMode mode)
-{
-   CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setAlternativeMode, mode);
-}
+CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setRenderMode, RenderMode, mode)
+CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setAlternativeMode, AlternativeMode, mode);
+CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setTranslation, Vector, translation);   
+CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setRotation, AffineMatrix, rotation);
+CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setScale, Vector, scale);
+CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setDisplayNormals, bool, displayNormals);
+CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setProjectionMode, ProjectionMode, mode);
 
-void RenderOptionManager::setTranslation(Vector translation)
-{
-   CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setTranslation, translation);   
-}
-
-void RenderOptionManager::setRotation(AffineMatrix rotation)
-{
-   CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setRotation, rotation);
-}
-
-void RenderOptionManager::setScale(Vector scale)
-{
-   CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setScale, scale);
-}
-
-void RenderOptionManager::setDisplayNormals(bool displayNormals)
-{
-   CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setDisplayNormals, displayNormals);
-}
-
-void RenderOptionManager::setProjectionMode(ProjectionMode mode)
-{
-   CALL_ON_ALL_MANAGED_RENDER_OPTIONS(setProjectionMode, mode);
-}
-
-
+/**
+ ******************************************************************************
+ *
+ *                   Setup camera position (only on primary options)
+ *
+ ******************************************************************************
+ */
 void RenderOptionManager::setEyePosition(Vector position)
 {
    primaryOptions_->setEyePosition(position);
@@ -97,7 +91,13 @@ void RenderOptionManager::setUpDirection(Vector direction)
    primaryOptions_->setUpDirection(direction);
 }
 
-// Other functions
+/**
+ ******************************************************************************
+ *
+ *                   Force redraw on all managed options
+ *
+ ******************************************************************************
+ */
 void RenderOptionManager::forceRedraw()
 {
    foreach(I_RenderOptions* options, allRenderOptions_)

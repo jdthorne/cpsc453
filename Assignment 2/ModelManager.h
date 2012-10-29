@@ -18,7 +18,11 @@ class Model;
  *
  *                   ModelManager
  *
- *  This class is responsible for loading models from disk.
+ *  This class is responsible for loading models from disk, either by set name
+ *  (e.g. "infantry"), or absolute paths.
+ *
+ *  This class also handles model interaction, including notifications when
+ *  the loaded models change, or advance to theie next frame.
  *
  ******************************************************************************
  */
