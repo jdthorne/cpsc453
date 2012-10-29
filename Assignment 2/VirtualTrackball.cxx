@@ -54,7 +54,7 @@ AffineMatrix VirtualTrackball::rotationAfterDragTo(AffineMatrix initialRotation,
    // Figure out the grab point
    TrackballPoint grabPoint = pointFromClick(width_ - x, y);
 
-   // Don't do anything if the magnitude is zero (otherwise cross product will explode)
+   // Don't do anything if the magnitude is zero (otherwise normalized cross product will explode)
    if ((grabPoint - lastGrabPoint_).magnitude() < 0.00001)
    {
       return initialRotation;
