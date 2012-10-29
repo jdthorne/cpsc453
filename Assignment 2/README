@@ -28,10 +28,15 @@ Brief User Manual:
 
    Model Selection
       Here you can select your model.  You can choose a pre-packaged model from the list,
-      or click "Browse" to load any model on the filesystem.
+      or click "custom..." to load any model on the filesystem.
 
-      The associated texture and weapon will be loaded automatically, through a basic
-      sniffing algorithm.
+      Custom models can be loaded using the "Custom Model Selection" frame.  You can select
+      a model, skin, weapon model, and weapon skin.  Options will be displayed as you select
+      them. 
+
+      For built-in models, the associated texture and weapon will be loaded automatically,
+      through a basic sniffing algorithm.  If the algorithm fails, you can load the models
+      manually from the "models" folder.
 
    Affine Transformations
       From this tab, you can customize the translation, rotation and scale of the model.
@@ -74,12 +79,12 @@ Brief User Manual:
                                 then my math is broken.
 
 
-Data-Structures Used
+Data-Structures Used:
    AffineMatrix
       This structure represents a four-dimensional Affine transformation matrix.  The structure
       is implemented with a simple two-dimensional array of doubles, stored in column-major
       order (e.g. element[x][y]).  This is to minimize confusion, as everything else in 
-      OpenGL is "x, then y, then z".
+      OpenGL is "x, then y", and I get confused by row/column too easily.
 
    Vector
       This structure represents a simple three-dimensional vector.  The vector is stored as
@@ -114,6 +119,15 @@ Data-Structures Used
       More information is available in the Qt documentation:
       http://doc.qt.digia.com/4.7/qmap.html
 
+Algorithms Used:
+   
+   Face Normal Calculation
+      Face normals are calculated by finding the offsets between triangle points 0 and 1, and
+      triangle points 0 and 2, then cross-producting and normalizing the result.
+
+   Vertex Normal Calculation
+      Vertex normals are calculated by determining which faces each vertex participates in, 
+      and then averaging the face normals of each of these faces.
 
 Implemented Requirements:
    I have implemented all of the required functional requirements listed in the assignment 
@@ -172,7 +186,6 @@ Reused Code:
      Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/grading/a2/index.htm
 
 
-
    In addition to the reused source code, several functions are adapted (but not copied) from 
    mathematical derivations and source code samples:
 
@@ -192,30 +205,3 @@ Reused Code:
        $ man glOrtho 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-Stuff to do:
-   - Make it work in computer lab
-   - Ensure it doesn't crash with various models
-   - Double-check the commenting
-
-Stuff that's Done:
-   - Custom view functions (ortho, perspective, viewport)
-   - Custom view functions (lookat)
-   - Toggle between regular and custom implementations
-   - Custom matrix stack
-   - Clean up the actual code
-   - Wire up zooming
-   - Virtual trackball
-   - Decide about animation
-   - Ensure all view transformations work
