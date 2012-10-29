@@ -47,6 +47,7 @@ signals:
 
 private: // helpers
    void removeAllModels();
+   QString findMeshForModel(QString path);
    QString findSkinForModel(QString path);
 
 private: // members

@@ -70,7 +70,7 @@ void ModelManager::loadDefaultModelSet()
  */
 void ModelManager::loadModelSet(QString set)
 {
-   QString path = "./models/" + set + "/tris.md2";
+   QString path = findMeshForModel("./models/" + set);
 
    // Clear any existing models
    removeAllModels();
@@ -120,6 +120,42 @@ void ModelManager::loadCustomModel(QString modelPath, QString modelSkinPath,
 
    // Notify that the models have changed
    emit modelsChanged();
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Helper to search for the path for a given model
+ *
+ ******************************************************************************
+ */
+QString ModelManager::findMeshForModel(QString folderPath)
+{
+   // Ensure we have valid input
+   if (folderPath == "")
+   {
+      return "";
+   }
+
+   // Figure out the name of the folder (e.g. /foo/bar/baz ==> baz)
+   QString folderName = folderPath.split("/")[ folderPath.split("/").length() - 1 ];
+
+   // Try "tris.md2"
+   QString meshWithTris = folderPath + "/tris.md2";
+   if (QFile::exists(meshWithTris))
+   {
+      return meshWithTris;
+   }
+
+   // Try "folder.md2"
+   QString meshWithFolder = folderPath + "/" + folderName + ".md2";
+   if (QFile::exists(meshWithFolder))
+   {
+      return meshWithFolder;
+   }
+
+   // Give up
+   return QString();
 }
 
 /**

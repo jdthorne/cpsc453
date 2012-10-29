@@ -1,7 +1,9 @@
 *~
 .DS_Store
+.*
 
 *.sublime-*
 
 *.moc.cxx
 *.ui.h
+
