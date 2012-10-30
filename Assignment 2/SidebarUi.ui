@@ -626,10 +626,10 @@ manually by selecting 'custom'.</string>
           <item row="0" column="1">
            <widget class="QSlider" name="xUp">
             <property name="minimum">
-             <number>-100</number>
+             <number>-2</number>
             </property>
             <property name="maximum">
-             <number>100</number>
+             <number>2</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -646,10 +646,10 @@ manually by selecting 'custom'.</string>
           <item row="1" column="1">
            <widget class="QSlider" name="yUp">
             <property name="minimum">
-             <number>-100</number>
+             <number>-2</number>
             </property>
             <property name="maximum">
-             <number>100</number>
+             <number>2</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -666,10 +666,10 @@ manually by selecting 'custom'.</string>
           <item row="2" column="1">
            <widget class="QSlider" name="zUp">
             <property name="minimum">
-             <number>-100</number>
+             <number>-2</number>
             </property>
             <property name="maximum">
-             <number>100</number>
+             <number>2</number>
             </property>
             <property name="value">
              <number>1</number>
