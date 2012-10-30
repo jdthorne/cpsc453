@@ -78,9 +78,6 @@ void GroundModel::renderMesh(AlternativeMode mode)
 
    glEnd();
 
-   // Flush the coordinates
-   glFlush();
-
    // Disable the texture
    glDisable(GL_TEXTURE_2D);
 

@@ -88,9 +88,6 @@ void Md2Model::renderMesh(AlternativeMode mode)
          int vertexId = triangle.index_xyz[v];
          int texId = triangle.index_st[v];
 
-         // Apply animation
-         vertexId += (data_->num_xyz * currentFrame_);
-
          // Tell OpenGL the normal
          Vector normal = vertexNormals_[vertexId];
          jdNormalv(normal);
@@ -100,6 +97,9 @@ void Md2Model::renderMesh(AlternativeMode mode)
          float uCoord = (float)tex.u / data_->skin_width;
          float vCoord = (data_->skin_height) - ((float)tex.v / data_->skin_height);
          glTexCoord2f(uCoord, vCoord);
+
+         // Apply animation
+         vertexId += (data_->num_xyz * currentFrame_);
 
          // Tell OpenGL the actual vertex
          Vector vertex = Vector(data_->m_vertices[vertexId]);
