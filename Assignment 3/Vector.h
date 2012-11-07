@@ -22,17 +22,20 @@ public:
    Vector(double x, double y, double z);
    Vector(float coords[]);
 
+public: // Accessors
+   double x() const;
+   double y() const;
+   double z() const;
+
 public: // Operators
-   Vector& operator += (const Vector& rhs);
-   Vector operator + (const Vector& rhs) const;
-   Vector operator - (const Vector& rhs) const;
+   Vector& operator+= (const Vector& rhs);
+   Vector operator+ (const Vector& rhs) const;
+   Vector operator- (const Vector& rhs) const;
 
    double largestElement() const;
 
    Vector cross(const Vector& rhs) const;
    double dot(const Vector& rhs) const;
-
-   void normalize();
 
    Vector inverse() const;
    Vector normalized() const;
@@ -48,15 +51,16 @@ public: // Operators
 
    static const Vector interpolate(Vector v1, Vector v2, double t);
 
-public:
-   double x;
-   double y;
-   double z;
+private:
+   double x_;
+   double y_;
+   double z_;
 };
 
 #define printVec(vec) qPrintable(vec.toString())
 
 Vector operator*(const Vector& vector, double scalar);
+Vector operator*(double scalar, const Vector& vector);
 Vector operator/(const Vector& vector, double scalar);
 
 #endif

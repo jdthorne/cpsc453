@@ -2,6 +2,7 @@
 // System
 
 // Project
+#include <Raytracer.h>
 #include <AssignmentCore.h>
 
 AssignmentCore::AssignmentCore()
@@ -20,6 +21,10 @@ AssignmentCore::~AssignmentCore()
 
 void AssignmentCore::show()
 {
+   Raytracer ray;
+   QImage renderedImage = ray.run();
+
+   imageViewer_->setPixmap(QPixmap::fromImage(renderedImage));
+
    window_.show();
 }
-

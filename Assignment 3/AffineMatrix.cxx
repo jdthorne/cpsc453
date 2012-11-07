@@ -76,17 +76,17 @@ AffineMatrix AffineMatrix::fromAxisAngle(Vector axis, double angle)
 
    // Adapted from the mathematical derivation on Wikipedia 
    // (http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle)
-   result.element[0][0] = cos(angle) + (axis.x * axis.x * (1 - cos(angle)));
-   result.element[1][0] = (axis.x * axis.y * (1 - cos(angle))) - (axis.z * sin(angle));
-   result.element[2][0] = (axis.x * axis.z * (1 - cos(angle))) + (axis.y * sin(angle));
+   result.element[0][0] = cos(angle) + (axis.x() * axis.x() * (1 - cos(angle)));
+   result.element[1][0] = (axis.x() * axis.y() * (1 - cos(angle))) - (axis.z() * sin(angle));
+   result.element[2][0] = (axis.x() * axis.z() * (1 - cos(angle))) + (axis.y() * sin(angle));
 
-   result.element[0][1] = (axis.y * axis.x * (1 - cos(angle))) + (axis.z * sin(angle));
-   result.element[1][1] = cos(angle) + (axis.y * axis.y * (1 - cos(angle)));
-   result.element[2][1] = (axis.y * axis.z * (1 - cos(angle))) - (axis.x * sin(angle));
+   result.element[0][1] = (axis.y() * axis.x() * (1 - cos(angle))) + (axis.z() * sin(angle));
+   result.element[1][1] = cos(angle) + (axis.y() * axis.y() * (1 - cos(angle)));
+   result.element[2][1] = (axis.y() * axis.z() * (1 - cos(angle))) - (axis.x() * sin(angle));
 
-   result.element[0][2] = (axis.z * axis.x * (1 - cos(angle))) - (axis.y * sin(angle));
-   result.element[1][2] = (axis.z * axis.y * (1 - cos(angle))) + (axis.x * sin(angle));
-   result.element[2][2] = cos(angle) + (axis.z * axis.z * (1 - cos(angle)));
+   result.element[0][2] = (axis.z() * axis.x() * (1 - cos(angle))) - (axis.y() * sin(angle));
+   result.element[1][2] = (axis.z() * axis.y() * (1 - cos(angle))) + (axis.x() * sin(angle));
+   result.element[2][2] = cos(angle) + (axis.z() * axis.z() * (1 - cos(angle)));
 
    result.element[3][3] = 1.0;
 
@@ -106,9 +106,9 @@ AffineMatrix AffineMatrix::fromTranslationVector(Vector translation)
    AffineMatrix result = AffineMatrix::identity();
 
    // Set the right-hand column to (x, y, z)
-   result.element[3][0] = translation.x;
-   result.element[3][1] = translation.y;
-   result.element[3][2] = translation.z;
+   result.element[3][0] = translation.x();
+   result.element[3][1] = translation.y();
+   result.element[3][2] = translation.z();
 
    return result;
 }
@@ -126,9 +126,9 @@ AffineMatrix AffineMatrix::fromScaleVector(Vector scale)
    AffineMatrix result = AffineMatrix::identity();
 
    // Set the main diagonal to (xScale, yScale, zScale)
-   result.element[0][0] = scale.x;
-   result.element[1][1] = scale.y;
-   result.element[2][2] = scale.z;
+   result.element[0][0] = scale.x();
+   result.element[1][1] = scale.y();
+   result.element[2][2] = scale.z();
 
    return result;
 }

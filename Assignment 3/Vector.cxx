@@ -4,23 +4,23 @@
 #include <cmath>
 
 Vector::Vector()
-   : x(0.0)
-   , y(0.0)
-   , z(0.0)
+   : x_(0.0)
+   , y_(0.0)
+   , z_(0.0)
 {
 }
 
-Vector::Vector(double x, double y, double z)
-   : x(x)
-   , y(y)
-   , z(z)
+Vector::Vector(double x_, double y_, double z_)
+   : x_(x_)
+   , y_(y_)
+   , z_(z_)
 {
 }
 
 Vector::Vector(float coords[])
-   : x(coords[0])
-   , y(coords[1])
-   , z(coords[2])
+   : x_(coords[0])
+   , y_(coords[1])
+   , z_(coords[2])
 {
 }
 
@@ -33,9 +33,9 @@ Vector::Vector(float coords[])
  */
 Vector& Vector::operator += (const Vector& rhs)
 {
-   x += rhs.x;
-   y += rhs.y;
-   z += rhs.z;
+   x_ += rhs.x_;
+   y_ += rhs.y_;
+   z_ += rhs.z_;
 
    return *this;
 }
@@ -64,7 +64,7 @@ Vector Vector::operator + (const Vector& rhs) const
  */
 Vector Vector::operator - (const Vector& rhs) const
 {
-   return Vector(x - rhs.x, y - rhs.y, z - rhs.z);
+   return Vector(x_ - rhs.x_, y_ - rhs.y_, z_ - rhs.z_);
 }
 
 /**
@@ -76,7 +76,7 @@ Vector Vector::operator - (const Vector& rhs) const
  */
 double Vector::largestElement() const
 {
-   return qMax(qMax(x, y), z);
+   return qMax(qMax(x_, y_), z_);
 }
 
 /**
@@ -91,9 +91,9 @@ Vector Vector::cross(const Vector& rhs) const
    const Vector& one = *this;
    const Vector& two = rhs;
 
-   return Vector( (one.y * two.z) - (two.y * one.z),
-                  (one.z * two.x) - (two.z * one.x),
-                  (one.x * two.y) - (two.x * one.y) );
+   return Vector( (one.y_ * two.z_) - (two.y_ * one.z_),
+                  (one.z_ * two.x_) - (two.z_ * one.x_),
+                  (one.x_ * two.y_) - (two.x_ * one.y_) );
 }
 
 /**
@@ -105,7 +105,7 @@ Vector Vector::cross(const Vector& rhs) const
  */
 double Vector::dot(const Vector& rhs) const
 {
-   return (x*rhs.x) + (y*rhs.y) + (z*rhs.z);
+   return (x_*rhs.x_) + (y_*rhs.y_) + (z_*rhs.z_);
 }
 
 /**
@@ -117,7 +117,7 @@ double Vector::dot(const Vector& rhs) const
  */
 double Vector::magnitude() const
 {
-   return sqrt(x*x + y*y + z*z);
+   return sqrt(x_*x_ + y_*y_ + z_*z_);
 }
 
 /**
@@ -129,48 +129,40 @@ double Vector::magnitude() const
  */
 Vector Vector::normalized() const
 {
-   Vector result = *this;
-   result.normalize();
-   return result;
-}
-
-/**
- ******************************************************************************
- *
- *                   Normalize this vector in place
- *
- ******************************************************************************
- */
-void Vector::normalize()
-{
    double scale = magnitude();
-   x /= scale;
-   y /= scale;
-   z /= scale;
+   double x = x_ / scale;
+   double y = y_ / scale;
+   double z = z_ / scale;
+
+   return Vector(x, y, z);
 }
 
 /**
  ******************************************************************************
  *
- *                   Multiply by a scalar
+ *                   Multiply_ by_ a scalar
  *
  ******************************************************************************
  */
 Vector operator*(const Vector& vector, double scalar)
 {
-   return Vector(vector.x * scalar, vector.y * scalar, vector.z * scalar);
+   return Vector(vector.x() * scalar, vector.y() * scalar, vector.z() * scalar);
+}
+Vector operator*(double scalar, const Vector& vector)
+{
+   return Vector(vector.x() * scalar, vector.y() * scalar, vector.z() * scalar);
 }
 
 /**
  ******************************************************************************
  *
- *                   Divide by a scalar
+ *                   Divide by_ a scalar
  *
  ******************************************************************************
  */
 Vector operator/(const Vector& vector, double scalar)
 {
-   return Vector(vector.x / scalar, vector.y / scalar, vector.z / scalar);
+   return Vector(vector.x() / scalar, vector.y() / scalar, vector.z() / scalar);
 }
 
 /**
@@ -182,7 +174,7 @@ Vector operator/(const Vector& vector, double scalar)
  */
 QString Vector::toString() const
 {
-   return QString::number(x, 'f', 6) + " " + QString::number(y, 'f', 6) + " " + QString::number(z, 'f', 6);
+   return QString::number(x_, 'f', 6) + " " + QString::number(y_, 'f', 6) + " " + QString::number(z_, 'f', 6);
 }
 
 /**
@@ -194,19 +186,19 @@ QString Vector::toString() const
  */
 Vector Vector::inverse() const
 {
-   return Vector(1.0/x, 1.0/y, 1.0/z);
+   return Vector(1.0/x_, 1.0/y_, 1.0/z_);
 }
 
 /**
  ******************************************************************************
  *
- *                   Multiply element-wise
+ *                   Multiply_ element-wise
  *
  ******************************************************************************
  */
 Vector Vector::multiplyElementsBy(const Vector& rhs) const
 {
-   return Vector(x*rhs.x, y*rhs.y, z*rhs.z);
+   return Vector(x_*rhs.x_, y_*rhs.y_, z_*rhs.z_);
 }
 
 /**
@@ -243,12 +235,34 @@ double Vector::distanceTo(const Vector rhs) const
 /**
  ******************************************************************************
  *
- *                   Interpolate two vectors by a scaling factor
+ *                   Interpolate two vectors by_ a scaling factor
  *
  ******************************************************************************
  */
 const Vector Vector::interpolate(Vector v1, Vector v2, double t)
 {
    return (v1 * t) + (v2 * (1.0 - t));
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Accessors
+ *
+ ******************************************************************************
+ */
+double Vector::x() const
+{
+   return x_;
+}
+
+double Vector::y() const
+{
+   return y_;
+}
+
+double Vector::z() const
+{
+   return z_;
 }
 
