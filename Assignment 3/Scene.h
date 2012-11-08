@@ -8,6 +8,7 @@
 
 // Project
 #include <SceneObject.h>
+#include <SceneLight.h>
 
 /**
  ******************************************************************************
@@ -25,11 +26,15 @@ public:
 
 public:
    QList<SceneObject*>& objects();
+   QList<SceneLight*>& lights();
+
+   PossibleRayIntersection findFirstIntersection(Ray ray);
 
 private: // helpers
 
 private: // members
    QList<SceneObject*> objects_;
+   QList<SceneLight*> lights_;
 
 };
 

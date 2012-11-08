@@ -20,11 +20,15 @@ public:
    virtual ~Color();
 
    int toQtRgb();
+   Color& operator+= (const Color& rhs);
 
 public:
    double r;
    double g;
    double b;
 };
+
+Color operator*(const Color& lhs, double value);
+Color operator+(const Color& lhs, const Color& rhs);
 
 #endif

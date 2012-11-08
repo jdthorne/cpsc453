@@ -266,3 +266,14 @@ double Vector::z() const
    return z_;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Reflection
+ *
+ ******************************************************************************
+ */
+Vector Vector::reflected(const Vector normal) const
+{
+   return (-2 * this->dot(normal) * normal) + *this;
+}

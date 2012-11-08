@@ -5,7 +5,7 @@
 #include <SceneObject.h>
 
 SceneObject::SceneObject()
-   : center_(100, 0, 0)
+   : center_(0, 0, 0)
 {
 
 }

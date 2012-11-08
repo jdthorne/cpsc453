@@ -8,10 +8,10 @@
 #include <Raytracer.h>
 
 Raytracer::Raytracer()
-   : imageWidth_(1280 / 2)
+   : cameraPosition_(0, 0, 100)
+   , imageWidth_(1280 / 2)
    , imageHeight_(720 / 2)
 {
-
 }
 
 Raytracer::~Raytracer()
@@ -36,11 +36,11 @@ QImage Raytracer::run()
 
 Color Raytracer::traceInitialRay(int x, int y)
 {
-   Vector startPoint = Vector(0, 0, 100);
+   Vector startPoint = cameraPosition_;
 
    Vector throughVirtualScreen = Vector(x - (imageWidth_ / 2),
                                         y - (imageHeight_ / 2),
-                                        50);
+                                        -1000);
 
    Ray ray = Ray::fromTo(startPoint, throughVirtualScreen);
 
@@ -49,32 +49,69 @@ Color Raytracer::traceInitialRay(int x, int y)
 
 Color Raytracer::trace(Ray ray)
 {
-   double bestDistance = 9999999;
-   PossibleRayIntersection bestIntersection = PossibleRayIntersection::noIntersection();
+   // See if the ray intersects with an object
+   PossibleRayIntersection possibleIntersection = scene_.findFirstIntersection(ray);
 
-   foreach (SceneObject* object, scene_.objects())
-   {
-      PossibleRayIntersection possibleIntersection = object->findIntersectionWith(ray);
-
-      if (possibleIntersection.exists())
-      {
-         double distance = possibleIntersection.intersection().distance();
-         if (distance < bestDistance)
-         {
-            bestDistance = distance;
-            bestIntersection = possibleIntersection;
-         }
-      }
-   }
-
-   if (!bestIntersection.exists())
+   // If not, return sky color
+   if (!possibleIntersection.exists())
    {
       return Color(0, 0, 0);
    }
 
-   RayIntersection intersection = bestIntersection.intersection();
-   double phongLongDong = fabs(ray.direction().dot(intersection.surfaceNormal()));
+   // Otherwise, grab the intersection
+   RayIntersection intersection = possibleIntersection.intersection();
 
-   return Color(phongLongDong, phongLongDong, 0);
+   // The resulting color consists of:
+   Color directLight = totalDirectLightAt(intersection);
+   Color reflectedLight = totalReflectedLightAt(intersection);
+
+   return directLight + reflectedLight;
+}
+
+Color Raytracer::totalDirectLightAt(RayIntersection intersection)
+{
+   Color result = Color(0, 0, 0);
+
+   foreach (SceneLight* light, scene_.lights())
+   {
+      double distanceToLight = intersection.point().distanceTo(light->position());
+      
+      Ray rayToLight = Ray::fromTo(intersection.point(), light->position());
+      PossibleRayIntersection objectInTheWay = scene_.findFirstIntersection(rayToLight);
+
+      bool shadow = (objectInTheWay.exists() && objectInTheWay.intersection().distance() < distanceToLight);
+      if (!shadow)
+      {
+         result += diffuseLightAt(intersection, *light);
+         result += specularLightAt(intersection, *light);
+      }
+   }
+
+   return result;
+}
+
+Color Raytracer::totalReflectedLightAt(RayIntersection intersection)
+{
+   return Color(0, 0, 0);
+}
+
+Color Raytracer::diffuseLightAt(RayIntersection intersection, const SceneLight& light)
+{
+   Vector intersectionToLight = (light.position() - intersection.point()).normalized();
+
+   double intensity = intersectionToLight.dot(intersection.surfaceNormal());
+   return Color(1, 0, 0) * intensity;
+}
+
+Color Raytracer::specularLightAt(RayIntersection intersection, const SceneLight& light)
+{
+   Vector intersectionToLight = (light.position() - intersection.point()).normalized();
+   Vector intersectionToViewport = (cameraPosition_ - intersection.point()).normalized();
+
+   Vector halfVector = (intersectionToLight + intersectionToViewport).normalized();
+
+   double intensity = pow(halfVector.dot(intersection.surfaceNormal()), 6);
+
+   return Color(0, 1, 0) * (intensity * 0.5);
 }
 

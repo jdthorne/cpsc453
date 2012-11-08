@@ -46,7 +46,7 @@ Vector RayIntersection::surfaceNormal()
    return surfaceNormal_;
 }
 
-Vector RayIntersection::intersectionPoint()
+Vector RayIntersection::point()
 {
    return intersectionPoint_;
 }
@@ -61,11 +61,7 @@ Vector RayIntersection::intersectionPoint()
 Ray RayIntersection::calculateReflection()
 {
    Vector start = intersectionPoint_;
-
-   Vector vector = incomingRay_.direction();
-   Vector normal = surfaceNormal_;
-
-   Vector direction = (-2 * vector.dot(normal) * normal) + vector;
+   Vector direction = incomingRay_.direction().reflected(surfaceNormal_);
 
    return Ray::startDirection(start, direction);
 }
@@ -79,7 +75,7 @@ Ray RayIntersection::calculateReflection()
  */
 PossibleRayIntersection PossibleRayIntersection::noIntersection()
 {
-   RayIntersection nullIntersection = RayIntersection(Ray::fromTo(Vector(), Vector()), 0.0, Vector());
+   RayIntersection nullIntersection = RayIntersection(Ray::fromTo(Vector(), Vector()), 999999, Vector());
    PossibleRayIntersection result = PossibleRayIntersection(nullIntersection);
    result.exists_ = false;
 

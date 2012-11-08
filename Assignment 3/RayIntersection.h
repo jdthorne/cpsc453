@@ -30,8 +30,8 @@ public: // accessors
    Ray reflectedRay();
    double distance();
 
+   Vector point();
    Vector surfaceNormal();
-   Vector intersectionPoint();
 
 private: // helpers
    Ray calculateReflection();

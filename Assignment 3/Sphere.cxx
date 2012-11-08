@@ -7,7 +7,7 @@
 
 Sphere::Sphere()
    : SceneObject()
-   , radius_(50)
+   , radius_(5)
 {
 }
 

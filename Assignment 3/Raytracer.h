@@ -28,12 +28,20 @@ public:
    QImage run();
 
 private: // helpers
+   Color trace(Ray ray);
+
    Color traceInitialRay(int x, int y);
 
-   Color trace(Ray ray);
+   Color totalDirectLightAt(RayIntersection intersection);
+   Color totalReflectedLightAt(RayIntersection intersection);
+
+   Color diffuseLightAt(RayIntersection intersection, const SceneLight& light);
+   Color specularLightAt(RayIntersection intersection, const SceneLight& light);
 
 private: // members
    Scene scene_;
+
+   Vector cameraPosition_;
 
    int imageWidth_;
    int imageHeight_;
