@@ -14,13 +14,13 @@ Ray::~Ray()
 {
 }
 
-Ray Ray::fromTo(Vector from, Vector to)
+Ray Ray::fromPointToPoint(Vector from, Vector to)
 {
    Vector direction = (to - from);
    return Ray(from, direction);
 }
 
-Ray Ray::startDirection(Vector start, Vector direction)
+Ray Ray::fromStartAndDirection(Vector start, Vector direction)
 {
    return Ray(start, direction);
 }

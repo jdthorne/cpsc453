@@ -5,8 +5,8 @@
 // Project
 #include <Sphere.h>
 
-Sphere::Sphere()
-   : SceneObject()
+Sphere::Sphere(Vector position)
+   : SceneObject(position)
    , radius_(5)
 {
 }

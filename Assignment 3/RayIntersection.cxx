@@ -63,7 +63,7 @@ Ray RayIntersection::calculateReflection()
    Vector start = intersectionPoint_;
    Vector direction = incomingRay_.direction().reflected(surfaceNormal_);
 
-   return Ray::startDirection(start, direction);
+   return Ray::fromStartAndDirection(start, direction);
 }
 
 /**
@@ -75,7 +75,7 @@ Ray RayIntersection::calculateReflection()
  */
 PossibleRayIntersection PossibleRayIntersection::noIntersection()
 {
-   RayIntersection nullIntersection = RayIntersection(Ray::fromTo(Vector(), Vector()), 999999, Vector());
+   RayIntersection nullIntersection = RayIntersection(Ray::fromPointToPoint(Vector(), Vector()), 999999, Vector());
    PossibleRayIntersection result = PossibleRayIntersection(nullIntersection);
    result.exists_ = false;
 

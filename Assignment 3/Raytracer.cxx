@@ -42,7 +42,7 @@ Color Raytracer::traceInitialRay(int x, int y)
                                         y - (imageHeight_ / 2),
                                         -1000);
 
-   Ray ray = Ray::fromTo(startPoint, throughVirtualScreen);
+   Ray ray = Ray::fromPointToPoint(startPoint, throughVirtualScreen);
 
    return trace(ray);   
 }
@@ -76,7 +76,7 @@ Color Raytracer::totalDirectLightAt(RayIntersection intersection)
    {
       double distanceToLight = intersection.point().distanceTo(light->position());
       
-      Ray rayToLight = Ray::fromTo(intersection.point(), light->position());
+      Ray rayToLight = Ray::fromPointToPoint(intersection.point(), light->position());
       PossibleRayIntersection objectInTheWay = scene_.findFirstIntersection(rayToLight);
 
       bool shadow = (objectInTheWay.exists() && objectInTheWay.intersection().distance() < distanceToLight);
@@ -100,7 +100,7 @@ Color Raytracer::diffuseLightAt(RayIntersection intersection, const SceneLight& 
    Vector intersectionToLight = (light.position() - intersection.point()).normalized();
 
    double intensity = intersectionToLight.dot(intersection.surfaceNormal());
-   return Color(1, 0, 0) * intensity;
+   return Color(0.5, 0, 0) * intensity;
 }
 
 Color Raytracer::specularLightAt(RayIntersection intersection, const SceneLight& light)
@@ -112,6 +112,6 @@ Color Raytracer::specularLightAt(RayIntersection intersection, const SceneLight&
 
    double intensity = pow(halfVector.dot(intersection.surfaceNormal()), 6);
 
-   return Color(0, 1, 0) * (intensity * 0.5);
+   return Color(0.5, 0, 0) * (intensity * 0.5);
 }
 

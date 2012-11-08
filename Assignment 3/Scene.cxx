@@ -7,7 +7,8 @@
 
 Scene::Scene()
 {
-   objects_.append(new Sphere());
+   objects_.append(new Sphere(Vector(0, 5, 0)));
+   objects_.append(new Sphere(Vector(0, -5, 0)));
    lights_.append(new SceneLight());
 }
 

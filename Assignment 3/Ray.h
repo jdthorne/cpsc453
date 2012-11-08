@@ -20,8 +20,8 @@ class Ray
 public:
    virtual ~Ray();
 
-   static Ray startDirection(Vector start, Vector direction);
-   static Ray fromTo(Vector from, Vector to);
+   static Ray fromStartAndDirection(Vector start, Vector direction);
+   static Ray fromPointToPoint(Vector from, Vector to);
 
 public:
    Vector start();

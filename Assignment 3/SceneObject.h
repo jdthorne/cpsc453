@@ -17,7 +17,7 @@ class SceneObject
 {
 
 public:
-   SceneObject();
+   SceneObject(Vector position);
    virtual ~SceneObject();
 
 public:
