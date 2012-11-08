@@ -19,7 +19,7 @@ public:
    Color(double r, double g, double b);
    virtual ~Color();
 
-   int toQtRgb();
+   unsigned int toQtRgb();
    Color& operator+= (const Color& rhs);
 
 public:

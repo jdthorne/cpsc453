@@ -9,6 +9,7 @@
 // Project
 #include <Ray.h>
 #include <Vector.h>
+#include <Material.h>
 
 /**
  ******************************************************************************
@@ -22,7 +23,7 @@ class RayIntersection
 
 public:
    RayIntersection(Ray incomingRay, double distance,
-                   Vector surfaceNormal);
+                   Vector surfaceNormal, Material material);
    virtual ~RayIntersection();
 
 public: // accessors
@@ -32,6 +33,7 @@ public: // accessors
 
    Vector point();
    Vector surfaceNormal();
+   Material material();
 
 private: // helpers
    Ray calculateReflection();
@@ -44,6 +46,8 @@ private:
 
    Vector intersectionPoint_;
    Ray reflectedRay_;
+
+   Material material_;
 };
 
 /**

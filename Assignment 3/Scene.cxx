@@ -4,11 +4,16 @@
 // Project
 #include <Scene.h>
 #include <Sphere.h>
+#include <Triangle.h>
 
 Scene::Scene()
 {
-   objects_.append(new Sphere(Vector(0, 5, 0)));
-   objects_.append(new Sphere(Vector(0, -5, 0)));
+   objects_.append(new Sphere(Vector(0, 5, 0), Material::redSteel()));
+   objects_.append(new Sphere(Vector(0, -5, 0), Material::blueSteel()));
+   objects_.append(new Triangle(Vector(0, 10, 0), 
+                                Vector(10, 10, 0),
+                                Vector(0, 10, 10),
+                                Material::steel()));
    lights_.append(new SceneLight());
 }
 

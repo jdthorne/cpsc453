@@ -19,11 +19,11 @@ Color::~Color()
 {
 }
 
-int Color::toQtRgb()
+unsigned int Color::toQtRgb()
 {
-   return qRgb(qBound(0.1, r * 255, 254.0), 
-               qBound(0.1, g * 255, 254.0), 
-               qBound(0.1, b * 255, 254.0));
+   return qRgb(qBound(0.0, r * 255.0, 255.0), 
+               qBound(0.0, g * 255.0, 255.0), 
+               qBound(0.0, b * 255.0, 255.0));
 }
 
 Color operator+(const Color& lhs, const Color& rhs)

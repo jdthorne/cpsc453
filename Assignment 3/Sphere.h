@@ -17,7 +17,7 @@ class Sphere : public SceneObject
 {
 
 public:
-   Sphere(Vector postion = Vector(0, 0, 0));
+   Sphere(Vector postion, Material material);
    virtual ~Sphere();
 
 public:

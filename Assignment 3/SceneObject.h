@@ -17,7 +17,7 @@ class SceneObject
 {
 
 public:
-   SceneObject(Vector position);
+   SceneObject(Vector position, Material material);
    virtual ~SceneObject();
 
 public:
@@ -25,7 +25,7 @@ public:
 
 protected: // members
    Vector center_;
-
+   Material material_;
 };
 
 #endif

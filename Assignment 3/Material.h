@@ -19,18 +19,21 @@ class Material
             Color specularColor, 
             double specularity,
             double reflectance);
-   virtual ~Material();
 
 public:
-   static Material& redSteel();
-   static Material& blueSteel();
+   virtual ~Material();
+
+   static Material steel();
+   static Material redSteel();
+   static Material blueSteel();
+   static Material none();
 
 public: // members
-   const Color diffuseColor;
-   const Color specularColor;
-   const double specularity;
+   Color diffuseColor;
+   Color specularColor;
+   double specularity;
 
-   const double reflectance;
+   double reflectance;
 };
 
 #endif

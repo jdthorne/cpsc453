@@ -5,13 +5,15 @@
 #include <RayIntersection.h>
 
 RayIntersection::RayIntersection(Ray incomingRay, double distance,
-                                 Vector surfaceNormal)
+                                 Vector surfaceNormal, Material material)
    : incomingRay_(incomingRay)
    , distance_(distance)
    , surfaceNormal_(surfaceNormal)
 
    , intersectionPoint_(incomingRay_.start() + (incomingRay_.direction() * distance_))
    , reflectedRay_(calculateReflection())
+
+   , material_(material)
 {
 }
 
@@ -51,6 +53,11 @@ Vector RayIntersection::point()
    return intersectionPoint_;
 }
 
+Material RayIntersection::material()
+{
+   return material_;
+}
+
 /**
  ******************************************************************************
  *
@@ -75,7 +82,7 @@ Ray RayIntersection::calculateReflection()
  */
 PossibleRayIntersection PossibleRayIntersection::noIntersection()
 {
-   RayIntersection nullIntersection = RayIntersection(Ray::fromPointToPoint(Vector(), Vector()), 999999, Vector());
+   RayIntersection nullIntersection = RayIntersection(Ray::fromPointToPoint(Vector(), Vector()), 999999, Vector(), Material::none());
    PossibleRayIntersection result = PossibleRayIntersection(nullIntersection);
    result.exists_ = false;
 

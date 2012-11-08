@@ -47,7 +47,7 @@ Color Raytracer::traceInitialRay(int x, int y)
    return trace(ray);   
 }
 
-Color Raytracer::trace(Ray ray)
+Color Raytracer::trace(Ray ray, int depth)
 {
    // See if the ray intersects with an object
    PossibleRayIntersection possibleIntersection = scene_.findFirstIntersection(ray);
@@ -63,9 +63,9 @@ Color Raytracer::trace(Ray ray)
 
    // The resulting color consists of:
    Color directLight = totalDirectLightAt(intersection);
-   Color reflectedLight = totalReflectedLightAt(intersection);
+   //Color reflectedLight = totalReflectedLightAt(intersection, depth);
 
-   return directLight + reflectedLight;
+   return directLight;// + reflectedLight;
 }
 
 Color Raytracer::totalDirectLightAt(RayIntersection intersection)
@@ -90,9 +90,14 @@ Color Raytracer::totalDirectLightAt(RayIntersection intersection)
    return result;
 }
 
-Color Raytracer::totalReflectedLightAt(RayIntersection intersection)
+Color Raytracer::totalReflectedLightAt(RayIntersection intersection, int depth)
 {
-   return Color(0, 0, 0);
+   if (depth > 6 || intersection.material().reflectance == 0.0)
+   {
+      return Color(0, 0, 0);
+   }
+
+   return trace(intersection.reflectedRay(), depth + 1) * intersection.material().reflectance;
 }
 
 Color Raytracer::diffuseLightAt(RayIntersection intersection, const SceneLight& light)
@@ -100,7 +105,7 @@ Color Raytracer::diffuseLightAt(RayIntersection intersection, const SceneLight& 
    Vector intersectionToLight = (light.position() - intersection.point()).normalized();
 
    double intensity = intersectionToLight.dot(intersection.surfaceNormal());
-   return Color(0.5, 0, 0) * intensity;
+   return intersection.material().diffuseColor * intensity;
 }
 
 Color Raytracer::specularLightAt(RayIntersection intersection, const SceneLight& light)
@@ -110,8 +115,10 @@ Color Raytracer::specularLightAt(RayIntersection intersection, const SceneLight&
 
    Vector halfVector = (intersectionToLight + intersectionToViewport).normalized();
 
-   double intensity = pow(halfVector.dot(intersection.surfaceNormal()), 6);
+   Material material = intersection.material();
 
-   return Color(0.5, 0, 0) * (intensity * 0.5);
+   double intensity = pow(halfVector.dot(intersection.surfaceNormal()), material.specularity);
+
+   return material.specularColor * intensity;
 }
 

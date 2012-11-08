@@ -5,8 +5,8 @@
 // Project
 #include <Sphere.h>
 
-Sphere::Sphere(Vector position)
-   : SceneObject(position)
+Sphere::Sphere(Vector position, Material material)
+   : SceneObject(position, material)
    , radius_(5)
 {
 }
@@ -66,6 +66,6 @@ PossibleRayIntersection Sphere::intersectionGivenDistance(Ray ray, double distan
 
    Vector surfaceNormal = relativeIntersectionPoint.normalized();
 
-   return RayIntersection(ray, distance, surfaceNormal);
+   return RayIntersection(ray, distance, surfaceNormal, material_);
 }
 
