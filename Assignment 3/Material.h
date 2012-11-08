@@ -16,8 +16,12 @@
 class Material
 {
    Material(Color diffuseColor,
+            double diffuseIntensity,
+
             Color specularColor, 
-            double specularity,
+            double specularIntensity,
+            double specularSpread,
+
             double reflectance);
 
 public:
@@ -30,8 +34,11 @@ public:
 
 public: // members
    Color diffuseColor;
+   double diffuseIntensity;
+
    Color specularColor;
-   double specularity;
+   double specularIntensity;
+   double specularSpread;
 
    double reflectance;
 };

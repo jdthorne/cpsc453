@@ -275,5 +275,5 @@ double Vector::z() const
  */
 Vector Vector::reflected(const Vector normal) const
 {
-   return (-2 * this->dot(normal) * normal) + *this;
+   return *this - ((2 * this->dot(normal)) * normal);
 }

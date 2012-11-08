@@ -8,7 +8,7 @@
 #include <Raytracer.h>
 
 Raytracer::Raytracer()
-   : cameraPosition_(0, 0, 100)
+   : cameraPosition_(0, 0, 25)
    , imageWidth_(1280 / 2)
    , imageHeight_(720 / 2)
 {
@@ -18,6 +18,13 @@ Raytracer::~Raytracer()
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Main Entry Point
+ *
+ ******************************************************************************
+ */
 QImage Raytracer::run()
 {
    QImage result = QImage(QSize(imageWidth_, imageHeight_), QImage::Format_RGB32);
@@ -34,19 +41,33 @@ QImage Raytracer::run()
    return result;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Raytracing Bootstrap Function
+ *
+ ******************************************************************************
+ */
 Color Raytracer::traceInitialRay(int x, int y)
 {
    Vector startPoint = cameraPosition_;
 
    Vector throughVirtualScreen = Vector(x - (imageWidth_ / 2),
                                         y - (imageHeight_ / 2),
-                                        -1000);
+                                        -350);
 
    Ray ray = Ray::fromPointToPoint(startPoint, throughVirtualScreen);
 
    return trace(ray);   
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Core Raytracing Function
+ *
+ ******************************************************************************
+ */
 Color Raytracer::trace(Ray ray, int depth)
 {
    // See if the ray intersects with an object
@@ -63,11 +84,18 @@ Color Raytracer::trace(Ray ray, int depth)
 
    // The resulting color consists of:
    Color directLight = totalDirectLightAt(intersection);
-   //Color reflectedLight = totalReflectedLightAt(intersection, depth);
+   Color reflectedLight = totalReflectedLightAt(intersection, depth);
 
-   return directLight;// + reflectedLight;
+   return directLight + reflectedLight;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Direct Lighting (e.g. phong)
+ *
+ ******************************************************************************
+ */
 Color Raytracer::totalDirectLightAt(RayIntersection intersection)
 {
    Color result = Color(0, 0, 0);
@@ -90,35 +118,45 @@ Color Raytracer::totalDirectLightAt(RayIntersection intersection)
    return result;
 }
 
+Color Raytracer::diffuseLightAt(RayIntersection intersection, const SceneLight& light)
+{
+   Vector intersectionToLight = (light.position() - intersection.point()).normalized();
+
+   Material material = intersection.material();
+
+   double positionalIntensity = intersectionToLight.dot(intersection.surfaceNormal());
+   return material.diffuseColor * material.diffuseIntensity * positionalIntensity;
+}
+
+Color Raytracer::specularLightAt(RayIntersection intersection, const SceneLight& light)
+{
+   Vector lightVector = (intersection.point() - light.position()).normalized();
+   Vector lightReflectedVector = lightVector.reflected(intersection.surfaceNormal());
+
+   Vector viewportVector = (cameraPosition_ - intersection.point()).normalized();
+
+   Material material = intersection.material();
+
+   double rDotV = qMax(0.0, lightReflectedVector.dot(viewportVector));
+   double positionalIntensity = pow(rDotV, material.specularSpread);
+
+   return material.specularColor * positionalIntensity * material.specularIntensity;
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Reflections
+ *
+ ******************************************************************************
+ */
 Color Raytracer::totalReflectedLightAt(RayIntersection intersection, int depth)
 {
-   if (depth > 6 || intersection.material().reflectance == 0.0)
+   if (depth > 3 || intersection.material().reflectance == 0.0)
    {
       return Color(0, 0, 0);
    }
 
    return trace(intersection.reflectedRay(), depth + 1) * intersection.material().reflectance;
-}
-
-Color Raytracer::diffuseLightAt(RayIntersection intersection, const SceneLight& light)
-{
-   Vector intersectionToLight = (light.position() - intersection.point()).normalized();
-
-   double intensity = intersectionToLight.dot(intersection.surfaceNormal());
-   return intersection.material().diffuseColor * intensity;
-}
-
-Color Raytracer::specularLightAt(RayIntersection intersection, const SceneLight& light)
-{
-   Vector intersectionToLight = (light.position() - intersection.point()).normalized();
-   Vector intersectionToViewport = (cameraPosition_ - intersection.point()).normalized();
-
-   Vector halfVector = (intersectionToLight + intersectionToViewport).normalized();
-
-   Material material = intersection.material();
-
-   double intensity = pow(halfVector.dot(intersection.surfaceNormal()), material.specularity);
-
-   return material.specularColor * intensity;
 }
 

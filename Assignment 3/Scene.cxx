@@ -8,11 +8,11 @@
 
 Scene::Scene()
 {
-   objects_.append(new Sphere(Vector(0, 5, 0), Material::redSteel()));
-   objects_.append(new Sphere(Vector(0, -5, 0), Material::blueSteel()));
-   objects_.append(new Triangle(Vector(0, 10, 0), 
-                                Vector(10, 10, 0),
-                                Vector(0, 10, 10),
+   //objects_.append(new Sphere(Vector(-10, 0, 5), Material::redSteel()));
+   objects_.append(new Sphere(Vector(0, 0, 0), Material::blueSteel()));
+   objects_.append(new Triangle(Vector(0, 5, 0), 
+                                Vector(10, 5, 0),
+                                Vector(0, 5, 10),
                                 Material::steel()));
    lights_.append(new SceneLight());
 }
@@ -39,7 +39,7 @@ PossibleRayIntersection Scene::findFirstIntersection(Ray ray)
    {
       PossibleRayIntersection possibleIntersection = object->findIntersectionWith(ray);
 
-      if (possibleIntersection.exists())
+      if (possibleIntersection.exists() && possibleIntersection.intersection().distance() > 0.01)
       {
          if (!bestIntersection.exists())
          {
@@ -55,16 +55,3 @@ PossibleRayIntersection Scene::findFirstIntersection(Ray ray)
 
    return bestIntersection;
 }
-
-
-/**
- ******************************************************************************
- *
- *                   So, the scene right now is:
- *                
- *        Sphere is at (0, 0, 0)
- *        Camera is at (0, 0, 100), looking along -Z
- *        Light is at  (25, 25, 50)
- *
- ******************************************************************************
- */

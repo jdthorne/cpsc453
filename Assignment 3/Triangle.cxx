@@ -8,7 +8,7 @@ Triangle::Triangle(Vector position, Vector pointTwo, Vector pointThree, Material
    : SceneObject(position, material)
    , pointTwo_(pointTwo)
    , pointThree_(pointThree)
-   , normal_( (pointTwo - position).cross(pointThree - position) )
+   , normal_( (pointTwo - position).cross(pointThree - position).normalized() )
 {
 }
 
