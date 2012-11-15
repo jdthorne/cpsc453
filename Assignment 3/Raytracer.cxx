@@ -82,11 +82,20 @@ Color Raytracer::trace(Ray ray, int depth)
    // Otherwise, grab the intersection
    RayIntersection intersection = possibleIntersection.intersection();
 
-   // The resulting color consists of:
-   Color directLight = totalDirectLightAt(intersection);
-   Color reflectedLight = totalReflectedLightAt(intersection, depth);
+   Color surfaceColor = totalDirectLightAt(intersection) 
+                        + totalReflectedLightAt(intersection, depth);
 
-   return directLight + reflectedLight;
+   double transparency = intersection.material().transparency;
+   if (transparency == 0.0)
+   {
+      return surfaceColor;
+   }
+   else
+   {
+      Color transmittedColor = totalRefractedLightAt(intersection, depth);
+
+      return Color::mix(transmittedColor, surfaceColor, transparency);
+   }
 }
 
 /**
@@ -125,7 +134,7 @@ Color Raytracer::diffuseLightAt(RayIntersection intersection, const Light& light
    Material material = intersection.material();
 
    double positionalIntensity = intersectionToLight.dot(intersection.surfaceNormal());
-   return material.diffuseColor * material.diffuseIntensity * positionalIntensity;
+   return (material.diffuseColor * light.color()) * material.diffuseIntensity * positionalIntensity;
 }
 
 Color Raytracer::specularLightAt(RayIntersection intersection, const Light& light)
@@ -140,7 +149,7 @@ Color Raytracer::specularLightAt(RayIntersection intersection, const Light& ligh
    double rDotV = qMax(0.0, lightReflectedVector.dot(viewportVector));
    double positionalIntensity = pow(rDotV, material.specularSpread);
 
-   return material.specularColor * positionalIntensity * material.specularIntensity;
+   return (material.specularColor * light.color()) * positionalIntensity * material.specularIntensity;
 }
 
 /**
@@ -158,4 +167,23 @@ Color Raytracer::totalReflectedLightAt(RayIntersection intersection, int depth)
    }
 
    return trace(intersection.reflectedRay(), depth + 1) * intersection.material().reflectance;
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Refractions
+ *
+ ******************************************************************************
+ */
+Color Raytracer::totalRefractedLightAt(RayIntersection intersection, int depth)
+{
+   if (depth > 3 || intersection.material().transparency == 0.0)
+   {
+      return Color(0, 0, 0);
+   }
+
+   Ray continuingRay = Ray::fromStartAndDirection(intersection.point(), 
+                                                  intersection.incomingRay().direction());
+   return trace(continuingRay, depth + 1) * intersection.material().transparency;
 }

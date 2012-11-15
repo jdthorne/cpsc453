@@ -22,14 +22,18 @@ class Material
             double specularIntensity,
             double specularSpread,
 
-            double reflectance);
+            double reflectance = 0.0,
+            double refraction = 0.0,
+            double transparency = 0.0);
 
 public:
    virtual ~Material();
 
    static Material steel();
    static Material redSteel();
-   static Material blueSteel();
+   static Material glass();
+   static Material bluePlastic();
+   static Material yellowPlastic();
    static Material none();
 
 public: // members
@@ -41,6 +45,8 @@ public: // members
    double specularSpread;
 
    double reflectance;
+   double refraction;
+   double transparency;
 };
 
 #endif

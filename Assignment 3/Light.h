@@ -5,6 +5,7 @@
 
 // Project
 #include <Vector.h>
+#include <Color.h>
 
 /**
  ******************************************************************************
@@ -17,16 +18,18 @@ class Light
 {
 
 public:
-   Light();
+   Light(Vector position, Color color);
    virtual ~Light();
 
 public:
    Vector position() const;
+   Color color() const;
 
 private: // helpers
 
 private: // members
    Vector position_;
+   Color color_;
 };
 
 #endif

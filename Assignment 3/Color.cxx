@@ -46,3 +46,16 @@ Color operator*(const Color& lhs, double value)
                  lhs.g * value,
                  lhs.b * value );
 }
+
+Color operator*(const Color& lhs, const Color& rhs)
+{
+   return Color( lhs.r * rhs.r,
+                 lhs.g * rhs.g,
+                 lhs.b * rhs.b );
+}
+
+Color Color::mix(Color c1, Color c2, double mix)
+{
+   return (c1 * mix) + (c2 * (1.0 - mix));
+}
+
