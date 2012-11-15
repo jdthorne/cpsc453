@@ -4,11 +4,12 @@
 // Project
 #include <Triangle.h>
 
-Triangle::Triangle(Vector position, Vector pointTwo, Vector pointThree, Material material)
-   : SceneObject(position, material)
-   , pointTwo_(pointTwo)
-   , pointThree_(pointThree)
-   , normal_( (pointTwo - position).cross(pointThree - position).normalized() )
+Triangle::Triangle(Vector p1, Vector p2, Vector p3, Material material)
+   : SceneObject(p1, material)
+   , p1_(p1)
+   , p2_(p2)
+   , p3_(p3)
+   , normal_( (p2 - p1).cross(p3 - p1).normalized() )
 {
 }
 
@@ -25,8 +26,7 @@ PossibleRayIntersection Triangle::findIntersectionWith(Ray ray)
       return PossibleRayIntersection::noIntersection();
    }
 
-   double numerator = (center_ - ray.start()).dot(normal_);
-
+   double numerator = (origin_ - ray.start()).dot(normal_);
    double distance = numerator / denominator;
 
    if (distance < 0)
@@ -34,6 +34,16 @@ PossibleRayIntersection Triangle::findIntersectionWith(Ray ray)
       return PossibleRayIntersection::noIntersection();
    }
 
+   Vector p = ray.start() + (ray.direction() * distance);
+
+   double x = ( (p - p1_).normalized()
+              + (p - p2_).normalized()
+              + (p - p3_).normalized() ).magnitude();
+
+   if (x > 1)
+   {
+      return PossibleRayIntersection::noIntersection();
+   }
+
    return RayIntersection(ray, distance, normal_, material_);
 }
-

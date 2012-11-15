@@ -24,7 +24,7 @@ public:
    virtual PossibleRayIntersection findIntersectionWith(Ray ray) = 0;
 
 protected: // members
-   Vector center_;
+   Vector origin_;
    Material material_;
 };
 

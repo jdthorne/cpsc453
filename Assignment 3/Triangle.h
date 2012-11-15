@@ -18,7 +18,7 @@ class Triangle : public SceneObject
 {
 
 public:
-   Triangle(Vector position, Vector pointTwo, Vector pointThree, Material material);
+   Triangle(Vector p1, Vector p2, Vector p3, Material material);
    virtual ~Triangle();
 
 public:
@@ -27,8 +27,9 @@ public:
 private: // helpers
 
 private: // members
-   Vector pointTwo_;
-   Vector pointThree_;
+   Vector p1_;
+   Vector p2_;
+   Vector p3_;
 
    Vector normal_;
 };

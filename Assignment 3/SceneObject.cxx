@@ -5,7 +5,7 @@
 #include <SceneObject.h>
 
 SceneObject::SceneObject(Vector position, Material material)
-   : center_(position)
+   : origin_(position)
    , material_(material)
 {
 

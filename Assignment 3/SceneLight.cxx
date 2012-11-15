@@ -5,7 +5,7 @@
 #include <SceneLight.h>
 
 SceneLight::SceneLight()
-   : position_(25, 0, 15)
+   : position_(10, 0, 15)
 {
 
 }

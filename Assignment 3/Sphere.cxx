@@ -18,7 +18,7 @@ Sphere::~Sphere()
 PossibleRayIntersection Sphere::findIntersectionWith(Ray ray)
 {
    Vector line = ray.direction();
-   Vector relativeCenter = (center_ - ray.start());
+   Vector relativeCenter = (origin_ - ray.start());
 
    double lineDotCenterSquared = pow(line.dot(relativeCenter), 2);
    double centerSquared = pow(relativeCenter.magnitude(), 2);
@@ -62,7 +62,7 @@ PossibleRayIntersection Sphere::intersectionGivenDistance(Ray ray, double distan
    }
 
    Vector intersectionPoint = ray.start() + (ray.direction() * distance);
-   Vector relativeIntersectionPoint = intersectionPoint - center_;
+   Vector relativeIntersectionPoint = intersectionPoint - origin_;
 
    Vector surfaceNormal = relativeIntersectionPoint.normalized();
 
