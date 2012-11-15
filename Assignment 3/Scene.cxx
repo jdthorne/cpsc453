@@ -14,7 +14,7 @@ Scene::Scene()
                                 Vector(10, 5, 0),
                                 Vector(0, 5, 10),
                                 Material::steel()));
-   lights_.append(new SceneLight());
+   lights_.append(new Light());
 }
 
 Scene::~Scene()
@@ -26,7 +26,7 @@ QList<SceneObject*>& Scene::objects()
    return objects_;
 }
 
-QList<SceneLight*>& Scene::lights()
+QList<Light*>& Scene::lights()
 {
    return lights_;
 }

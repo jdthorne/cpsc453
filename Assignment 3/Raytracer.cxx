@@ -100,7 +100,7 @@ Color Raytracer::totalDirectLightAt(RayIntersection intersection)
 {
    Color result = Color(0, 0, 0);
 
-   foreach (SceneLight* light, scene_.lights())
+   foreach (Light* light, scene_.lights())
    {
       double distanceToLight = intersection.point().distanceTo(light->position());
       
@@ -118,7 +118,7 @@ Color Raytracer::totalDirectLightAt(RayIntersection intersection)
    return result;
 }
 
-Color Raytracer::diffuseLightAt(RayIntersection intersection, const SceneLight& light)
+Color Raytracer::diffuseLightAt(RayIntersection intersection, const Light& light)
 {
    Vector intersectionToLight = (light.position() - intersection.point()).normalized();
 
@@ -128,7 +128,7 @@ Color Raytracer::diffuseLightAt(RayIntersection intersection, const SceneLight& 
    return material.diffuseColor * material.diffuseIntensity * positionalIntensity;
 }
 
-Color Raytracer::specularLightAt(RayIntersection intersection, const SceneLight& light)
+Color Raytracer::specularLightAt(RayIntersection intersection, const Light& light)
 {
    Vector lightVector = (intersection.point() - light.position()).normalized();
    Vector lightReflectedVector = lightVector.reflected(intersection.surfaceNormal());

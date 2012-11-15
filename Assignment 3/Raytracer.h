@@ -35,8 +35,8 @@ private: // helpers
    Color totalDirectLightAt(RayIntersection intersection);
    Color totalReflectedLightAt(RayIntersection intersection, int depth);
 
-   Color diffuseLightAt(RayIntersection intersection, const SceneLight& light);
-   Color specularLightAt(RayIntersection intersection, const SceneLight& light);
+   Color diffuseLightAt(RayIntersection intersection, const Light& light);
+   Color specularLightAt(RayIntersection intersection, const Light& light);
 
 private: // members
    Scene scene_;

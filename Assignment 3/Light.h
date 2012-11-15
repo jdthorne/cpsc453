@@ -9,16 +9,16 @@
 /**
  ******************************************************************************
  *
- *                   SceneLight
+ *                   Light
  *
  ******************************************************************************
  */
-class SceneLight
+class Light
 {
 
 public:
-   SceneLight();
-   virtual ~SceneLight();
+   Light();
+   virtual ~Light();
 
 public:
    Vector position() const;
