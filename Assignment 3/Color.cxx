@@ -8,11 +8,10 @@
 #include <Color.h>
 
 Color::Color(double r, double g, double b)
-   : r(r)
-   , g(g)
-   , b(b)
+   : r(qBound(0.0, r, 1.0))
+   , g(qBound(0.0, g, 1.0))
+   , b(qBound(0.0, b, 1.0))
 {
-
 }
 
 Color::~Color()

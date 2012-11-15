@@ -159,4 +159,3 @@ Color Raytracer::totalReflectedLightAt(RayIntersection intersection, int depth)
 
    return trace(intersection.reflectedRay(), depth + 1) * intersection.material().reflectance;
 }
-

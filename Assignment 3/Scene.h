@@ -9,6 +9,7 @@
 // Project
 #include <SceneObject.h>
 #include <Light.h>
+#include <Group.h>
 
 /**
  ******************************************************************************
@@ -25,7 +26,6 @@ public:
    virtual ~Scene();
 
 public:
-   QList<SceneObject*>& objects();
    QList<Light*>& lights();
 
    PossibleRayIntersection findFirstIntersection(Ray ray);
@@ -33,7 +33,7 @@ public:
 private: // helpers
 
 private: // members
-   QList<SceneObject*> objects_;
+   Group root_;
    QList<Light*> lights_;
 
 };
