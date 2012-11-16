@@ -11,8 +11,17 @@ Quad::Quad(Vector p1, Vector p2, Vector p3, Vector p4, Material material)
            p1,
            material)
 {
-
 }
+
+Quad* Quad::newFromFile(PropertyList properties)
+{
+   return new Quad(properties.vector("P1"),
+                   properties.vector("P2"),
+                   properties.vector("P3"),
+                   properties.vector("P4"),
+                   properties.material("Material"));
+}
+
 
 Quad::~Quad()
 {

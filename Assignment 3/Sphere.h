@@ -5,6 +5,7 @@
 
 // Project
 #include <SceneObject.h>
+#include <PropertyList.h>
 
 /**
  ******************************************************************************
@@ -17,8 +18,10 @@ class Sphere : public SceneObject
 {
 
 public:
-   Sphere(Vector postion, Material material);
+   Sphere(Vector postion, double radius, Material material);
    virtual ~Sphere();
+
+   static Sphere* newFromFile(PropertyList properties);
 
 public:
    virtual PossibleRayIntersection findIntersectionWith(Ray ray);

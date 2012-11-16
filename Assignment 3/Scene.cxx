@@ -1,6 +1,11 @@
 
 // System
 
+// Qt
+#include <QFile>
+#include <QTextStream>
+#include <QStringList>
+
 // Project
 #include <Scene.h>
 #include <Sphere.h>
@@ -9,22 +14,7 @@
 Scene::Scene()
    : root_(Vector(0, 0, 0), Material::none())
 {
-   root_.addObject(new Sphere(Vector(0, 0, 0), Material::glass()));
-   root_.addObject(new Sphere(Vector(10, 0, 0), Material::bluePlastic()));
-   root_.addObject(new Sphere(Vector(-10, 0, 0), Material::redSteel()));
-
-   root_.addObject(new Sphere(Vector(0, 0, -15), Material::yellowPlastic()));
-
-   root_.addObject(new Quad(Vector(-20, 5, -20),
-                            Vector(+20, 5, -20),
-                            Vector(+20, 5, +20),
-                            Vector(-20, 5, +20),
-                            Material::steel()));
-
-   //lights_.append(new Light(Vector(15, -5, 25), Color(0.3, 0.3, 0.3)));
-   //lights_.append(new Light(Vector(-15, -5, 25), Color(0.3, 0.3, 0.3)));
-   lights_.append(new Light(Vector(0, -25, 0), Color(0.6, 0.6, 0.6)));
-   lights_.append(new Light(Vector(0, 0, 10), Color(0.6, 0.6, 0.6)));
+   loadFromFile("Spherical.scene");
 }
 
 Scene::~Scene()
@@ -40,3 +30,48 @@ PossibleRayIntersection Scene::findFirstIntersection(Ray ray)
 {
    return root_.findIntersectionWith(ray);
 }
+
+void Scene::loadFromFile(QString filename)
+{
+   QFile file(filename);
+   file.open(QFile::ReadOnly);
+
+   QTextStream stream(&file);
+   while (!stream.atEnd())
+   {
+      QString line = QString(file.readLine()).trimmed();
+
+      if (line.length() < 2 || !line.contains(":"))
+      {
+         continue;
+      }
+
+      QStringList components = line.split(":");
+
+      QString type = components[0].trimmed();
+      QString properties = components[1].trimmed();
+
+      addObjectFromFile(type, properties);
+   }
+}
+
+void Scene::addObjectFromFile(QString type, QString properties)
+{
+   if (type == "Sphere")
+   {
+      root_.addObject(Sphere::newFromFile(properties));
+   }
+   else if (type == "Quad")
+   {
+      root_.addObject(Quad::newFromFile(properties));
+   }
+   else if (type == "Light")
+   {
+      lights_.append(Light::newFromFile(properties));
+   }
+   else
+   {
+      qDebug("Unknown object type: '%s'", qPrintable(type));
+   }
+}
+

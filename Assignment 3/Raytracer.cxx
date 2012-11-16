@@ -58,7 +58,7 @@ Color Raytracer::traceInitialRay(int x, int y)
 
    Ray ray = Ray::fromPointToPoint(startPoint, throughVirtualScreen);
 
-   return trace(ray);   
+   return trace(ray);
 }
 
 /**

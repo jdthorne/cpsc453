@@ -5,10 +5,17 @@
 // Project
 #include <Sphere.h>
 
-Sphere::Sphere(Vector position, Material material)
+Sphere::Sphere(Vector position, double radius, Material material)
    : SceneObject(position, material)
-   , radius_(5)
+   , radius_(radius)
 {
+}
+
+Sphere* Sphere::newFromFile(PropertyList properties)
+{
+   return new Sphere(properties.vector("Position"), 
+                     properties.scalar("Radius"),
+                     properties.material("Material"));
 }
 
 Sphere::~Sphere()

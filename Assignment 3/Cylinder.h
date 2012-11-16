@@ -1,34 +1,32 @@
-#ifndef QUAD_H
-#define QUAD_H
+#ifndef CYLINDER_H
+#define CYLINDER_H
 
 // System
 
 // Project
 #include <Group.h>
-#include <PropertyList.h>
 
 /**
  ******************************************************************************
  *
- *                   Quad
+ *                   Cylinder
  *
  ******************************************************************************
  */
-class Quad : public Group
+class Cylinder : public Group
 {
 
 public:
-   Quad(Vector p1, Vector p2, Vector p3, Vector p4, Material material);
-   virtual ~Quad();
-
-   static Quad* newFromFile(PropertyList properties);
+   Cylinder(Vector position, double height, double radius, Material material);
+   virtual ~Cylinder();
 
 public:
 
 private: // helpers
 
 private: // members
-
+   double height_;
+   double radius_;
 };
 
 #endif

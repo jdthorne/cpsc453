@@ -3,6 +3,9 @@
 
 // System
 
+// Qt
+#include <QString>
+
 // Project
 #include <Color.h>
 
@@ -35,6 +38,8 @@ public:
    static Material bluePlastic();
    static Material yellowPlastic();
    static Material none();
+
+   static Material named(QString name);
 
 public: // members
    Color diffuseColor;

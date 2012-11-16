@@ -32,6 +32,31 @@ Material::~Material()
 {
 }
 
+Material Material::named(QString name)
+{
+   if (name == "steel")
+   {
+      return Material::steel();
+   }
+   else if (name == "redSteel")
+   {
+      return Material::redSteel();
+   }
+   else if (name == "bluePlastic")
+   {
+      return Material::bluePlastic();
+   }
+   else if (name == "yellowPlastic")
+   {
+      return Material::yellowPlastic();
+   }
+   else
+   {
+      qDebug("Unknown material '%s'", qPrintable(name));
+      return Material::none();
+   }  
+}
+
 Material Material::steel()
 {
    static Material material = Material(Color(0.75, 0.75, 0.75),

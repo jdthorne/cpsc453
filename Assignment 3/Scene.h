@@ -31,6 +31,8 @@ public:
    PossibleRayIntersection findFirstIntersection(Ray ray);
 
 private: // helpers
+   void loadFromFile(QString filename);
+   void addObjectFromFile(QString type, QString properties);
 
 private: // members
    Group root_;

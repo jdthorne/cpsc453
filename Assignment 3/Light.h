@@ -6,6 +6,7 @@
 // Project
 #include <Vector.h>
 #include <Color.h>
+#include <PropertyList.h>
 
 /**
  ******************************************************************************
@@ -20,6 +21,8 @@ class Light
 public:
    Light(Vector position, Color color);
    virtual ~Light();
+
+   static Light* newFromFile(PropertyList properties);
 
 public:
    Vector position() const;
