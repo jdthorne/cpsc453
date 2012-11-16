@@ -10,6 +10,8 @@
 #include <Scene.h>
 #include <Color.h>
 
+#include <RaytracerStatus.h>
+
 /**
  ******************************************************************************
  *
@@ -28,14 +30,15 @@ public:
    QImage run();
 
 private: // helpers
-   Color trace(Ray ray, int depth = 0);
+   Color trace(Ray ray, RaytracerStatus status = RaytracerStatus());
 
    Color traceInitialRay(int x, int y);
 
    Color totalDirectLightAt(RayIntersection intersection);
-   Color totalReflectedLightAt(RayIntersection intersection, int depth);
-   Color totalRefractedLightAt(RayIntersection intersection, int depth);
+   Color totalReflectedLightAt(RayIntersection intersection, RaytracerStatus status);
+   Color totalRefractedLightAt(RayIntersection intersection, RaytracerStatus status);
 
+   Color ambientLightAt(RayIntersection intersection);
    Color diffuseLightAt(RayIntersection intersection, const Light& light);
    Color specularLightAt(RayIntersection intersection, const Light& light);
 

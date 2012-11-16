@@ -37,6 +37,7 @@ public:
    static Material glass();
    static Material bluePlastic();
    static Material yellowPlastic();
+   static Material greenPlastic();
    static Material none();
 
    static Material named(QString name);

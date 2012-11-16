@@ -6,6 +6,7 @@
 // Project
 #include <Vector.h>
 #include <SceneObject.h>
+#include <PropertyList.h>
 
 /**
  ******************************************************************************
@@ -20,6 +21,7 @@ class Triangle : public SceneObject
 public:
    Triangle(Vector p1, Vector p2, Vector p3, Material material);
    virtual ~Triangle();
+   static Triangle* newFromFile(PropertyList properties);
 
 public:
    virtual PossibleRayIntersection findIntersectionWith(Ray ray);

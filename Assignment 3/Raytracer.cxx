@@ -68,7 +68,7 @@ Color Raytracer::traceInitialRay(int x, int y)
  *
  ******************************************************************************
  */
-Color Raytracer::trace(Ray ray, int depth)
+Color Raytracer::trace(Ray ray, RaytracerStatus status)
 {
    // See if the ray intersects with an object
    PossibleRayIntersection possibleIntersection = scene_.findFirstIntersection(ray);
@@ -82,20 +82,19 @@ Color Raytracer::trace(Ray ray, int depth)
    // Otherwise, grab the intersection
    RayIntersection intersection = possibleIntersection.intersection();
 
+   // If we're leaving an object, just calculate the refraction
+   if (status.rayIsInsideObject())
+   {
+      //return Color(1, 0, 0);
+      //return totalRefractedLightAt(intersection, status);
+   }
+
+   // Otherwise, calculate the surface color
    Color surfaceColor = totalDirectLightAt(intersection) 
-                        + totalReflectedLightAt(intersection, depth);
+                        + totalReflectedLightAt(intersection, status)
+                        + totalRefractedLightAt(intersection, status);
 
-   double transparency = intersection.material().transparency;
-   if (transparency == 0.0)
-   {
-      return surfaceColor;
-   }
-   else
-   {
-      Color transmittedColor = totalRefractedLightAt(intersection, depth);
-
-      return Color::mix(transmittedColor, surfaceColor, transparency);
-   }
+   return surfaceColor;
 }
 
 /**
@@ -107,7 +106,7 @@ Color Raytracer::trace(Ray ray, int depth)
  */
 Color Raytracer::totalDirectLightAt(RayIntersection intersection)
 {
-   Color result = Color(0, 0, 0);
+   Color result = ambientLightAt(intersection);
 
    foreach (Light* light, scene_.lights())
    {
@@ -127,13 +126,18 @@ Color Raytracer::totalDirectLightAt(RayIntersection intersection)
    return result;
 }
 
+Color Raytracer::ambientLightAt(RayIntersection intersection)
+{
+   return scene_.ambientLight() * intersection.material().diffuseColor;
+}
+
 Color Raytracer::diffuseLightAt(RayIntersection intersection, const Light& light)
 {
    Vector intersectionToLight = (light.position() - intersection.point()).normalized();
 
    Material material = intersection.material();
 
-   double positionalIntensity = intersectionToLight.dot(intersection.surfaceNormal());
+   double positionalIntensity = fabs(intersectionToLight.dot(intersection.surfaceNormal()));
    return (material.diffuseColor * light.color()) * material.diffuseIntensity * positionalIntensity;
 }
 
@@ -159,14 +163,15 @@ Color Raytracer::specularLightAt(RayIntersection intersection, const Light& ligh
  *
  ******************************************************************************
  */
-Color Raytracer::totalReflectedLightAt(RayIntersection intersection, int depth)
+Color Raytracer::totalReflectedLightAt(RayIntersection intersection, RaytracerStatus status)
 {
-   if (depth > 3 || intersection.material().reflectance == 0.0)
+   if (status.outOfDepth() || intersection.material().reflectance == 0.0)
    {
       return Color(0, 0, 0);
    }
 
-   return trace(intersection.reflectedRay(), depth + 1) * intersection.material().reflectance;
+   Color reflectedColor = trace(intersection.reflectedRay(), status.nextRecursion());
+   return reflectedColor * intersection.material().reflectance;
 }
 
 /**
@@ -176,14 +181,39 @@ Color Raytracer::totalReflectedLightAt(RayIntersection intersection, int depth)
  *
  ******************************************************************************
  */
-Color Raytracer::totalRefractedLightAt(RayIntersection intersection, int depth)
+Color Raytracer::totalRefractedLightAt(RayIntersection intersection, RaytracerStatus status)
 {
-   if (depth > 3 || intersection.material().transparency == 0.0)
+   if (status.outOfDepth() || intersection.material().transparency == 0.0)
    {
       return Color(0, 0, 0);
    }
 
+   double refraction = intersection.material().refraction;
+
+   //if (status.rayIsInsideObject())
+   //{
+   //   qDebug("OH HAI");
+   //   return Color(1, 0, 0);
+   //   refraction = 1.0 / refraction;
+  // }
+
+   Vector incoming = intersection.incomingRay().direction();
+   Vector normal = intersection.surfaceNormal();
+
+   double cosi = (incoming * -1).dot(normal);
+   double cost2 = 1.0 - pow(refraction, 2) * (1 - pow(cosi, 2));
+
+   if (cost2 <= 0)
+   {
+      return Color(0, 0, 0);
+   }  
+
+   Vector refractedRay = (incoming * refraction) + (normal * (refraction * cosi - sqrt(fabs(cost2))));
+
    Ray continuingRay = Ray::fromStartAndDirection(intersection.point(), 
-                                                  intersection.incomingRay().direction());
-   return trace(continuingRay, depth + 1) * intersection.material().transparency;
+                                                  refractedRay);
+
+
+   Color refractedColor = trace(continuingRay, status.nextRecursionDueToRefraction());
+   return refractedColor * intersection.material().transparency;
 }

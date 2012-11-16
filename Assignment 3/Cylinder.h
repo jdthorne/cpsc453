@@ -4,7 +4,8 @@
 // System
 
 // Project
-#include <Group.h>
+#include <SceneObject.h>
+#include <PropertyList.h>
 
 /**
  ******************************************************************************
@@ -13,20 +14,25 @@
  *
  ******************************************************************************
  */
-class Cylinder : public Group
+class Cylinder : public SceneObject
 {
 
 public:
    Cylinder(Vector position, double height, double radius, Material material);
    virtual ~Cylinder();
 
+   static Cylinder* newFromFile(PropertyList properties);
+
 public:
+   virtual PossibleRayIntersection findIntersectionWith(Ray ray);
 
 private: // helpers
 
 private: // members
    double height_;
    double radius_;
+
+   Vector axis_;
 };
 
 #endif

@@ -5,16 +5,20 @@
 #include <QFile>
 #include <QTextStream>
 #include <QStringList>
+#include <QCoreApplication>
 
 // Project
 #include <Scene.h>
 #include <Sphere.h>
 #include <Quad.h>
+#include <Cylinder.h>
+#include <Triangle.h>
 
 Scene::Scene()
-   : root_(Vector(0, 0, 0), Material::none())
+   : ambientLight_(0.1, 0.1, 0.1)
+   , root_(Vector(0, 0, 0), Material::none())
 {
-   loadFromFile("Spherical.scene");
+   loadFromFile(QCoreApplication::arguments()[1]);
 }
 
 Scene::~Scene()
@@ -41,7 +45,7 @@ void Scene::loadFromFile(QString filename)
    {
       QString line = QString(file.readLine()).trimmed();
 
-      if (line.length() < 2 || !line.contains(":"))
+      if (line.length() < 2 || !line.contains(":") || line.startsWith("#"))
       {
          continue;
       }
@@ -65,6 +69,14 @@ void Scene::addObjectFromFile(QString type, QString properties)
    {
       root_.addObject(Quad::newFromFile(properties));
    }
+   else if (type == "Cylinder")
+   {
+      root_.addObject(Cylinder::newFromFile(properties));
+   }
+   else if (type == "Triangle")
+   {
+      root_.addObject(Triangle::newFromFile(properties));
+   }
    else if (type == "Light")
    {
       lights_.append(Light::newFromFile(properties));
@@ -73,5 +85,10 @@ void Scene::addObjectFromFile(QString type, QString properties)
    {
       qDebug("Unknown object type: '%s'", qPrintable(type));
    }
+}
+
+Color Scene::ambientLight()
+{
+   return ambientLight_;
 }
 

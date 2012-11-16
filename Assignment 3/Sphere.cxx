@@ -55,9 +55,14 @@ PossibleRayIntersection Sphere::findIntersectionWith(Ray ray)
       double distanceA = lineDotCenter + squareRoot;
       double distanceB = lineDotCenter - squareRoot;
 
-      double shortestDistance = qMin(distanceA, distanceB);
+      if (distanceA < 0 && distanceB < 0)
+      {
+         return PossibleRayIntersection::noIntersection();
+      }
 
-      return intersectionGivenDistance(ray, shortestDistance);
+      double distance = qMin(distanceA, distanceB);
+
+      return intersectionGivenDistance(ray, distance);
    }
  }
 

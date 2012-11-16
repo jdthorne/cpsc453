@@ -50,6 +50,14 @@ Material Material::named(QString name)
    {
       return Material::yellowPlastic();
    }
+   else if (name == "greenPlastic")
+   {
+      return Material::greenPlastic();
+   }
+   else if (name == "glass")
+   {
+      return Material::glass();
+   }
    else
    {
       qDebug("Unknown material '%s'", qPrintable(name));
@@ -64,7 +72,7 @@ Material Material::steel()
 
                                        Color(0.5, 0.5, 0.5),
                                        0.5,
-                                       6.0,
+                                       12.0,
 
                                        0.5);
 
@@ -78,7 +86,7 @@ Material Material::redSteel()
 
                                        Color(1, 1, 1),
                                        0.5,
-                                       6.0,
+                                       12.0,
 
                                        0.25);
 
@@ -90,12 +98,16 @@ Material Material::glass()
    static Material material = Material(Color(0.5, 0.5, 0.5),
                                        0.5,
 
+                                       // Specular
                                        Color(1, 1, 1),
                                        0.5,
                                        20.0,
 
-                                       0.25,
+                                       // Reflection
                                        0.0,
+
+                                       // Refraction
+                                       1.2,
                                        0.75);
 
    return material;
@@ -108,7 +120,7 @@ Material Material::bluePlastic()
 
                                        Color(1, 1, 1),
                                        0.5,
-                                       5.0,
+                                       2.0,
 
                                        0.0);
 
@@ -122,7 +134,21 @@ Material Material::yellowPlastic()
 
                                        Color(1, 1, 1),
                                        0.5,
-                                       5.0,
+                                       2.0,
+
+                                       0.0);
+
+   return material;
+}
+
+Material Material::greenPlastic()
+{
+   static Material material = Material(Color(0.35, 1.0, 0.35),
+                                       0.5,
+
+                                       Color(1, 1, 1),
+                                       0.5,
+                                       2.0,
 
                                        0.0);
 

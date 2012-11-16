@@ -29,12 +29,15 @@ public:
    QList<Light*>& lights();
 
    PossibleRayIntersection findFirstIntersection(Ray ray);
+   Color ambientLight();
 
 private: // helpers
    void loadFromFile(QString filename);
    void addObjectFromFile(QString type, QString properties);
 
 private: // members
+   Color ambientLight_;
+
    Group root_;
    QList<Light*> lights_;
 

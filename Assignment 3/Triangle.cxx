@@ -17,6 +17,14 @@ Triangle::~Triangle()
 {
 }
 
+Triangle* Triangle::newFromFile(PropertyList properties)
+{
+   return new Triangle(properties.vector("P1"),
+                       properties.vector("P2"),
+                       properties.vector("P3"),
+                       properties.material("Material"));
+}
+
 PossibleRayIntersection Triangle::findIntersectionWith(Ray ray)
 {
    double denominator = ray.direction().dot(normal_);
