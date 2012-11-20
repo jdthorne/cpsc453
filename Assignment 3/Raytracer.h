@@ -23,10 +23,11 @@ class Raytracer
 {
 
 public:
-   Raytracer();
+   Raytracer(Scene& scene);
    virtual ~Raytracer();
 
 public:
+   bool running();
    QImage run();
 
 private: // helpers
@@ -43,12 +44,15 @@ private: // helpers
    Color specularLightAt(RayIntersection intersection, const Light& light);
 
 private: // members
-   Scene scene_;
+   Scene& scene_;
+   QImage result_;
 
    Vector cameraPosition_;
 
    int imageWidth_;
    int imageHeight_;
+
+   int y_;
 };
 
 #endif

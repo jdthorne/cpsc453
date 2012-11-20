@@ -1,0 +1,193 @@
+
+                           ======================
+                                  README
+                           ======================
+
+========================================================================================
+Welcome to CPSC453 Assignment 3!
+
+
+Student Name: James Donald Thorne
+Student ID:   10018506
+
+
+Target Platform:
+   This assignment has been tested to run on the computers in MS239.
+
+
+Compiling and Running:
+   To compile and run this assignment, go to the assignment folder and type:
+
+   $ make
+   $ ./assignment3
+
+
+Brief User Manual:
+   To use this assignment, run the application, select a scene, and click "Render".
+   The scene will be rendered, and displayed in the window as it is completed.  
+
+   Once the render is complete, you can optionally save it by clicking "Save Image".
+
+
+   You can also create additional scenes by creating and editing ".scene" files.  Please
+   take a look at the included sample files for reference; the file format is generally:
+
+      ObjectType: Property = Value, Property = Value, Property = Value
+
+   Possible objects are:
+
+      Triangle: P1 = [x], [y], [z]; P2 = [x], [y], [z]; P3 = [x], [y], [z]; Material = [material]
+      Quad: P1 = [x], [y], [z]; P2 = [x], [y], [z]; P3 = [x], [y], [z]; P4 = [x], [y], [z]; Material = [material]
+      Light: Position = [x], [y], [z]; Color = [r], [g], [b]
+      Cylinder: Position = [x], [y], [z]; Normal = [x], [y], [z]; Height = [h]; Radius = [r]; Material = [material]
+      Sphere: Position = [x], [y], [z]; Radius = [r]; Material = [material]
+
+
+Data-Structures Used:
+   Color
+      This structure represents a rgb color, with three color channels (r, g, b) stored as
+      double-precision floating point values between 0.0 and 1.0.
+
+   Ray
+      The Ray structure represents a single ray being traced.  It consists of a start point
+      (represented by a vector), and a direction (represented by a unit vector).
+
+   RayIntersection
+      The RayIntersection structure represents a ray intersecting with an object.  This structure
+      holds the incoming ray, intersection point, surface normal, and material at the intersection
+      point.  It also provides several convenience functions, e.g. reflectedRay().
+
+   PossibleRayIntersection
+      This structure allows us to represent either an intersection, or a lack of intersection,
+      without having to deal with null pointers.
+
+   Vector
+      This structure represents a simple three-dimensional vector.  The vector is stored as
+      three discrete double values, 'x', 'y' and 'z'.
+
+   Group
+      A "group" is a collection of objects, that can be treated as a single object.  This allows
+      us to glue e.g. multiple triangles together into a single mesh.
+
+   SceneObject (and Sphere, Cylinder, Triangle, Quad)
+      Various objects, each of which are responsible for calculating ray intersections,
+      knowing their material, and knowing their dimensions.
+
+   Scene
+      A scene is a top-level group, which also includes lights, and functionality to read itself
+      in from a file.
+
+   PropertyList
+      PropertyList is a simple structure which allows easy parsing of definition strings like
+      "Property = Value, Property2 = Value".
+
+   QList
+      Provided by Qt, QList<> is a templated data structure which stores elements in either
+      an array of pointers or an array of items, depending on the item's size.
+
+      More information is available in the Qt documentation:
+      http://doc.qt.digia.com/4.7/qlist.html
+
+   QMap
+      Provided by Qt, QMap<> is a templated data structure that stores elements in a 
+      skip-list based dictionary.  It is used primarily to store calculated normals of
+      vertices and faces.
+
+      More information is available in the Qt documentation:
+      http://doc.qt.digia.com/4.7/qmap.html
+
+
+Algorithms Used:
+   Ray-Sphere Intersection
+      Intersection between rays and spheres are calculated by equating the ray equation and
+      the sphere equation, and then solving for the ray distance parameter t.
+
+   Ray-Cylinder Intersection 
+      Similar to ray-sphere intersection, this algorithm equates the ray equation and the
+      cylinder equation.
+
+   Ray-Triangle Intersection
+      This is a two-step algorithm, first using the plane equation to determine where an
+      intersection exists, and then using the area solving technique to determine if the
+      intersection point is within the triangle.
+
+   Phong Lighting and Shadows
+      Surface colors are calculated by casting a ray to each light.
+      - If the ray intersects an object first, it's in shadow, and only ambient light is used
+      - If the ray reaches the light, then diffuse and specular lighting is calculated using
+        the Phong lighting equations
+
+   
+
+
+Implemented Requirements:
+   I have implemented all of the required functional requirements listed in the assignment 
+   description, as well as several bonus ones.
+
+   The requirements I have implemented are listed below:
+
+   Rendering
+   - Normal Vectors - Choose Show Normals on the Render Options tab
+   - Object Display - Choose Wireframe, Flat or Smooth on the Render Options tab.
+   - Viewport       - The model is automatically centered.  Exact coordinates are visible
+                      from the "View Transformations" tab.
+   - Ground Pattern - A gear logo appears under the model's feet.  Changes on the Affine
+                      Transformations tab do not affect the ground pattern.
+   - Weapon Model   - The weapon is automatically loaded with the model.  A good example is
+                      the "harry" model, available from the Model Selection tab.
+   - Skin Textures  - The model (and associated weapon) have skins.
+
+   Affine Transformations
+   - Translation    - Available from the "Affine Transformations" tab
+   - Scaling        - Available from the "Affine Transformations" tab (both Uniform and per-axis)
+   - Rotation       - Click+Drag on the 3D model to use the Virtual Trackball
+
+   View Changes
+   - View location  - Available from the "View Transformations" tab
+   - View direction - Available from the "View Transformations" tab
+   - Up Direction   - Available from the "View Transformations" tab
+   - Projection     - Available from the "Render Options" tab
+
+   File Opening
+   - User Interface - Available from the "Model Selection" tab
+
+
+   I have also implemented several bonus requirements:
+
+   - B1 - Animation                   - Animations are constantly looping
+
+   - B3 - Transformation from Scratch - Click "Use Hand-Written Math" on the "Render Options" tab
+   - B4 - Viewing from Scratch        - Click "Use Hand-Written Math" on the "Render Options" tab
+
+   - B6 - Multiple Viewports          - Top, Front, Side and Perspective viewports are always visible.
+   - B7 - Alternative Rendering       - Click "Alternative Rendering Mode" on the "Render Options" tab
+
+
+Reused Code:
+   This assignment is entirely my own work, except for the following items:
+
+   - md2.h / md2.cpp, downloaded from the CPSC453 Course Website, used as a requirement of this assignment.
+     
+     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/grading/a2/index.htm
+
+   - pcx.h / pcx.cpp, downloaded from the CPSC453 Course Website, used as a requirement of this assignment.
+     
+     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/grading/a2/index.htm
+
+   - All of the models in the models/ folder, obtained from the course website, used as a requirement
+     of this assignment.
+     
+     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/grading/a2/index.htm
+
+
+   In addition to the reused source code, several functions are adapted (but not copied) from 
+   mathematical derivations and source code samples:
+
+   - AffineMatrix::fromAxisAngle() is adapted from a mathematical derivation on Wikipedia
+
+     Original URL: http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
+
+   - VirtualTrackball is adapted from Erika Harrison's wonderful tutorial notes.
+
+     Original URL: http://pages.cpsc.ucalgary.ca/~eharris/cpsc453/tut09/
+

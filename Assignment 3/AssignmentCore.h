@@ -6,6 +6,7 @@
 // Qt
 #include <QMainWindow>
 #include <QLabel>
+#include <QComboBox>
 
 // Project
 
@@ -16,21 +17,24 @@
  *
  ******************************************************************************
  */
-class AssignmentCore
+class AssignmentCore : public QMainWindow
 {
+   Q_OBJECT
 
 public:
    AssignmentCore();
    virtual ~AssignmentCore();
 
-public:
-   void show();
+private slots:
+   virtual void handleRenderClicked();
+   virtual void handleSaveClicked();
 
 private: // helpers
 
 private: // members
-   QMainWindow window_;
    QLabel* imageViewer_;
+   QComboBox* sceneList_;
+   QImage lastImage_;
 };
 
 #endif

@@ -55,12 +55,7 @@ PossibleRayIntersection Sphere::findIntersectionWith(Ray ray)
       double distanceA = lineDotCenter + squareRoot;
       double distanceB = lineDotCenter - squareRoot;
 
-      if (distanceA < 0 && distanceB < 0)
-      {
-         return PossibleRayIntersection::noIntersection();
-      }
-
-      double distance = qMin(distanceA, distanceB);
+      double distance = smallestPositiveValue(distanceA, distanceB);
 
       return intersectionGivenDistance(ray, distance);
    }
@@ -79,5 +74,22 @@ PossibleRayIntersection Sphere::intersectionGivenDistance(Ray ray, double distan
    Vector surfaceNormal = relativeIntersectionPoint.normalized();
 
    return RayIntersection(ray, distance, surfaceNormal, material_);
+}
+
+double Sphere::smallestPositiveValue(double a, double b)
+{
+   if (a < 0.0000001)
+   {
+      return b;
+   }
+   else if (b < 0.0000001)
+   {
+      return a;
+   }
+   else if (a < b)
+   {
+      return a;
+   }
+   return b;
 }
 

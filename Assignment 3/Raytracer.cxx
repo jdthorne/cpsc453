@@ -2,16 +2,22 @@
 // System
 #include <cmath>
 
+// Qt
+#include <QElapsedTimer>
+
 // Project
 #include <Vector.h>
 #include <Ray.h>
 #include <Raytracer.h>
 
-Raytracer::Raytracer()
-   : cameraPosition_(0, 0, 25)
+Raytracer::Raytracer(Scene& scene)
+   : scene_(scene)
+   , cameraPosition_(0, 0, 25)
    , imageWidth_(1280 / 2)
    , imageHeight_(720 / 2)
+   , y_(0)
 {
+   result_ = QImage(QSize(imageWidth_, imageHeight_), QImage::Format_RGB32);
 }
 
 Raytracer::~Raytracer()
@@ -25,20 +31,28 @@ Raytracer::~Raytracer()
  *
  ******************************************************************************
  */
+bool Raytracer::running()
+{
+   return (y_ < imageHeight_);
+}
+
 QImage Raytracer::run()
 {
-   QImage result = QImage(QSize(imageWidth_, imageHeight_), QImage::Format_RGB32);
+   QElapsedTimer timer;
+   timer.start();
 
-   for (int x = 0; x < result.width(); x++)
+   while (running() && timer.elapsed() < 100)
    {
-      for (int y = 0; y < result.height(); y++)
+      for (int x = 0; x < result_.width(); x++)
       {
-         Color pixelColor = traceInitialRay(x, y);
-         result.setPixel(x, y, pixelColor.toQtRgb());
+         Color pixelColor = traceInitialRay(x, y_);
+         result_.setPixel(x, y_, pixelColor.toQtRgb());
       }
+
+      y_++;
    }
 
-   return result;
+   return result_;
 }
 
 /**
@@ -85,8 +99,7 @@ Color Raytracer::trace(Ray ray, RaytracerStatus status)
    // If we're leaving an object, just calculate the refraction
    if (status.rayIsInsideObject())
    {
-      //return Color(1, 0, 0);
-      //return totalRefractedLightAt(intersection, status);
+      return totalRefractedLightAt(intersection, status);
    }
 
    // Otherwise, calculate the surface color
@@ -189,16 +202,14 @@ Color Raytracer::totalRefractedLightAt(RayIntersection intersection, RaytracerSt
    }
 
    double refraction = intersection.material().refraction;
-
-   //if (status.rayIsInsideObject())
-   //{
-   //   qDebug("OH HAI");
-   //   return Color(1, 0, 0);
-   //   refraction = 1.0 / refraction;
-  // }
-
    Vector incoming = intersection.incomingRay().direction();
    Vector normal = intersection.surfaceNormal();
+
+   if (status.rayIsInsideObject())
+   {
+     refraction = 1.0 / refraction;
+     normal = normal * -1.0;
+   }
 
    double cosi = (incoming * -1).dot(normal);
    double cost2 = 1.0 - pow(refraction, 2) * (1 - pow(cosi, 2));

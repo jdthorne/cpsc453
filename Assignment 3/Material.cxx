@@ -72,7 +72,7 @@ Material Material::steel()
 
                                        Color(0.5, 0.5, 0.5),
                                        0.5,
-                                       12.0,
+                                       75.0,
 
                                        0.5);
 
@@ -86,7 +86,7 @@ Material Material::redSteel()
 
                                        Color(1, 1, 1),
                                        0.5,
-                                       12.0,
+                                       75.0,
 
                                        0.25);
 
@@ -96,12 +96,12 @@ Material Material::redSteel()
 Material Material::glass()
 {
    static Material material = Material(Color(0.5, 0.5, 0.5),
-                                       0.5,
+                                       0.8,
 
                                        // Specular
                                        Color(1, 1, 1),
-                                       0.5,
-                                       20.0,
+                                       0.6,
+                                       75.0,
 
                                        // Reflection
                                        0.0,
@@ -120,7 +120,7 @@ Material Material::bluePlastic()
 
                                        Color(1, 1, 1),
                                        0.5,
-                                       2.0,
+                                       15.0,
 
                                        0.0);
 
@@ -134,7 +134,7 @@ Material Material::yellowPlastic()
 
                                        Color(1, 1, 1),
                                        0.5,
-                                       2.0,
+                                       15.0,
 
                                        0.0);
 
@@ -148,7 +148,7 @@ Material Material::greenPlastic()
 
                                        Color(1, 1, 1),
                                        0.5,
-                                       2.0,
+                                       15.0,
 
                                        0.0);
 
@@ -164,7 +164,7 @@ Material Material::none()
                                        0.5,
                                        6.0,
 
-                                       0.25);
+                                       0.0);
 
    return material;
 }

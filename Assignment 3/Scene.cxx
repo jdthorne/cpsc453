@@ -14,11 +14,11 @@
 #include <Cylinder.h>
 #include <Triangle.h>
 
-Scene::Scene()
+Scene::Scene(QString file)
    : ambientLight_(0.1, 0.1, 0.1)
    , root_(Vector(0, 0, 0), Material::none())
 {
-   loadFromFile(QCoreApplication::arguments()[1]);
+   loadFromFile(file);
 }
 
 Scene::~Scene()

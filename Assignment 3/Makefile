@@ -30,15 +30,15 @@ INCLUDES += "-I/Library/Frameworks/QtOpenGL.framework/Versions/4/Headers/"
 INCLUDES += "-I."
 
 # Actually compile the assignment
-assignment2 : *.cxx
+assignment2 : *.cxx AssignmentCore.moc.cxx
 	$(CC) -o assignment3 *.cxx $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
 
 # Run the QT Moc
 #OpenGlCore.moc.cxx : OpenGlCore.h
 #	moc OpenGlCore.h -oOpenGlCore.moc.cxx
 #
-#AssignmentCore.moc.cxx : AssignmentCore.h
-#	moc AssignmentCore.h -oAssignmentCore.moc.cxx
+AssignmentCore.moc.cxx : AssignmentCore.h
+	moc AssignmentCore.h -oAssignmentCore.moc.cxx
 #
 #Sidebar.moc.cxx : Sidebar.h
 #	moc Sidebar.h -o Sidebar.moc.cxx

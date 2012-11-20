@@ -22,7 +22,7 @@ class Scene
 {
 
 public:
-   Scene();
+   Scene(QString file);
    virtual ~Scene();
 
 public:
