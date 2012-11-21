@@ -116,7 +116,26 @@ Algorithms Used
       - If the ray intersects an object first, it's in shadow, and only ambient light is used
       - If the ray reaches the light, then diffuse and specular lighting is calculated using
         the Phong lighting equations
+
+   **********************************
+   **********************************
+   **********************************
+   **********************************
+   **********************************
+   **********************************
+   **********************************
+   **********************************
+   **********************************
    Shadows, Reflections, etc
+   Also -> Include more detail!
+   (and don't need commented images)
+   **********************************
+   **********************************
+   **********************************
+   **********************************
+   **********************************
+   **********************************
+   **********************************
 
 
 Implemented Requirements:
