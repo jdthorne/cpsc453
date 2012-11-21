@@ -3,6 +3,33 @@ UNAME := $(shell uname)
 # This assignment compiles on Linux & Mac
 # Please build it on the computers in MS239
 
+ifeq ($(UNAME), Linux)
+
+# Use G++ with -Wall and -Werror
+CC = g++
+COMPILERFLAGS = -Wall -Werror
+CFLAGS = $(COMPILERFLAGS) 
+
+MOC = moc-qt4
+UIC = uic-qt4
+
+# Include headers in the local folder, as well as standard library locations
+INCLUDES += "-I."
+INCLUDES += "-I/usr/X11R6/include -I/usr/local/include"
+INCLUDES += "-I/usr/include/QtCore"
+INCLUDES += "-I/usr/include/QtGui"
+INCLUDES += "-I/usr/include/QtOpenGL"
+
+# Need OpenGL, GLU, glut, and other fun things
+LIBRARIES = -lGL -lGLU -lglut -lm -lstdc++ -lQtCore -lQtGui -lQtOpenGL
+
+assignment2 : *.cxx AssignmentCore.moc.cxx
+	$(CC) -o assignment3 *.cxx $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
+
+AssignmentCore.moc.cxx : AssignmentCore.h
+	$(MOC) AssignmentCore.h -oAssignmentCore.moc.cxx
+
+else
 
 # Mac is silly, and uses frameworks
 FRAMEWORK += -framework QtCore
@@ -33,34 +60,8 @@ INCLUDES += "-I."
 assignment2 : *.cxx AssignmentCore.moc.cxx
 	$(CC) -o assignment3 *.cxx $(COMPILERFLAGS) $(LIBRARIES) $(FRAMEWORK) $(LIBPATH) $(INCLUDES)
 
-# Run the QT Moc
-#OpenGlCore.moc.cxx : OpenGlCore.h
-#	moc OpenGlCore.h -oOpenGlCore.moc.cxx
-#
 AssignmentCore.moc.cxx : AssignmentCore.h
 	moc AssignmentCore.h -oAssignmentCore.moc.cxx
-#
-#Sidebar.moc.cxx : Sidebar.h
-#	moc Sidebar.h -o Sidebar.moc.cxx
-#
-#ModelRenderer.moc.cxx : ModelRenderer.h
-#	moc ModelRenderer.h -o ModelRenderer.moc.cxx
-#
-#RenderOptionManager.moc.cxx : RenderOptionManager.h
-#	moc RenderOptionManager.h -o RenderOptionManager.moc.cxx
-#
-#ModelManager.moc.cxx : ModelManager.h
-#	moc ModelManager.h -o ModelManager.moc.cxx
-#
-#SliderSpinboxController.moc.cxx : SliderSpinboxController.h
-#	moc SliderSpinboxController.h -o SliderSpinboxController.moc.cxx
-#
-#Md2Model.moc.cxx : Md2Model.h
-#	moc Md2Model.h -o Md2Model.moc.cxx
-#
-#GroundModel.moc.cxx : GroundModel.h
-#	moc GroundModel.h -o GroundModel.moc.cxx
-#
-#SidebarUi.ui.h : SidebarUi.ui
-#	uic SidebarUi.ui -o SidebarUi.ui.h
-#
+
+endif
+

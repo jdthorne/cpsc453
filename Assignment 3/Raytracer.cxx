@@ -3,7 +3,7 @@
 #include <cmath>
 
 // Qt
-#include <QElapsedTimer>
+#include <QTime>
 
 // Project
 #include <Vector.h>
@@ -55,11 +55,10 @@ bool Raytracer::running()
 QImage Raytracer::run()
 {
    // Save when we started
-   QElapsedTimer timer;
-   timer.start();
+   QTime start = QTime::currentTime();
 
    // Continue while we're running, and haven't spent too long
-   while (running() && timer.elapsed() < 100)
+   while (running() && start.msecsTo(QTime::currentTime()) < 100)
    {
       // Render a full row
       for (int x = 0; x < result_.width(); x++)
