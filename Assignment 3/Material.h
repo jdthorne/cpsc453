@@ -4,10 +4,13 @@
 // System
 
 // Qt
+#include <QMap>
 #include <QString>
 
 // Project
 #include <Color.h>
+
+class PropertyList;
 
 /**
  ******************************************************************************
@@ -44,6 +47,9 @@ public:
    static Material none();
 
    static Material named(QString name);
+   static Material* newFromFile(PropertyList& properties);
+
+   static QMap<QString, Material*>& customMaterials();
 
 public: // members
    Color diffuseColor;

@@ -3,6 +3,7 @@
 
 // Project
 #include <Material.h>
+#include <PropertyList.h>
 
 Material::Material(Color diffuseColor,
                    double diffuseIntensity,
@@ -30,6 +31,42 @@ Material::Material(Color diffuseColor,
 
 Material::~Material()
 {
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Store custom materials
+ *
+ ******************************************************************************
+ */
+
+QMap<QString,Material*>& Material::customMaterials()
+{
+   static QMap<QString, Material*> customMaterials;
+
+   return customMaterials;
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Load a material from a definition
+ *
+ ******************************************************************************
+ */
+Material* Material::newFromFile(PropertyList& properties)
+{
+   return new Material(properties.color("Diffuse"), 
+                       properties.scalar("DiffuseK"),
+
+                       properties.color("Specular"), 
+                       properties.scalar("SpecularK"),
+                       properties.scalar("SpecularAlpha"),
+
+                       properties.scalar("Reflectance"),
+                       properties.scalar("Refraction"),
+                       properties.scalar("Transparency"));
 }
 
 /**
@@ -64,6 +101,10 @@ Material Material::named(QString name)
    else if (name == "glass")
    {
       return Material::glass();
+   }
+   else if (customMaterials().contains(name))
+   {
+      return *(customMaterials()[name]);
    }
    else
    {

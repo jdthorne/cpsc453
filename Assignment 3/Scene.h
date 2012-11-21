@@ -36,7 +36,7 @@ public:
 
 private: // helpers
    void loadFromFile(QString filename);
-   void addObjectFromFile(QString type, QString properties);
+   void addObjectFromFile(QString type, PropertyList properties);
 
 private: // members
    Color ambientLight_;

@@ -106,7 +106,7 @@ void Scene::loadFromFile(QString filename)
  *
  ******************************************************************************
  */
-void Scene::addObjectFromFile(QString type, QString properties)
+void Scene::addObjectFromFile(QString type, PropertyList properties)
 {
    if (type == "Sphere")
    {
@@ -127,6 +127,10 @@ void Scene::addObjectFromFile(QString type, QString properties)
    else if (type == "Light")
    {
       lights_.append(Light::newFromFile(properties));
+   }
+   else if (type == "Material")
+   {
+      Material::customMaterials().insert(properties.string("Name"), Material::newFromFile(properties));
    }
    else
    {
