@@ -125,22 +125,24 @@ Implemented Requirements:
 
    The requirements I have implemented are listed below:
 
+   Requirement                                                       Associated File (samples/)
+   ===========                                                       ============================
+
    - Objects in the Scene
-      - Spheres
-      - Triangles and Quads
+      - Spheres                                                      spheres.png
+      - Triangles and Quads                                          triangle.png, spheres.png
    - Phong Lighting Model and Point Light Sources
-      - Support for dynamic light positions and colors
-      - Support for Phong ambient, diffuse, and specular lighting
-   - Shadows
-   - Reflection (recursive to 5 levels)
+      - Support for dynamic light positions and colors               spheres.png
+      - Support for Phong lighting                                   triangle.png
+   - Shadows                                                         spheres.png
+   - Reflection (recursive to 5 levels)                              spheres.png
+
 
    I have also implemented several bonus requirements:
 
-   - Scene and light specification read from input file
-   - Refraction (recursive)
-   - Cylinder primitive (only when aligned along the y-axis)
-
-   All of these are demonstrated in the images within the supplied "samples/" folder
+   - Scene and light specification read from input file              see ".scene" files
+   - Refraction (recursive)                                          refraction.png
+   - Cylinder primitive (only when aligned along the y-axis)         cylinders.png
 
 
 Reused Code:
@@ -148,16 +150,5 @@ Reused Code:
 
    - Vector.cxx and Vector.h, reused and enhanced from my Assignment 2 submission.
 
-
-
-
-
-
-
-
-
-
-
-THINGS TO ADD SOME MORE OF
-   - Scene files - custom materials, ambient light color
-   - Make samples/ folder
+   Note that I did NOT use the provided GraphicsGems code to implement cylinders;
+   I implemented them entirely on my own to maximize the learning opportunity.

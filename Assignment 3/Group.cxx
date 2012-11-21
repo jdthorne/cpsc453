@@ -19,6 +19,13 @@ Group::Group(QList<SceneObject*> children, Vector position, Material material)
 
 Group::~Group()
 {
+   while (children_.count() > 0)
+   {
+      SceneObject* child = children_.first();
+      children_.removeFirst();
+      
+      delete child;
+   }
 }
 
 /**

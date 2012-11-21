@@ -1,8 +1,10 @@
 
-Sphere: Position = 0, 0, 2; Radius = 7.5; Material = steel
+Material: Name = whiteSteel; Diffuse = 1, 1, 1; DiffuseK = 0.5; Specular = 1, 1, 1; SpecularK = 0.5; SpecularAlpha = 50; Reflectance = 0.0; Refraction = 1.0; Transparency = 0.0
+
+Sphere: Position = 0, 0, 2; Radius = 5; Material = bluePlastic
 Sphere: Position = 12, 0, 12; Radius = 5; Material = redSteel
 
-Light: Position = 0, 0, 24; Color = .6, .6, .6
-Light: Position = 0, 0, -10; Color = .6, .6, .6
+Light: Position = 0, 0, 24; Color = .8, .8, .8
+Light: Position = 0, 0, -10; Color = .8, .8, .8
 
-Triangle: P1 = -10, -10, 0; P2 = -11, 11, 0; P3 = 10, 10, 0; Material = yellowPlastic
+Triangle: P1 = -10, -10, 0; P2 = -11, 11, 0; P3 = 10, 10, 0; Material = whiteSteel

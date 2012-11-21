@@ -72,6 +72,9 @@ AssignmentCore::AssignmentCore()
 
    // Make window non-resizable
    this->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+   // Display the startup image
+   imageViewer_->setPixmap(QPixmap::fromImage(QImage("Fun.png")));
 }
 
 AssignmentCore::~AssignmentCore()
@@ -127,7 +130,7 @@ void AssignmentCore::handleSaveClicked()
       return;
    }
 
-   // Save the image
+   // Save the
    qDebug("Saving rendered image to %s...", qPrintable(filename));
    lastImage_.save(filename);
 }

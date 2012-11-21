@@ -1,7 +1,7 @@
 Quad: P1 = -30, 5, -20; P2 = 30, 5, -20; P3 = 30, 5, 20; P4 = -30, 5, 20; Material = steel
 
-Light: Position = 20, 0, 20; Color = 0.3, 0.3, 0.3
-Light: Position = -20, 0, 20; Color = 0.3, 0.3, 0.3
+Light: Position = 20, 0, 20; Color = 0.6, 0.6, 0.6
+Light: Position = -20, 0, 20; Color = 0.6, 0.6, 0.6
 Light: Position = 0, 0, -20; Color = 2.0, 0.3, 0.3
 
 Cylinder: Position = 0, 0, 0; Height = 10; Radius = 15; Material = greenPlastic
