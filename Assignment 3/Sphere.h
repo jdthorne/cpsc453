@@ -30,7 +30,6 @@ public:
 
 protected: // helpers
    PossibleRayIntersection intersectionGivenDistance(Ray ray, double distance);
-   double smallestPositiveValue(double a, double b);
 
 private:
    double radius_;

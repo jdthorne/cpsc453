@@ -41,7 +41,7 @@ Cylinder* Cylinder::newFromFile(PropertyList properties)
  */
 PossibleRayIntersection Cylinder::findIntersectionWith(Ray ray)
 {
-   Vector start = ray.start();
+   Vector start = ray.start() - origin_;
    Vector direction = ray.direction();
 
    // Calculate a, b, c values for quadratic equation
@@ -63,7 +63,7 @@ PossibleRayIntersection Cylinder::findIntersectionWith(Ray ray)
    double distance2 = (-b - sqrt(valueUnderSquareRoot)) / (2 * a);
 
    // Get best distance
-   double distance = qMin(distance1, distance2);
+   double distance = smallestPositiveValue(distance1, distance2);
 
    if (distance < 0)
    {

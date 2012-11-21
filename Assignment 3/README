@@ -128,22 +128,17 @@ Implemented Requirements:
    - Objects in the Scene
       - Spheres
       - Triangles and Quads
-
    - Phong Lighting Model and Point Light Sources
       - Support for dynamic light positions and colors
       - Support for Phong ambient, diffuse, and specular lighting
-
    - Shadows
-
    - Reflection (recursive to 5 levels)
-
 
    I have also implemented several bonus requirements:
 
-   - Scene and Light Specification read from input file
+   - Scene and light specification read from input file
    - Refraction (recursive)
-   - Cylinder primitive
-
+   - Cylinder primitive (only when aligned along the y-axis)
 
    All of these are demonstrated in the images within the supplied "samples/" folder
 
@@ -166,3 +161,4 @@ Reused Code:
 THINGS TO ADD SOME MORE OF
    - Cylinder code - support non-centered cylinders
    - Scene files - custom materials, ambient light color
+   - Make samples/ folder

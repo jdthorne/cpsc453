@@ -25,6 +25,9 @@ public:
 public:
    virtual PossibleRayIntersection findIntersectionWith(Ray ray) = 0;
 
+protected: // helpers
+   double smallestPositiveValue(double a, double b);
+
 protected: // members
    Vector origin_;
    Material material_;

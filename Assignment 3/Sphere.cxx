@@ -105,27 +105,3 @@ PossibleRayIntersection Sphere::intersectionGivenDistance(Ray ray, double distan
    return RayIntersection(ray, distance, surfaceNormal, material_);
 }
 
-/**
- ******************************************************************************
- *
- *                   Return smallest non-zero positive value
- *
- ******************************************************************************
- */
-double Sphere::smallestPositiveValue(double a, double b)
-{
-   if (a < 0.0000001)
-   {
-      return b;
-   }
-   else if (b < 0.0000001)
-   {
-      return a;
-   }
-   else if (a < b)
-   {
-      return a;
-   }
-   return b;
-}
-

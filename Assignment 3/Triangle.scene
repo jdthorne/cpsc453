@@ -1,0 +1,8 @@
+
+Sphere: Position = 0, 0, 2; Radius = 7.5; Material = steel
+Sphere: Position = 12, 0, 12; Radius = 5; Material = redSteel
+
+Light: Position = 0, 0, 24; Color = .6, .6, .6
+Light: Position = 0, 0, -10; Color = .6, .6, .6
+
+Triangle: P1 = -10, -10, 0; P2 = -11, 11, 0; P3 = 10, 10, 0; Material = yellowPlastic
