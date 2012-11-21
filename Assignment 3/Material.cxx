@@ -32,6 +32,13 @@ Material::~Material()
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Return a material from a name
+ *
+ ******************************************************************************
+ */
 Material Material::named(QString name)
 {
    if (name == "steel")
@@ -65,6 +72,13 @@ Material Material::named(QString name)
    }  
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Simple, reflective grey steel
+ *
+ ******************************************************************************
+ */
 Material Material::steel()
 {
    static Material material = Material(Color(0.75, 0.75, 0.75),
@@ -79,6 +93,13 @@ Material Material::steel()
    return material;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Red Steel
+ *
+ ******************************************************************************
+ */
 Material Material::redSteel()
 {
    static Material material = Material(Color(1, 0.25, 0.25),
@@ -93,6 +114,13 @@ Material Material::redSteel()
    return material;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Translucent glass
+ *
+ ******************************************************************************
+ */
 Material Material::glass()
 {
    static Material material = Material(Color(0.5, 0.5, 0.5),
@@ -113,6 +141,13 @@ Material Material::glass()
    return material;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Blue plasticey material
+ *
+ ******************************************************************************
+ */
 Material Material::bluePlastic()
 {
    static Material material = Material(Color(0.35, 0.35, 1.0),
@@ -127,6 +162,13 @@ Material Material::bluePlastic()
    return material;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Yellow plastic
+ *
+ ******************************************************************************
+ */
 Material Material::yellowPlastic()
 {
    static Material material = Material(Color(1.0, 1.0, 0.35),
@@ -141,6 +183,13 @@ Material Material::yellowPlastic()
    return material;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Green plastic
+ *
+ ******************************************************************************
+ */
 Material Material::greenPlastic()
 {
    static Material material = Material(Color(0.35, 1.0, 0.35),
@@ -155,6 +204,13 @@ Material Material::greenPlastic()
    return material;
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   "Null" material
+ *
+ ******************************************************************************
+ */
 Material Material::none()
 {
    static Material material = Material(Color(0, 0, 0),

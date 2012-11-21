@@ -13,6 +13,9 @@
  *
  *                   Light
  *
+ * Represents a dynamic point light in the scene, defined by a position and
+ * a color
+ *
  ******************************************************************************
  */
 class Light

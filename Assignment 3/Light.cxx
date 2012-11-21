@@ -10,6 +10,13 @@ Light::Light(Vector position, Color color)
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Load a light from a file definition
+ *
+ ******************************************************************************
+ */
 Light* Light::newFromFile(PropertyList properties)
 {
    return new Light(properties.vector("Position"),
@@ -20,6 +27,13 @@ Light::~Light()
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Simple accessors
+ *
+ ******************************************************************************
+ */
 Vector Light::position() const
 {
    return position_;

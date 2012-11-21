@@ -20,6 +20,13 @@ PropertyList::~PropertyList()
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Return a vector by name
+ *
+ ******************************************************************************
+ */
 Vector PropertyList::vector(QString key)
 {
    QStringList components = properties_[key].split(",");
@@ -31,6 +38,13 @@ Vector PropertyList::vector(QString key)
    return Vector(x, y, z);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Return a color by name
+ *
+ ******************************************************************************
+ */
 Color PropertyList::color(QString key)
 {
    QStringList components = properties_[key].split(",");
@@ -42,16 +56,37 @@ Color PropertyList::color(QString key)
    return Color(r, g, b);
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Return a material by name
+ *
+ ******************************************************************************
+ */
 Material PropertyList::material(QString key)
 {
    return Material::named(string(key));
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Return a scalar by name
+ *
+ ******************************************************************************
+ */
 double PropertyList::scalar(QString key)
 {
    return properties_[key].toDouble();
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Return a string by name
+ *
+ ******************************************************************************
+ */
 QString PropertyList::string(QString key)
 {
    if (!properties_.contains(key))

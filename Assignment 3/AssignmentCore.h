@@ -15,6 +15,8 @@
  *
  *                   AssignmentCore
  *
+ * This class represents the main window, and handles user interaction
+ *
  ******************************************************************************
  */
 class AssignmentCore : public QMainWindow

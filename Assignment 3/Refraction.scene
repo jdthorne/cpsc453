@@ -6,4 +6,5 @@ Light: Position = -10, 0, 10; Color = 0.3, 0.3, 0.3
 Light: Position = 15, 0, 15; Color = 0.3, 0.3, 0.3
 
 Cylinder: Position = 0, 0, 0; Normal = 0, 1, 0; Height = 10; Radius = 15; Material = yellowPlastic
-Sphere: Position = 3, 0, 10; Radius = 3; Material = glass
+Sphere: Position = 4, 0, 10; Radius = 3; Material = glass
+

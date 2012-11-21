@@ -17,6 +17,10 @@
  *
  *                   Raytracer
  *
+ * This class handles the core raytracing functions.  It requires a scene,
+ * and performs raytracing in an interative manner.  To use it, call
+ * run() as long as running() returns true.
+ *
  ******************************************************************************
  */
 class Raytracer

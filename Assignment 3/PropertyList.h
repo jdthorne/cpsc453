@@ -17,6 +17,9 @@
  *
  *                   PropertyList
  *
+ * This class parses name/value pairs (such as "A = 0, 0, 1; R = 4") into 
+ * easily-accessible values (e.g. Vector A = properties.vector("A"); )
+ *
  ******************************************************************************
  */
 class PropertyList

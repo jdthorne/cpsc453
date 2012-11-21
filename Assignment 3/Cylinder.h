@@ -12,6 +12,8 @@
  *
  *                   Cylinder
  *
+ * This class is a SceneObject that represents a cylinder.
+ *
  ******************************************************************************
  */
 class Cylinder : public SceneObject

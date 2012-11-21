@@ -12,6 +12,8 @@
  *
  *                   Quad
  *
+ * This class represents a quad, by gluing two triangles together in a group
+ *
  ******************************************************************************
  */
 class Quad : public Group

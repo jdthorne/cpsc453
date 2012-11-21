@@ -11,6 +11,9 @@
  *
  *                   Group
  *
+ * Represents a set of SceneObjects which have been "glued" together into
+ * one SceneObject.
+ *
  ******************************************************************************
  */
 class Group : public SceneObject

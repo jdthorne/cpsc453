@@ -117,77 +117,52 @@ Algorithms Used:
       - If the ray reaches the light, then diffuse and specular lighting is calculated using
         the Phong lighting equations
 
-   
-
 
 Implemented Requirements:
    I have implemented all of the required functional requirements listed in the assignment 
    description, as well as several bonus ones.
 
+
    The requirements I have implemented are listed below:
 
-   Rendering
-   - Normal Vectors - Choose Show Normals on the Render Options tab
-   - Object Display - Choose Wireframe, Flat or Smooth on the Render Options tab.
-   - Viewport       - The model is automatically centered.  Exact coordinates are visible
-                      from the "View Transformations" tab.
-   - Ground Pattern - A gear logo appears under the model's feet.  Changes on the Affine
-                      Transformations tab do not affect the ground pattern.
-   - Weapon Model   - The weapon is automatically loaded with the model.  A good example is
-                      the "harry" model, available from the Model Selection tab.
-   - Skin Textures  - The model (and associated weapon) have skins.
+   - Objects in the Scene
+      - Spheres
+      - Triangles and Quads
 
-   Affine Transformations
-   - Translation    - Available from the "Affine Transformations" tab
-   - Scaling        - Available from the "Affine Transformations" tab (both Uniform and per-axis)
-   - Rotation       - Click+Drag on the 3D model to use the Virtual Trackball
+   - Phong Lighting Model and Point Light Sources
+      - Support for dynamic light positions and colors
+      - Support for Phong ambient, diffuse, and specular lighting
 
-   View Changes
-   - View location  - Available from the "View Transformations" tab
-   - View direction - Available from the "View Transformations" tab
-   - Up Direction   - Available from the "View Transformations" tab
-   - Projection     - Available from the "Render Options" tab
+   - Shadows
 
-   File Opening
-   - User Interface - Available from the "Model Selection" tab
+   - Reflection (recursive to 5 levels)
 
 
    I have also implemented several bonus requirements:
 
-   - B1 - Animation                   - Animations are constantly looping
+   - Scene and Light Specification read from input file
+   - Refraction (recursive)
+   - Cylinder primitive
 
-   - B3 - Transformation from Scratch - Click "Use Hand-Written Math" on the "Render Options" tab
-   - B4 - Viewing from Scratch        - Click "Use Hand-Written Math" on the "Render Options" tab
 
-   - B6 - Multiple Viewports          - Top, Front, Side and Perspective viewports are always visible.
-   - B7 - Alternative Rendering       - Click "Alternative Rendering Mode" on the "Render Options" tab
+   All of these are demonstrated in the images within the supplied "samples/" folder
 
 
 Reused Code:
    This assignment is entirely my own work, except for the following items:
 
-   - md2.h / md2.cpp, downloaded from the CPSC453 Course Website, used as a requirement of this assignment.
-     
-     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/grading/a2/index.htm
-
-   - pcx.h / pcx.cpp, downloaded from the CPSC453 Course Website, used as a requirement of this assignment.
-     
-     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/grading/a2/index.htm
-
-   - All of the models in the models/ folder, obtained from the course website, used as a requirement
-     of this assignment.
-     
-     Original URL: http://pages.cpsc.ucalgary.ca/~mario/courses/453-F12/grading/a2/index.htm
+   - Vector.cxx and Vector.h, reused and enhanced from my Assignment 2 submission.
 
 
-   In addition to the reused source code, several functions are adapted (but not copied) from 
-   mathematical derivations and source code samples:
 
-   - AffineMatrix::fromAxisAngle() is adapted from a mathematical derivation on Wikipedia
 
-     Original URL: http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
 
-   - VirtualTrackball is adapted from Erika Harrison's wonderful tutorial notes.
 
-     Original URL: http://pages.cpsc.ucalgary.ca/~eharris/cpsc453/tut09/
 
+
+
+
+
+THINGS TO ADD SOME MORE OF
+   - Cylinder code - support non-centered cylinders
+   - Scene files - custom materials, ambient light color

@@ -16,6 +16,9 @@
  *
  *                   Scene
  *
+ * This class is a collection of objects, lights, and other properties
+ * necessary to represent a raytracable scene
+ *
  ******************************************************************************
  */
 class Scene

@@ -11,6 +11,8 @@
  *
  *                   SceneObject
  *
+ * This is an abstract base class representing an object in a scene
+ *
  ******************************************************************************
  */
 class SceneObject

@@ -12,6 +12,8 @@
  *
  *                   Sphere
  *
+ * Represents a raytracable sphere within a scene
+ *
  ******************************************************************************
  */
 class Sphere : public SceneObject

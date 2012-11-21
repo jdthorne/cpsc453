@@ -11,6 +11,9 @@
  *
  *                   Ray
  *
+ * This class represents a tracable ray, starting from a point, and continuing
+ * in a direction.
+ *
  ******************************************************************************
  */
 class Ray

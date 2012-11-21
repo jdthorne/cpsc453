@@ -13,6 +13,13 @@ Quad::Quad(Vector p1, Vector p2, Vector p3, Vector p4, Material material)
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Load a quad from a file
+ *
+ ******************************************************************************
+ */
 Quad* Quad::newFromFile(PropertyList properties)
 {
    return new Quad(properties.vector("P1"),

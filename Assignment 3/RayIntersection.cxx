@@ -61,7 +61,7 @@ Material RayIntersection::material()
 /**
  ******************************************************************************
  *
- *                   Calculations
+ *                   Calculate reflected ray
  *
  ******************************************************************************
  */
@@ -76,7 +76,7 @@ Ray RayIntersection::calculateReflection()
 /**
  ******************************************************************************
  *
- *                   Possible Ray Intersection
+ *                   Return a sentinel "no intersection" value
  *
  ******************************************************************************
  */
@@ -89,7 +89,13 @@ PossibleRayIntersection PossibleRayIntersection::noIntersection()
    return result;
 }
 
-
+/**
+ ******************************************************************************
+ *
+ *                   Construct a Possible Intersection from an Intersection
+ *
+ ******************************************************************************
+ */
 PossibleRayIntersection::PossibleRayIntersection(RayIntersection intersection)
    : exists_(true)
    , intersection_(intersection)
@@ -98,6 +104,14 @@ PossibleRayIntersection::PossibleRayIntersection(RayIntersection intersection)
 PossibleRayIntersection::~PossibleRayIntersection()
 {
 }
+
+/**
+ ******************************************************************************
+ *
+ *                   Simple accessors
+ *
+ ******************************************************************************
+ */
 bool PossibleRayIntersection::exists()
 {
    return exists_;

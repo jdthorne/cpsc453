@@ -13,6 +13,8 @@
  *
  *                   Triangle
  *
+ * Represents a raytracable triangle within the scene
+ *
  ******************************************************************************
  */
 class Triangle : public SceneObject

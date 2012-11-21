@@ -21,6 +21,13 @@ Group::~Group()
 {
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Find the intersection with any member of the group
+ *
+ ******************************************************************************
+ */
 PossibleRayIntersection Group::findIntersectionWith(Ray ray)
 {
    PossibleRayIntersection bestIntersection = PossibleRayIntersection::noIntersection();
@@ -46,6 +53,13 @@ PossibleRayIntersection Group::findIntersectionWith(Ray ray)
    return bestIntersection;  
 }
 
+/**
+ ******************************************************************************
+ *
+ *                   Add new object to the group
+ *
+ ******************************************************************************
+ */
 void Group::addObject(SceneObject* object)
 {
    children_.append(object);

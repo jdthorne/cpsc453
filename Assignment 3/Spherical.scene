@@ -5,8 +5,6 @@ Sphere: Position = 0, 0, -15; Radius = 5; Material = yellowPlastic
 
 Quad: P1 = -20, 5, -20; P2 = 20, 5, -20; P3 = 20, 5, 20; P4 = -20, 5, 20; Material = steel
 
-# Triangle: P1 = -20, 5, -20; P2 = 20, 5, -20; P3 = 0, -15, -20; Material = greenPlastic
-
 Light: Position = 0, -25, 0; Color = 0.6, 0.6, 0.6
 Light: Position = 0, 0, 25; Color = 0.6, 0.6, 0.6
 

@@ -14,6 +14,9 @@
  *
  *                   Material
  *
+ * Represents the properties of a surface, including diffuse color, specular
+ * color and spread, reflectance, refraction, and transparency
+ *
  ******************************************************************************
  */
 class Material

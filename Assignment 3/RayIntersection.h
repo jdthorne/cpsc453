@@ -16,6 +16,9 @@
  *
  *                   RayIntersection
  *
+ * This class represents a ray intersecting an object, consiting of the
+ * incoming ray, intersection point, surface normal, and surface material
+ *
  ******************************************************************************
  */
 class RayIntersection
@@ -54,6 +57,9 @@ private:
  ******************************************************************************
  *
  *                   Possible Ray Intersection
+ *
+ * This class represents a "maybe" value for Ray, similar to a null pointer,
+ * but in an entirely memory safe manner.
  *
  ******************************************************************************
  */

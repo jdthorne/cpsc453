@@ -10,6 +10,9 @@
  *
  *                   RaytracerStatus
  *
+ * This class represents the state of the raytracer, encapsulated so it can
+ * be kept on the stack during each recursion
+ *
  ******************************************************************************
  */
 class RaytracerStatus
