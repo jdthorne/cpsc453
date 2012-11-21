@@ -97,7 +97,7 @@ Data-Structures Used:
       http://doc.qt.digia.com/4.7/qmap.html
 
 
-Algorithms Used:
+Algorithms Used
    Ray-Sphere Intersection
       Intersection between rays and spheres are calculated by equating the ray equation and
       the sphere equation, and then solving for the ray distance parameter t.
@@ -136,7 +136,6 @@ Implemented Requirements:
       - Support for Phong lighting                                   triangle.png
    - Shadows                                                         spheres.png
    - Reflection (recursive to 5 levels)                              spheres.png
-
 
    I have also implemented several bonus requirements:
 
