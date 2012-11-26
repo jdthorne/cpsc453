@@ -33,6 +33,7 @@ public:
 
    PossibleRayIntersection findFirstIntersection(Ray ray);
    Color ambientLight();
+   double planeDepth();
 
 private: // helpers
    void loadFromFile(QString filename);
@@ -40,6 +41,7 @@ private: // helpers
 
 private: // members
    Color ambientLight_;
+   double planeDepth_;
 
    Group root_;
    QList<Light*> lights_;

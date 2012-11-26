@@ -36,6 +36,8 @@ Brief User Manual:
 
    Possible objects are:
 
+      Material: Name = [x], Diffuse = [r], [g], [b], DiffuseK = [k], Specular = [r], [g], [b], SpecularK = [k], SpecularAlpha = [a], Reflectance = [r], Refraction = [r], Transparency = [a]
+
       Triangle: P1 = [x], [y], [z]; P2 = [x], [y], [z]; P3 = [x], [y], [z]; Material = [material]
       Quad: P1 = [x], [y], [z]; P2 = [x], [y], [z]; P3 = [x], [y], [z]; P4 = [x], [y], [z]; Material = [material]
       Light: Position = [x], [y], [z]; Color = [r], [g], [b]
@@ -99,43 +101,111 @@ Data-Structures Used:
 
 Algorithms Used
    Ray-Sphere Intersection
-      Intersection between rays and spheres are calculated by equating the ray equation and
-      the sphere equation, and then solving for the ray distance parameter t.
+      Intersection between rays and spheres are calculated by equating the ray equation
+
+         p = tx + o
+
+      and the sphere equation
+
+         r = |p - c|
+
+      and then solving for the ray distance parameter t, resuling in the equation:
+
+         t = (x dot c) +- sqrt[ (x dot c)^2 - c^2 + r^2 ]
+
+      If the value inside the square root is negative, there is no solution.  If the
+      value is zero, the intersection point is exactly (x dot c) units from the ray's
+      origin, and if there are multiple solutions, the closest non-zero solution is used.
+
+      The surface normal of the sphere is calculated by finding the vector from the sphere's 
+      center to the intersection point, and normalizing it.
 
    Ray-Cylinder Intersection 
-      Similar to ray-sphere intersection, this algorithm equates the ray equation and the
-      cylinder equation.
+      Similar to ray-sphere intersection, this algorithm equates the ray equation 
+
+         p = tx + o
+
+      and the axis-aligned cylinder equation
+
+         p_x^2 + p_z^2 = r^2
+
+      and then solving for the ray distance parameter t, resulting in the equation:
+
+         a = p_x^2 + p_z^2
+         b = 2(s_x)(p_x) + 2(s_z)(p_z)
+         c = s_x^2 + s_z^2 - r
+
+         t = -b +- sqrt[ b^2 - 4ac ] / 2a
+
+      If the value inside the square root is negative, there is no solution.  If the
+      value is zero, the intersection point is exactly (x dot c) units from the ray's
+      origin, and if there are multiple solutions, the closest non-zero solution is used.
+
+      The surface normal of the cylinder is calculated by finding the vector between the 
+      cylinder's axis and the intersection point, and normalizing it.
 
    Ray-Triangle Intersection
       This is a two-step algorithm, first using the plane equation to determine where an
       intersection exists, and then using the area solving technique to determine if the
       intersection point is within the triangle.
 
+      The intersection point is found through the equation
+
+         t = ( (p - o) dot n ) / (x dot n);
+
+      If the numerator is zero, or the distance is <0, no intersection is found.
+
+      Once the intersection is found, we calculate the area of intersection by summing
+      the unit vectors between the intersection point, and each of the triangle's three
+      vertices.
+
+         a = |normalized(p - p1) + normalized(p - p2) + normalized(p - p3)|;
+
+      if a > 1, we conclude the intersection point is outside of the triangle, and no result
+      is returned.
+
+      The surface normal of the triangle is found from the cross-product of two of its
+      edges (e.g. (p2-p1) x (p3-p1) ), similar to how normals were calculated for the md2
+      loader in Assignment 2.
+
    Phong Lighting and Shadows
       Surface colors are calculated by casting a ray to each light.
-      - If the ray intersects an object first, it's in shadow, and only ambient light is used
-      - If the ray reaches the light, then diffuse and specular lighting is calculated using
-        the Phong lighting equations
 
-   **********************************
-   **********************************
-   **********************************
-   **********************************
-   **********************************
-   **********************************
-   **********************************
-   **********************************
-   **********************************
-   Shadows, Reflections, etc
-   Also -> Include more detail!
-   (and don't need commented images)
-   **********************************
-   **********************************
-   **********************************
-   **********************************
-   **********************************
-   **********************************
-   **********************************
+      - If the ray intersects an object first, we conclude the surface is in shadow, and only 
+        a constant ambient light is applied
+
+      - If the ray reaches the light, then diffuse and specular lighting is calculated using
+        the Phong lighting equation:
+
+        diffuse = diffuseColor * lightColor * diffuseIntensity 
+                  * ( lightVector dot surfaceNormal )
+
+        specular = specularColor * lightColor * specularIntensity 
+                   * (reflectedVector dot viewportVector) ^ specularSpread
+
+   Reflection
+      After the surface color of a ray is calculated, a ray reflecting from the surface
+      is traced recursively, and its color calculated.  The color of the reflection ray is
+      then added to the surface color of the initial ray.
+
+         trace := lightColor + trace(reflectedRay)
+
+      Once a maximum recursion depth is reached, the reflected rays are assumed to be
+      black.
+
+   Refraction
+      Similar to reflection, transparent surfaces have an additional ray cast through them,
+      using the snell refraction equation
+
+         cosi = -incoming dot normal
+         cost2 = 1 - (refractionIndex^2 * (1 - cosi^2))
+         ray = (incoming * refractionIndex) + (normal * refractionIndex * cosi * sqrt(|cost2|))
+
+      This ray is then followed through the object.  Once it hits the outer edge, it is
+      refracted again (using a negative normal and inverse refractionIndex), and the determined
+      color is added to the original surface.
+
+         trace := lightColor + trace(reflectedRay) + trace(refractedRay)
 
 
 Implemented Requirements:
@@ -170,4 +240,5 @@ Reused Code:
    - Vector.cxx and Vector.h, reused and enhanced from my Assignment 2 submission.
 
    Note that I did NOT use the provided GraphicsGems code to implement cylinders;
-   I implemented them entirely on my own to maximize the learning opportunity.
+   I implemented them entirely on my own, in order to maximize my learning.
+

@@ -102,6 +102,14 @@ Material Material::named(QString name)
    {
       return Material::glass();
    }
+   else if (name == "backdrop")
+   {
+      return Material::backdrop();
+   }
+   else if (name == "shade")
+   {
+      return Material::shade();
+   }
    else if (customMaterials().contains(name))
    {
       return *(customMaterials()[name]);
@@ -260,6 +268,49 @@ Material Material::none()
                                        Color(0.5, 0.5, 0.5),
                                        0.5,
                                        6.0,
+
+                                       0.0);
+
+   return material;
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Backdrop material
+ *
+ ******************************************************************************
+ */
+Material Material::backdrop()
+{
+   static Material material = Material(Color(0.4, 0.4, 0.4),
+                                       0.5,
+
+                                       Color(1, 1, 1),
+                                       0.5,
+                                       15.0,
+
+                                       0.0);
+
+   return material;
+}
+
+
+/**
+ ******************************************************************************
+ *
+ *                   Shade material
+ *
+ ******************************************************************************
+ */
+Material Material::shade()
+{
+   static Material material = Material(Color(0, 0, 0),
+                                       0.5,
+
+                                       Color(0.2, 0.2, 0.2),
+                                       0.5,
+                                       15.0,
 
                                        0.0);
 

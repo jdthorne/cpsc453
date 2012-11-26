@@ -16,6 +16,7 @@
 
 Scene::Scene(QString file)
    : ambientLight_(0.1, 0.1, 0.1)
+   , planeDepth_(-350)
    , root_(Vector(0, 0, 0), Material::none())
 {
    loadFromFile(file);
@@ -132,9 +133,25 @@ void Scene::addObjectFromFile(QString type, PropertyList properties)
    {
       Material::customMaterials().insert(properties.string("Name"), Material::newFromFile(properties));
    }
+   else if (type == "ImagePlane")
+   {
+      planeDepth_ = properties.scalar("Depth");
+   }
    else
    {
       qDebug("Unknown object type: '%s'", qPrintable(type));
    }
+}
+
+/**
+ ******************************************************************************
+ *
+ *                   Image plane depth (e.g. scene scale)
+ *
+ ******************************************************************************
+ */
+double Scene::planeDepth()
+{
+   return planeDepth_;
 }
 

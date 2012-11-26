@@ -72,6 +72,8 @@ QImage Raytracer::run()
       y_++;
    }
 
+   qDebug("[Raytracer] Rendering is %.2f percent complete...", 100.0 * (double)y_ / imageHeight_);
+
    // Return the image in progress
    return result_;
 }
@@ -91,7 +93,7 @@ Color Raytracer::traceInitialRay(int x, int y)
    // Find the virtual screen point
    Vector throughVirtualScreen = Vector(x - (imageWidth_ / 2),
                                         y - (imageHeight_ / 2),
-                                        -350);
+                                        scene_.planeDepth());
 
    // Build the ray connecting the points
    Ray ray = Ray::fromPointToPoint(startPoint, throughVirtualScreen);

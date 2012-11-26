@@ -46,6 +46,9 @@ public:
    static Material greenPlastic();
    static Material none();
 
+   static Material backdrop();
+   static Material shade();
+
    static Material named(QString name);
    static Material* newFromFile(PropertyList& properties);
 
