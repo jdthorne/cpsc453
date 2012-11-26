@@ -130,7 +130,13 @@ void AssignmentCore::handleSaveClicked()
       return;
    }
 
-   // Save the
+   // Ensure the image ends in "png"
+   if (!filename.toLower().endsWith(".png"))
+   {
+      filename = filename + ".png";
+   }
+
+   // Save the image
    qDebug("Saving rendered image to %s...", qPrintable(filename));
    lastImage_.save(filename);
 }

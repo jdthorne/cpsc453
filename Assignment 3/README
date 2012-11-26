@@ -73,7 +73,8 @@ Data-Structures Used:
 
    SceneObject (and Sphere, Cylinder, Triangle, Quad)
       Various objects, each of which are responsible for calculating ray intersections,
-      knowing their material, and knowing their dimensions.
+      knowing their material, and knowing their dimensions.  See the algorithms section below
+      for more details.
 
    Scene
       A scene is a top-level group, which also includes lights, and functionality to read itself
@@ -81,7 +82,7 @@ Data-Structures Used:
 
    PropertyList
       PropertyList is a simple structure which allows easy parsing of definition strings like
-      "Property = Value, Property2 = Value".
+      "Property = a, b, c; Property2 = value".
 
    QList
       Provided by Qt, QList<> is a templated data structure which stores elements in either
@@ -185,7 +186,7 @@ Algorithms Used
 
    Reflection
       After the surface color of a ray is calculated, a ray reflecting from the surface
-      is traced recursively, and its color calculated.  The color of the reflection ray is
+      is created and traced, and its color calculated.  The color of the reflection ray is
       then added to the surface color of the initial ray.
 
          trace := lightColor + trace(reflectedRay)
@@ -215,9 +216,7 @@ Implemented Requirements:
 
    The requirements I have implemented are listed below:
 
-   Requirement                                                       Associated File (samples/)
-   ===========                                                       ============================
-
+   == Requirement ==                                              == Associated File (samples/) ==
    - Objects in the Scene
       - Spheres                                                      spheres.png
       - Triangles and Quads                                          triangle.png, spheres.png
@@ -229,9 +228,27 @@ Implemented Requirements:
 
    I have also implemented several bonus requirements:
 
+   == Requirement ==                                              == Associated File (samples/) ==
    - Scene and light specification read from input file              see ".scene" files
    - Refraction (recursive)                                          refraction.png
    - Cylinder primitive (only when aligned along the y-axis)         cylinders.png
+
+
+
+Supplied Sample Images:
+   All images are supplied in the "samples/" folder.  They are:
+   
+   samples/spheres.png
+      Demonstrates quads, spheres, colored lighting, shadows and reflection
+
+   samples/triangle.png
+      Demonstrates triangles, spheres, specular and diffuse lighting, and reflection
+
+   samples/cylinders.png
+      Demonstrates axis-aligned cylinders, colored lighting, shadows and reflection
+
+   samples/refraction.png
+      Demonstrates refraction, reflection, spheres, cylinders, lights, shadows and reflection
 
 
 Reused Code:

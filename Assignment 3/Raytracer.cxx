@@ -72,8 +72,6 @@ QImage Raytracer::run()
       y_++;
    }
 
-   qDebug("[Raytracer] Rendering is %.2f percent complete...", 100.0 * (double)y_ / imageHeight_);
-
    // Return the image in progress
    return result_;
 }
